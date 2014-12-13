@@ -14,7 +14,9 @@ program
 
 program
   .command 'server'
-  .description 'Run a server to display the generated html output'
+  .description 'Run a server to display the generated html output. Press Ctrl+C to stop.'
   .action server
 
 program.parse process.argv
+
+unless program.args.length then program.help()

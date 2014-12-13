@@ -1,0 +1,9 @@
+{
+  "rootName": "Foo Project",
+  "total": 188,
+  "root_info": {
+    "dirs": ["views", "tests", "assets", "tasks", "api", "config"],
+    "files": ["package.json", ".bowerrc", "app.coffee", "Gruntfile.js", "README.md", "bower.json", "Procfile", "npm-debug.log", ".gitignore", "karma.conf.coffee"]
+  }
+  "rootDir": "/foo/bar/foo2/foo-project/",
+}

@@ -2,30 +2,44 @@ import os
 import sys
 import json
 
+excluded_dirs = set(['node_modules', '.git'])
+
 rootDir = sys.argv[1]
 rootDir = os.getcwd() + os.sep + rootDir
 
-total = 0
-excluded_files = set(['node_modules', '.git'])
-root_info = dict()
-for root, dirs, files in os.walk(rootDir, topdown=True):
-  dirs[:] = [d for d in dirs if d not in excluded_files]
-  if root == rootDir:
-    root_info['dirs'] = dirs
-    root_info['files'] = files
-  total += len(files)
+def get_total_files():
+  totalFiles = 0
+  for root, dirs, files in os.walk(rootDir, topdown=True):
+    dirs[:] = [d for d in dirs if d not in excluded_dirs]
+    totalFiles += len(files)
+  return totalFiles
 
+def path_to_dict(path):
+    d = {'name': os.path.basename(path)}
+    if os.path.isdir(path):
+        d['type'] = "directory"
+        d['children'] = [path_to_dict(os.path.join(path,x)) for x in os.listdir(path) if x not in excluded_dirs]
+    else:
+        d['type'] = "file"
+    return d
+
+def save_data_file():
+  if not os.path.exists('encina-report'):
+    os.makedirs('encina-report')
+
+  data = {
+    'total': totalSumFiles,
+    'treeDir': treeDir,
+    'rootName': rootName,
+    'rootDir': rootDir,
+    'excluded_dirs': list(excluded_dirs)
+  }
+
+  with open('encina-report/data.json', 'w') as datafile:
+    json.dump(data, datafile)
+
+
+totalSumFiles = get_total_files()
+treeDir = path_to_dict(rootDir)
 rootName = rootDir.split(os.sep)[-2]
-
-if not os.path.exists('encina-report'):
-  os.makedirs('encina-report')
-
-data = {
-  'total': total,
-  'root_info': root_info,
-  'rootName': rootName,
-  'rootDir': rootDir
-}
-
-with open('encina-report/data.json', 'w') as datafile:
-  json.dump(data, datafile)
+save_data_file()

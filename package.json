@@ -4,6 +4,7 @@
   "description": "Projects analyzer",
   "author": "Ignacio Carbajo",
   "license": "MIT",
+  "repository": "https://github.com/igncp/encina",
   "bin": {
     "encina": "bin/encina.js"
   },

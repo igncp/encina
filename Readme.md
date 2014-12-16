@@ -16,10 +16,10 @@ A command line tool for analyzing projects and retrieving statistics. Once compl
 
 ## Usage
 
-You can use `encina` from the command line once the module is installed. If you want to use it anywhere, install it as a global module `npm install -g encina` (soon).
+You can use `encina` from the command line once the module is installed. If you want to use it anywhere, install it as a global module `npm install -g encina`.
 
 - To retrieve data from a project: `encina examine -f PATH/TO/PROJECT` 
-- To display the result: `encina server` in the directory that contains the `encina-report` result. In a browser, go to: `http://localhost:9993
+- To display the result: `encina server` in the directory that contains the `encina-report` result. In a browser, go to: `http://localhost:9993`
 
 ## Technologies covered
 
@@ -33,4 +33,5 @@ Download the repository and run the Makefile using `make`.
 ## Author and License
 
 Ignacio Carbajo - 2014
+
 MIT

@@ -1,7 +1,7 @@
 exec = require('child_process').exec
 path = require 'path'
 fs = require 'fs'
-csf = require 'coffee-files'
+grunt = require 'grunt'
 
 generateData = (rootDir)->
   command = 'python ' + __dirname + '/python/examine.py ' + rootDir
@@ -14,8 +14,15 @@ generateData = (rootDir)->
 copyServerFiles = ->
   fs.createReadStream(__dirname + '/output/index.html')
     .pipe(fs.createWriteStream('encina-report/index.html'));
-  csf.glob '*.coffee', __dirname + '/output/coffee/', 'encina-report/js'
-  console.log 'Done!'
+  runGrunt()
+
+runGrunt = ->
+  command = 'grunt compilations --gruntfile ' + __dirname + '/../Gruntfile.coffee ' + \
+    ' --root_dir="' + process.cwd() + '/" --env=prod'
+  child = exec command, (error, stdout, stderr)->
+    if stderr then console.log stderr
+    else
+      console.log 'Done!'
 
 module.exports = (rootDir, repo)->
   if typeof rootDir is 'string'

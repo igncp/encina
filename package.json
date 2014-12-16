@@ -1,6 +1,6 @@
 {
   "name": "encina",
-  "version": "0.0.1.1",
+  "version": "0.0.2",
   "description": "Projects analyzer",
   "author": "Ignacio Carbajo",
   "license": "MIT",
@@ -11,12 +11,12 @@
   "email": "icarbajop@gmail.com",
   "homepage": "http://igncp.github.io/encina/",
   "dependencies": {
-    "coffee-files": "^0.1.4",
     "coffee-script": "^1.8.0",
     "commander": "^2.5.0",
     "express": "^4.10.4",
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.12.0",
+    "grunt-contrib-stylus": "^0.20.0",
     "grunt-contrib-watch": "^0.6.1"
   },
   "preferglobal": true

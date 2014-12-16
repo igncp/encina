@@ -3,8 +3,6 @@ path = require 'path'
 fs = require 'fs'
 csf = require 'coffee-files'
 
-mongoose = require 'mongoose'
-
 generateData = (rootDir)->
   command = 'python ' + __dirname + '/python/examine.py ' + rootDir
   child = exec command, (error, stdout, stderr)->

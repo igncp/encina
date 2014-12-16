@@ -1,11 +1,36 @@
 # Encina
 
-Gets stats from projects
+A command line tool for analyzing projects and retrieving statistics. Once completed, you can inspect the result using an interactive interface, with charts (D3) and formatted data.
+
+[![Encina Logo](/misc/encina.jpg)](https://github.com/igncp/encina)
+
+"¿Qué tienes tú, negra encina campesina con tus ramas sin color en el campo sin verdor; con tu tronco ceniciento sin esbeltez ni altiveza, con tu vigor sin tormento, y tu humildad que es firmeza?"
+
+-- <cite>Antonio Machado</cite>
 
 ## Requirements
 
+- Debian environment
+- Node.js
 - Python and pip
 
-## Use
+## Usage
 
-You can use `encina` from the command line once the module is installed. If you want to use it anywhere, install it as a global module `npm install -g encina`
+You can use `encina` from the command line once the module is installed. If you want to use it anywhere, install it as a global module `npm install -g encina` (soon).
+
+- To retrieve data from a project: `encina examine -f PATH/TO/PROJECT` 
+- To display the result: `encina server` in the directory that contains the `encina-report` result. In a browser, go to: `http://localhost:9993
+
+## Technologies covered
+
+- Backend: Python for the data analysis, Node.js, CoffeeScript
+- Frontend: Angular.js, D3.js
+
+## Development
+
+Download the repository and run the Makefile using `make`.
+
+## Author and License
+
+Ignacio Carbajo - 2014
+MIT

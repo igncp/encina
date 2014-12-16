@@ -1,9 +1,33 @@
 {
-  "rootName": "Foo Project",
-  "total": 188,
-  "root_info": {
-    "dirs": ["views", "tests", "assets", "tasks", "api", "config"],
-    "files": ["package.json", ".bowerrc", "app.coffee", "Gruntfile.js", "README.md", "bower.json", "Procfile", "npm-debug.log", ".gitignore", "karma.conf.coffee"]
+  "excluded_dirs": [".git", "node_modules"],
+  "treeDir": {
+    "type": "directory",
+    "name": "",
+    "children": [{
+      "type": "file",
+      "name": "package.json"
+    }]
   },
-  "rootDir": "/foo/bar/foo2/foo-project/"
+  "special_cases": {
+    "uses_node": true,
+    "has_git": true
+  },
+  "rootName": "demos",
+  "rootDir": "/foo/bar/demos/",
+  "extensions": {
+    "md": 3,
+    "coffee": 39,
+    "txt": 1,
+    "ico": 1,
+    "log": 1,
+    "styl": 23,
+    "js": 42,
+    "json": 18,
+    "tsv": 5,
+    "csv": 4,
+    "yml": 3,
+    "png": 1,
+    "ejs": 38
+  },
+  "numberFiles": 188
 }

@@ -11,7 +11,16 @@
     <script type="text/javascript" src="js/app.coffee.js"></script>
 </head>
 <body>
-    <h1>Encina Report</h1>
-    <p>Welcome!</p>
+    <div ng-controller="MainCtrl" class="col-lg-offset-1 col-lg-10">
+        <h1>Encina Report - {{data.rootName}} <small>{{data.rootDir}}</small></h1>
+        <h2>Extract</h2>
+        <p>Number of files: <strong>{{data.numberFiles}}</strong></p>
+        <p ng-if="data.special_cases.has_git === true">Has a git repository</p>
+        <p ng-if="data.special_cases.uses_node === true">Uses Node.js</p>
+        <p>File extensions:</p>
+        <ul>
+            <li ng-repeat="extension in data.parsedExtensions | orderBy:'count':true">{{extension.name}}: {{extension.count}}</li>
+        </ul>
+    </div>
 </body>
 </html>

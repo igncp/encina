@@ -60,6 +60,8 @@ def check_special_cases(element):
     special_cases['has_git'] = True
   if element == 'package.json':
     special_cases['uses_node'] = True
+  if element == 'bower.json':
+    special_cases['uses_bower'] = True
 
 excluded_dirs = set(['node_modules', '.git'])
 

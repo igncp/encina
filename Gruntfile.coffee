@@ -20,7 +20,10 @@ module.exports = (grunt) ->
       outputDevel:
         options:
           atBegin: true
-        files: 'src/output/**/*.coffee'
+        files: [
+          'src/output/coffee/**/*.coffee'
+          'src/output/styl/**/*.styl'
+        ]
         tasks: ['coffee', 'stylus']
 
   if env is 'prod'

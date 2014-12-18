@@ -21,10 +21,12 @@
         <h2>Extract</h2>
         <p>Number of files: <strong>{{data.numberFiles}}</strong>
         </p>
-        <p ng-if="data.special_cases.has_git === true">Has a git repository</p>
-        <p ng-if="data.special_cases.uses_node === true">Uses Node.js</p>
-        <p ng-if="data.special_cases.uses_bower === true">Uses Bower.js</p>
-
+        <p>Total Number of Non Empty Lines: <strong>{{data.totalLines}}</strong>
+        </p>
+        <p ng-if="data.special_cases.has_git === true">- Has a git repository</p>
+        <p ng-if="data.special_cases.uses_node === true">- Uses Node.js</p>
+        <p ng-if="data.special_cases.uses_bower === true">- Uses Bower.js</p>
+        <p>Directories excluded: {{data.excluded_dirs.join(', ')}}</strong>.</p>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
@@ -52,7 +54,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="panel-group" id="accordion3" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingLines">
+                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion3" href="#collapseLines" aria-expanded="true" aria-controls="collapseLines">Non Empty Lines Count</a></h4>
+                </div>
+                <div id="collapseLines" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLines">
+                    <div class="panel-body">
+                        <ul>
+                            <li>Number of non empty lines - Repeated in number of files</li>
+                            <li ng-repeat="lines in data.parsedLines | orderBy:['filesCount', 'linesCount']:true"><strong>{{lines.linesCount}}</strong> - {{lines.filesCount}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <footer class="col-lg-offset-1 col-lg-10">
         <p><a href="https://github.com/igncp/encina">Encina Source</a>
         </p>

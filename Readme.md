@@ -1,4 +1,4 @@
-# Encina
+# Encina [![npm version](https://badge.fury.io/js/encina.svg)](http://badge.fury.io/js/encina)
 
 A command line tool for analyzing projects and retrieving statistics. Once completed, you can inspect the result using an interactive interface, with charts (D3) and formatted data.
 

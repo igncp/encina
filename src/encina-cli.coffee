@@ -1,20 +1,21 @@
 program = require 'commander'
+pjson = require '../package.json'
 
 examine = require './examine'
 server = require './run-server'
 
 program
-  .option '-f, --file', 'Project file. Default to .'
-  .option '-g, --github', 'Github repository. Default to false.'
+  .version pjson.version
 
 program
-  .command 'examine'
+  .command 'examine <path>'
   .description 'Analyze the project, creating an html output'
   .action examine
 
 program
   .command 'server'
   .description 'Run a server to display the generated html output. Press Ctrl+C to stop.'
+  .option '-b, --browser', 'Opens the default browser'
   .action server
 
 program.parse process.argv

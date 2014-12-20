@@ -6,7 +6,7 @@ grunt = require 'grunt'
 generateData = (rootDir)->
   command = 'python ' + __dirname + '/python/examine.py ' + rootDir
   child = exec command, (error, stdout, stderr)->
-    if stderr then console.log stderr
+    if stderr then console.log stdout + '\n' + stderr
     else
       console.log stdout.trim() if stdout.trim()
       copyServerFiles()
@@ -24,6 +24,6 @@ runGrunt = ->
     else
       console.log 'Done!'
 
-module.exports = (rootDir, repo)->
+module.exports = (rootDir)->
   if typeof rootDir is 'string'
     generateData rootDir

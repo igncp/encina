@@ -23,3 +23,15 @@ encina.controller 'MainCtrl', ($scope, $http)->
     
     $scope.treeDirString = JSON.stringify $scope.data.treeDir, undefined, 2
     console.log '$scope.data', $scope.data
+
+encina.directive 'bootstrapAccordion', ->
+  return {
+    restrict: 'E'
+    templateUrl: 'components/bootstrap-accordion.html'
+    replace: true
+    scope:
+      title: '@'
+      expanded: '@'
+      name: '@'
+    transclude: true
+  }

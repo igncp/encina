@@ -15,29 +15,49 @@ module.exports = (grunt) ->
         ext: '.coffee.js'
     stylus:
       app:
-        files: {}
-    watch:
+        files: (->
+          obj = {}
+          if env is 'prod'
+            obj[currentDir + '/encina-report/css/styles.css'] = \
+              __dirname + '/src/output/styl/styles.styl'
+          else
+            obj[__dirname + '/src/output/devel/css/styles.css'] = \
+              __dirname + '/src/output/styl/styles.styl'
+          obj
+        )()
+    copy:
+      app:
+        files: [{
+          expand: true
+          cwd: __dirname + '/src/output/'
+          src: 'index.html'
+          dest: if env is 'prod' then currentDir + '/encina-report/' \
+            else __dirname + '/src/output/devel/'
+        }, {
+          expand: true
+          cwd: __dirname + '/src/output/components/'
+          src: '**'
+          dest: if env is 'prod' then  currentDir + '/encina-report/components/' \
+            else __dirname + '/src/output/devel/components/'
+        }]
+    watch: # For devel
       outputDevel:
         options:
           atBegin: true
         files: [
           'src/output/coffee/**/*.coffee'
           'src/output/styl/**/*.styl'
+          'src/output/index.html'
+          'src/output/components/**/*.html'
         ]
-        tasks: ['coffee', 'stylus']
-
-  if env is 'prod'
-    config.stylus.app.files[currentDir + '/encina-report/css/styles.css'] = \
-      __dirname + '/src/output/styl/styles.styl'
-  else
-    config.stylus.app.files[__dirname + '/src/output/devel/css/styles.css'] = \
-      __dirname + '/src/output/styl/styles.styl'
+        tasks: ['compilations']
 
   grunt.initConfig config
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-watch'
 
-  grunt.registerTask 'compilations', ['coffee', 'stylus']
+  grunt.registerTask 'compilations', ['coffee', 'stylus', 'copy']
   grunt.registerTask 'default', ['compilations']

@@ -1,5 +1,9 @@
 npm-debug.log
 node_modules
+*.pyc
+
+# Devel
 src/output/devel/js
 src/output/devel/css
-*.pyc
+src/output/devel/components
+src/output/devel/index

@@ -9,13 +9,8 @@ generateData = (rootDir)->
     if stderr then console.log stdout + '\n' + stderr
     else
       console.log stdout.trim() if stdout.trim()
-      copyServerFiles()
-
-copyServerFiles = ->
-  fs.createReadStream(__dirname + '/output/index.html')
-    .pipe(fs.createWriteStream('encina-report/index.html'));
-  runGrunt()
-
+      runGrunt()
+  
 runGrunt = ->
   command = 'grunt compilations --gruntfile ' + __dirname + '/../Gruntfile.coffee ' + \
     ' --root_dir="' + process.cwd() + '/" --env=prod'

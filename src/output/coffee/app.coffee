@@ -33,11 +33,17 @@ define 'app', ['charts/charts'], ->
         })
       
       $scope.treeDirString = JSON.stringify $scope.data.treeDir, undefined, 2
-      $scope.loaded = -> document.body.style.opacity = 1
 
+      $scope.data.linesMeanFormatted = Number($scope.data.linesMean).toFixed(0)
+      $scope.data.linesMedianFormatted = Number($scope.data.linesMedian).toFixed(0)
+      $scope.data.linesStdFormatted = Number($scope.data.linesStd).toFixed(2)
+      
       (require('charts/extensions-pie')).render($scope.data.parsedExtensions)
+      (require('charts/lines-distribution')).render($scope.data.parsedLines)
       
       console.log '$scope.data', $scope.data
+      
+      $scope.loaded = -> document.body.style.opacity = 1
 
   encina.directive 'bootstrapAccordion', ->
     return {

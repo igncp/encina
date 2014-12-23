@@ -3,12 +3,17 @@ import sys
 import json
 
 class Data():
-  def get_total_files(sf):
-    totalFiles = 0
+  def get_total_files_and_dirs(sf):
+    total_files = 0
+    total_dirs = 0
+    
     for root, dirs, files in os.walk(sf.root_dir, topdown=True):
       dirs[:] = [d for d in dirs if d not in sf.excluded_dirs]
-      totalFiles += len(files)
-    sf.total_files = totalFiles
+      total_files += len(files)
+      total_dirs += len(dirs)
+    
+    sf.total_files = total_files
+    sf.total_dirs = total_dirs
 
   def count_lines_and_collect(sf, path):
     counter = 0

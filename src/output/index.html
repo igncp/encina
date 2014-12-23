@@ -20,21 +20,23 @@
             <h1>Encina Report - {{data.rootName}} <small>{{data.rootDir}}</small></h1>
         </div>
         <h2>Extract</h2>
-        <p>Number of files: <strong>{{data.numberFiles}}</strong>
+        <p>Number of files: <strong>{{data.totalFiles}}</strong>
         </p>
-        <p>Total Number of Non Empty Lines: <strong>{{data.totalLines}}</strong>
-        <p>Mean of Non Empty Lines: <strong>{{data.linesMean.toFixed(0)}}</strong>
+        <p>Number of directories: <strong>{{data.totalDirs}}</strong>
         </p>
-        <p>Total size: <strong>{{data.totalSize.toFixed(2)}} Mb</strong></p>
-        <p ng-if="data.special_cases.has_git === true">- Has a git repository</p>
-        <p ng-if="data.special_cases.uses_node === true">- Uses Node.js</p>
-        <p ng-if="data.special_cases.uses_bower === true">- Uses Bower.js</p>
+        <p>Total size: <strong>{{data.totalSize.toFixed(2)}} Mb</strong>
+        </p>
+        <ul>
+            <li ng-if="data.special_cases.has_git === true">Has a git repository</li>
+            <li ng-if="data.special_cases.uses_node === true">Uses Node.js</li>
+            <li ng-if="data.special_cases.uses_bower === true">Uses Bower.js</li>
+        </ul>
         <p>Directories excluded: {{data.excluded_dirs.join(', ')}}</strong>.</p>
 
         <bootstrap-accordion title="File extensions" name="extensions" expanded="true">
             <div class="col-lg-6">
                 <ul>
-                    <li ng-repeat="extension in data.parsedExtensions | orderBy:'count':true">{{extension.name}}: {{extension.count}}</li>
+                    <li ng-repeat="extension in data.parsedExtensions | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}}</li>
                 </ul>
             </div>
             <div class="col-lg-6">
@@ -42,15 +44,24 @@
             </div>
         </bootstrap-accordion>
 
-        <bootstrap-accordion title="File Structure JSON" name="structure">
-            <pre>{{treeDirString}}</pre>
+        <bootstrap-accordion title="Non Empty Lines Count" name="lines">
+            <div class="col-lg-12">
+                <p>Total Number of Non Empty Lines: <strong>{{data.totalLines}}</strong>
+                </p>
+                <p>Mean of Non Empty Lines Per File: <strong>{{data.linesMeanFormatted}}</strong>
+                </p>
+                <p>Median of Non Empty Lines Per File: <strong>{{data.linesMedianFormatted}}</strong>
+                </p>
+                <p>STD of Non Empty Lines Per File: <strong>{{data.linesStdFormatted}}</strong>
+                </p>
+            </div>
+            <div class="col-lg-12">
+                <div id="chart-lines-distribution"></div>
+            </div>
         </bootstrap-accordion>
 
-        <bootstrap-accordion title="Non Empty Lines Count" name="lines">
-            <ul>
-                <li>Number of non empty lines - Repeated in number of files</li>
-                <li ng-repeat="lines in data.parsedLines | orderBy:['filesCount', 'linesCount']:true"><strong>{{lines.linesCount}}</strong> - {{lines.filesCount}}</li>
-            </ul>
+        <bootstrap-accordion title="File Structure JSON" name="structure">
+            <pre>{{treeDirString}}</pre>
         </bootstrap-accordion>
 
         <bootstrap-accordion title="Files Size" name="sizes">

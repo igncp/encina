@@ -7,3 +7,5 @@ class Data():
     number_files = number_files.astype(int)
     lines = lines.multiply(number_files)
     sf.lines_mean = lines.mean()
+    sf.lines_median = lines.median()
+    sf.lines_std = lines.std()

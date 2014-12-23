@@ -7,7 +7,8 @@ class Data():
       os.makedirs('encina-report')
 
     data = {
-      'numberFiles': sf.total_files,
+      'totalFiles': sf.total_files,
+      'totalDirs': sf.total_dirs,
       'treeDir': sf.tree_dir,
       'rootName': sf.root_name,
       'rootDir': sf.root_dir,
@@ -16,6 +17,8 @@ class Data():
       'special_cases': sf.special_cases,
       'lines': sf.lines,
       'linesMean': str(sf.lines_mean),
+      'linesMedian': str(sf.lines_median),
+      'linesStd': str(sf.lines_std),
       'sizes': sf.sizes
     }
 

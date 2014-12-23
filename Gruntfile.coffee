@@ -12,7 +12,7 @@ module.exports = (grunt) ->
           if env is 'prod' then return currentDir + 'encina-report/js/'
           else return 'src/output/devel/js/'
         )()
-        ext: '.coffee.js'
+        ext: '.js'
     stylus:
       app:
         files: (->

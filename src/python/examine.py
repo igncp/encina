@@ -1,8 +1,9 @@
-from examine.data import Data
+from examine.initialization import Data
 
 data = Data()
 
 data.get_total_files()
 data.set_tree_and_extras()
+data.calculate_lines_mean()
 
 data.save_file()

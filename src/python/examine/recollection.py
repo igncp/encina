@@ -45,27 +45,10 @@ class Data():
           sf.check_special_cases(name)
           d['extension'] = sf.collect_file_extension(name)
           d['lines'] = str(sf.count_lines_and_collect(path))
+          d['size'] = str(sf.get_sizes_and_collect(path))
           d['type'] = "file"
       
       return d
-
-  def save_file(sf):
-    if not os.path.exists('encina-report'):
-      os.makedirs('encina-report')
-
-    data = {
-      'numberFiles': sf.total_files,
-      'treeDir': sf.tree_dir,
-      'rootName': sf.root_name,
-      'rootDir': sf.root_dir,
-      'excluded_dirs': list(sf.excluded_dirs),
-      'extensions': sf.extensions,
-      'special_cases': sf.special_cases,
-      'lines': sf.lines
-    }
-
-    with open('encina-report/data.json', 'w') as datafile:
-      json.dump(data, datafile)
 
   def collect_file_extension(sf, path):
     extension = os.path.splitext(path)[1]
@@ -88,3 +71,12 @@ class Data():
       sf.special_cases['uses_node'] = True
     if element == 'bower.json':
       sf.special_cases['uses_bower'] = True
+
+  def get_sizes_and_collect(sf, path):
+    size = os.path.getsize(path)
+    if str(size) in sf.sizes:
+      sf.sizes[str(size)] += 1
+    else:
+      sf.sizes[str(size)] = 1
+    
+    return size

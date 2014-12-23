@@ -1,8 +1,11 @@
 import os
 import sys
-import methods
 
-class Data(methods.Data):
+import recollection
+import storage
+import processing
+
+class Data(recollection.Data, storage.Data, processing.Data):
   def __init__(sf):
     sf.excluded_dirs = set(['node_modules', '.git', 'bower_components'])
     
@@ -10,6 +13,7 @@ class Data(methods.Data):
     sf.special_cases = dict()
     sf.lines = dict()
     sf.tree_dir = dict()
+    sf.sizes = dict()
 
     sf.set_root_dir()
     

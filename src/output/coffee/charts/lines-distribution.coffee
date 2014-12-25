@@ -9,8 +9,8 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
     floor = height - margin.top * 2
     barWidth = (width - margin.left) / data.length
     barHeight = 7
-    barYFn = ((d)-> floor - barHeight * d)
-    barHeightFn = ((d)-> d * barHeight)
+    barYFn = (d)-> floor - barHeight * d
+    barHeightFn = (d)-> d * barHeight
     
     colorsArr = ['#323247','#7C7CC9','#72B66C','#429742']
     color = common.createColorsScale  colorsArr, data

@@ -22,4 +22,4 @@ class Data(recollection.Data, storage.Data, processing.Data):
   def set_root_dir(sf):
     sf.root_dir = sys.argv[1]
     if sf.root_dir[-1] != os.sep: sf.root_dir += os.sep
-    sf.root_dir = os.getcwd() + os.sep + sf.root_dir
+    sf.root_dir = os.path.normpath(os.getcwd() + os.sep + sf.root_dir)

@@ -51,7 +51,7 @@ define 'app', ['charts/charts'], ->
       templateUrl: 'components/bootstrap-accordion.html'
       replace: true
       scope:
-        title: '@'
+        titleText: '@'
         expanded: '@'
         name: '@'
       transclude: true

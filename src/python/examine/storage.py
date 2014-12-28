@@ -7,19 +7,13 @@ class Data():
       os.makedirs('encina-report')
 
     data = {
-      'totalFiles': sf.total_files,
-      'totalDirs': sf.total_dirs,
-      'treeDir': sf.tree_dir,
-      'rootName': sf.root_name,
-      'rootDir': sf.root_dir,
-      'excluded_dirs': list(sf.excluded_dirs),
+      'root': sf.root,
+      'nel': sf.nel, # Non Empty Lines
+      'sizes': sf.sizes,
       'extensions': sf.extensions,
-      'special_cases': sf.special_cases,
-      'lines': sf.lines,
-      'linesMean': str(sf.lines_mean),
-      'linesMedian': str(sf.lines_median),
-      'linesStd': str(sf.lines_std),
-      'sizes': sf.sizes
+      'structure': sf.structure,
+      'characteristics': sf.characteristics,
+      'tree': sf.tree
     }
 
     with open('encina-report/data.json', 'w') as datafile:

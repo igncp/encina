@@ -4,45 +4,38 @@ define 'app', ['charts/charts'], ->
   encina.controller 'MainCtrl', ($scope, $http)->
     $http.get('data.json').then (res)->
       $scope.data = res.data
-      
-      $scope.data.parsedExtensions = []
-      for extension in Object.keys($scope.data.extensions)
-        $scope.data.parsedExtensions.push({
+
+      $scope.data.extensions.parsedHist = []
+      for extension in Object.keys($scope.data.extensions.hist)
+        $scope.data.extensions.parsedHist.push({
           name: extension
-          count: $scope.data.extensions[extension]
+          count: $scope.data.extensions.hist[extension]
         })
 
-      $scope.data.parsedLines = []
-      $scope.data.totalLines = 0
-      for linesCount in Object.keys($scope.data.lines)
-        $scope.data.totalLines += Number(linesCount) * \
-          Number($scope.data.lines[linesCount])
-        $scope.data.parsedLines.push({
-          linesCount: Number(linesCount)
-          filesCount: Number($scope.data.lines[linesCount])
+      $scope.data.nel.parsedHist = []
+      $scope.data.nel.total = 0
+      for linesCount in Object.keys($scope.data.nel.hist)
+        $scope.data.nel.total += linesCount * $scope.data.nel.hist[linesCount]
+        $scope.data.nel.parsedHist.push({
+          linesCount: linesCount
+          filesCount: $scope.data.nel.hist[linesCount]
         })
 
-      $scope.data.parsedSizes = []
-      $scope.data.totalSize = 0
-      for size in Object.keys($scope.data.sizes)
-        $scope.data.totalSize += Number(size) * \
-          Number($scope.data.sizes[size]) / 131072
-        $scope.data.parsedSizes.push({
-          size: Number(size)
-          filesCount: Number($scope.data.sizes[size])
+      $scope.data.sizes.parsedHist = []
+      $scope.data.sizes.total = 0
+      for size in Object.keys($scope.data.sizes.hist)
+        $scope.data.sizes.total += size * $scope.data.sizes.hist[size] / 131072
+        $scope.data.sizes.parsedHist.push({
+          size: size
+          filesCount: $scope.data.sizes.hist[size]
         })
       
-      $scope.treeDirString = JSON.stringify $scope.data.treeDir, undefined, 2
-
-      $scope.data.linesMeanFormatted = Number($scope.data.linesMean).toFixed(0)
-      $scope.data.linesMedianFormatted = Number($scope.data.linesMedian).toFixed(0)
-      $scope.data.linesStdFormatted = Number($scope.data.linesStd).toFixed(2)
+      $scope.treeString = JSON.stringify $scope.data.tree, undefined, 2
       
-      (require('charts/extensions-pie')).render($scope.data.parsedExtensions)
-      (require('charts/lines-distribution')).render($scope.data.parsedLines)
+      (require('charts/extensions-pie')).render($scope.data.extensions.parsedHist)
+      (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
       
       console.log '$scope.data', $scope.data
-      
       $scope.loaded = -> document.body.style.opacity = 1
 
   encina.directive 'bootstrapAccordion', ->

@@ -19,41 +19,43 @@
 <body>
     <div id="container" ng-controller="MainCtrl" class="col-lg-offset-1 col-lg-10">
         <div class="page-header">
-            <h1>Encina Report - {{data.rootName}} <small>{{data.rootDir}}</small></h1>
+            <h1>Encina Report - <strong>{{data.root.name}}</strong> <small>{{data.root.dir}}</small></h1>
         </div>
         <h2>Extract</h2>
-        <p>Number of files: <strong>{{data.totalFiles}}</strong>
+        <p>Number of files: <strong>{{data.structure.total_files}}</strong>
         </p>
-        <p>Number of directories: <strong>{{data.totalDirs}}</strong>
+        <p>Number of directories: <strong>{{data.structure.total_dirs}}</strong>
         </p>
-        <p>Total size: <strong>{{data.totalSize.toFixed(2)}} Mb</strong>
+        <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mb</strong>
         </p>
         <ul>
             <li ng-if="data.special_cases.has_git === true">Has a git repository</li>
             <li ng-if="data.special_cases.uses_node === true">Uses Node.js</li>
             <li ng-if="data.special_cases.uses_bower === true">Uses Bower.js</li>
         </ul>
-        <p>Directories excluded: {{data.excluded_dirs.join(', ')}}</strong>.</p>
+        <p>Directories excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
         <bootstrap-accordion title-text="Non Empty Lines Count" name="lines" expanded="true">
-            <div class="col-lg-12">
-                <p>Total Number of Non Empty Lines: <strong>{{data.totalLines}}</strong>
-                </p>
-                <p>Mean of Non Empty Lines Per File: <strong>{{data.linesMeanFormatted}}</strong>
-                </p>
-                <p>Median of Non Empty Lines Per File: <strong>{{data.linesMedianFormatted}}</strong>
-                </p>
-                <p>STD of Non Empty Lines Per File: <strong>{{data.linesStdFormatted}}</strong>
-                </p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>Total Number of Non Empty Lines: <strong>{{data.nel.total}}</strong></p>
+                    <p>Mean of Non Empty Lines Per File: <strong>{{data.nel.mean.toFixed(0)}}</strong></p>
+                    <p>Median of Non Empty Lines Per File: <strong>{{data.nel.median.toFixed(0)}}</strong></p>
+                    <p>STD of Non Empty Lines Per File: <strong>{{data.nel.std.toFixed(2)}}</strong></p>
+                </div>
+                <div class="col-lg-6">
+                    <p>Maximum Non Empty Lines in a single file: <strong>{{data.nel.max.lines.lines}}</strong> (in {{data.nel.max.lines.files}} file(s))</p>
+                    <p>Maximum repeated files: <strong>{{data.nel.max.files.files}}</strong> (with {{data.nel.max.files.lines}} non empty line(s))</p>
+                </div>
             </div>
-            <div class="col-lg-12">
-                <div id="chart-lines-distribution"></div>
+            <div class="row">
+                <div id="chart-lines-distribution" class="col-lg-12"></div>
             </div>
         </bootstrap-accordion>
 
         <bootstrap-accordion title-text="File extensions" name="extensions">
             <div class="col-lg-6">
                 <ul>
-                    <li ng-repeat="extension in data.parsedExtensions | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}}</li>
+                    <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}}</li>
                 </ul>
             </div>
             <div class="col-lg-6">
@@ -63,13 +65,13 @@
 
 
         <bootstrap-accordion title-text="File Structure JSON" name="structure">
-            <pre>{{treeDirString}}</pre>
+            <pre>{{treeString}}</pre>
         </bootstrap-accordion>
 
         <bootstrap-accordion title-text="Files Size" name="sizes">
             <ul>
                 <li>Bytes - Repeated in number of files</li>
-                <li ng-repeat="size in data.parsedSizes | orderBy:['filesCount', 'size']:true"><strong>{{size.size}}</strong> - {{size.filesCount}}</li>
+                <li ng-repeat="size in data.sizes.parsedHist | orderBy:['filesCount', 'size']:true"><strong>{{size.size}}</strong> - {{size.filesCount}}</li>
             </ul>
         </bootstrap-accordion>
 

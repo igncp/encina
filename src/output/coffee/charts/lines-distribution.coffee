@@ -1,54 +1,100 @@
 define 'charts/lines-distribution', ['charts/common'], (common)->
-  graph = {}
+  graph = {
+    vars: {}
+    dom: {}
+    scales: {}
+  }
 
-  graph.render = (origData)->
-    data = _.cloneDeep origData
-    
-    filesWithZeroLines = false
-    if data[0].linesCount is 0
-      filesWithZeroLines = data[0].filesCount
-      data.splice 0, 1
+  graph.setCg = ->
+    graph.cg = {
+      width: $('#chart-lines-distribution').width()
+      height: 400
+      margin: {left: 160, bottom: 100, top: 10}
+      colorsArr: ['#323247','#7C7CC9','#72B66C','#429742']
+    }
+  
+  graph.setVars = ->
+    graph.vars.filesWithZeroLines = false
+    if graph.data[0].linesCount is 0
+      graph.vars.filesWithZeroLines = graph.data[0].filesCount
+      graph.data.splice 0, 1
 
-    maxLinesCount = d3.max(data, (d)-> d.linesCount)
-    maxFilesCount = d3.max(data, (d)-> d.filesCount)
-    width = 800
-    height = 400
-    
-    margin = {left: 160, bottom: 100, top: 50}
-    margin.vertical = margin.top + margin.bottom
+    graph.vars.maxLinesCount = d3.max(graph.data, (d)-> d.linesCount)
+    graph.vars.maxFilesCount = d3.max(graph.data, (d)-> d.filesCount)
+    graph.vars.verticalMargin = graph.cg.margin.top + graph.cg.margin.bottom
+    graph.vars.floor = graph.cg.height - graph.cg.margin.bottom * 2
+    graph.vars.barHeight = (graph.cg.height - graph.vars.verticalMargin) / graph.vars.maxFilesCount
+    graph.vars.color = common.createColorsScale  graph.cg.colorsArr, graph.data, 'filesCount'
 
-    floor = height - margin.bottom * 2
-    barHeight = (height - margin.vertical) / maxFilesCount
-    
-    colorsArr = ['#323247','#7C7CC9','#72B66C','#429742']
-    color = common.createColorsScale  colorsArr, data
-    
-    slider = d3.select('#chart-lines-distribution')
+  graph.setData = (data)-> graph.data = data
+
+  graph.createSlider = ->
+    d3.select('#chart-lines-distribution')
       .append 'div'
-      .attr 'id', 'slider'
-
-    $('#slider').slider({
+      .append 'p'
+      .attr 'class', 'col-lg-12'
+      .attr 'id', 'chart-lines-distribution-slider-title'
+      .text 'Scale Modification (Logarithmic)'
+    d3.select('#chart-lines-distribution')
+      .append 'div'
+      .append 'p'
+      .attr 'class', 'col-lg-1'
+      .attr 'id', 'chart-lines-distribution-slider-val-0'
+    d3.select('#chart-lines-distribution')
+      .append 'div'
+      .attr 'id', 'chart-lines-distribution-slider'
+      .attr 'class', 'col-lg-10'
+    d3.select('#chart-lines-distribution')
+      .append 'div'
+      .append 'p'
+      .attr 'class', 'col-lg-1'
+      .attr 'id', 'chart-lines-distribution-slider-val-1'
+    graph.dom.slider = $('#chart-lines-distribution-slider')
+    graph.dom.slider.slider({
       range: true
       values: [0, 100]
+      change: graph.draw
+      slide: graph.setSliderValues
     })
-    
-    svg = d3.select('#chart-lines-distribution')
+
+  graph.setSliderValues = ->
+    transformToLogValue = (sliderValue)->
+      minp = 0
+      maxp = 100
+      minv = Math.log 1
+      maxv = Math.log graph.vars.maxLinesCount
+
+      # calculate adjustment factor
+      factor = (maxv-minv) / (maxp-minp)
+      Math.exp(minv + factor * (sliderValue-minp))
+
+    graph.vars.sliderValues = graph.dom.slider.slider('values')
+    _.each graph.vars.sliderValues, (value, index)->
+      transformedValue = Math.floor transformToLogValue(value)
+      $('#chart-lines-distribution-slider-val-' + index).html transformedValue
+      graph.vars.sliderValues[index] = transformedValue
+
+  graph.setScales = ->
+    graph.scales.x = d3.scale.log()
+      .domain [graph.vars.sliderValues[0] + 0.5, graph.vars.sliderValues[1] + 1]
+      .range [0, graph.cg.width - graph.cg.margin.left - 20]
+
+    graph.scales.y = d3.scale.log()
+      .domain [0.5, graph.vars.maxFilesCount]
+      .rangeRound [0, (-1) * (graph.cg.height - graph.vars.verticalMargin - 20)]
+
+  graph.createChart = ->
+    previousSvg = d3.select('#chart-lines-distribution svg')
+    previousSvg.remove() if previousSvg
+    graph.dom.svg = d3.select('#chart-lines-distribution')
       .append('svg')
-      .attr({width: width, height: height})
-    
-    chart = svg.append('g')
-      .attr({transform: 'translate(' + margin.left + ',' + \
-        margin.bottom + ')'})
-
-    x = d3.scale.log()
-      .domain [0.5, maxLinesCount + 100.5]
-      .range [0, width - margin.left - 20]
-
-    y = d3.scale.log()
-      .domain [0.5, maxFilesCount]
-      .rangeRound [0, (-1) * (height - margin.vertical - 20)]
-
-    xAxis = d3.svg.axis().scale(x)
+      .attr({width: graph.cg.width, height: graph.cg.height})
+    graph.dom.chart = graph.dom.svg.append('g')
+      .attr({transform: 'translate(' + graph.cg.margin.left + ',' + \
+        graph.cg.margin.bottom + ')'})
+  
+  graph.createAxis = ->
+    graph.dom.xAxis = d3.svg.axis().scale(graph.scales.x)
       .orient('bottom')
       .tickFormat((d)->
         # Digits different than zero (except first one)
@@ -59,9 +105,9 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
         else return null
       )
 
-    yAxis = d3.svg.axis().scale(y)
+    graph.dom.yAxis = d3.svg.axis().scale(graph.scales.y)
       .orient('left')
-      .ticks if maxFilesCount < 11 then maxFilesCount else 10
+      .ticks if graph.vars.maxFilesCount < 11 then graph.vars.maxFilesCount else 10
       .tickFormat((d)->
         # Digits different than zero (except first one)
         dString = d.toFixed(0).toString()
@@ -71,38 +117,60 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
         else return null
       )
     
-    chart.append('g')
-      .attr({'transform': 'translate(0,' + floor + ')', class: 'x-axis axis'})
-      .call(xAxis)
+    graph.dom.chart.append('g')
+      .attr({'transform': 'translate(0,' + graph.vars.floor + ')', class: 'x-axis axis'})
+      .call(graph.dom.xAxis)
       .append('text')
-      .attr('transform', 'translate(' + (width - margin.left) / 2 + ' ,0)')
+      .attr('transform', 'translate(' + (graph.cg.width - graph.cg.margin.left) / 2 + ' ,0)')
       .attr('class', 'x-axis-label')
       .attr('y', 40).attr('font-size', '1.3em')
       .style({'text-anchor': 'end'})
       .text('Lines Count')
 
 
-    chart.append('g')
-      .attr({'transform': 'translate(0,' + floor + ')', class: 'x-axis axis'})
-      .call(yAxis)
+    graph.dom.chart.append('g')
+      .attr({'transform': 'translate(0,' + graph.vars.floor + ')', class: 'x-axis axis'})
+      .call(graph.dom.yAxis)
       .append('text')
-      .attr('transform', 'translate(-30,' + String((-1) * (height - margin.bottom) / 2) + ')')
+      .attr('transform', 'translate(-30,' + String((-1) * \
+        (graph.cg.height - graph.cg.margin.bottom) / 2) + ')')
       .attr('y', 40)
       .attr('font-size', '1.3em')
       .style({'text-anchor': 'end'})
       .text('Files Count')
 
-    drawBars = ->
-      chart.selectAll('rect')
-        .data(data).enter().append('rect')
-        .attr('x', (d, i)-> x(d.linesCount))
-        .attr('y', (d)-> y(d.filesCount) + floor)
-        .attr('width', 2)
-        .attr('height', (d)-> y(d.filesCount) * (-1))
-        .attr('fill', (d)-> color(d))
-        .append 'title'
-        .text (d)-> d.linesCount + ', ' + d.filesCount
-    
-    drawBars()
+  graph.createBars = ->
+    dataUsed = graph.data.filter((item, index)->
+      if item.linesCount > graph.vars.sliderValues[0] \
+        and item.linesCount <= graph.vars.sliderValues[1] then return item
+      else return null
+    )
+    dataUsed = _.compact dataUsed
 
+    graph.dom.chart.selectAll('rect')
+      .data(dataUsed)
+      .enter()
+      .append('rect')
+      .attr('x', (d, i)-> graph.scales.x(d.linesCount))
+      .attr('y', (d)-> graph.scales.y(d.filesCount) + graph.vars.floor)
+      .attr('width', 2)
+      .attr('height', (d)-> graph.scales.y(d.filesCount) * (-1))
+      .attr('fill', (d)-> graph.vars.color(d.filesCount))
+      .append 'title'
+      .text (d)-> d.linesCount + ' line(s), ' + d.filesCount + ' file(s)'
+
+  graph.render = (origData)->
+    graph.setData _.cloneDeep origData
+    graph.setCg()
+    graph.setVars()
+    graph.createSlider()
+    graph.setSliderValues()
+    graph.draw()
+
+  graph.draw = ()->
+    graph.createChart()
+    graph.setScales()
+    graph.createAxis()
+    graph.createBars()
+    
   graph

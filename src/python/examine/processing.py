@@ -14,7 +14,7 @@ class Data():
       'lines': dict(),
       'files': dict()
     })
-    sf.nel['max']['lines']['lines'] = max(linesS.index.tolist())
-    sf.nel['max']['lines']['files'] = sf.nel['hist'][sf.nel['max']['lines']['lines']]
-    sf.nel['max']['files']['lines'] = linesS.idxmax()
+    sf.nel['max']['lines']['lines'] = max(linesS.index.astype(int).tolist())
+    sf.nel['max']['lines']['files'] = sf.nel['hist'][str(sf.nel['max']['lines']['lines'])]
+    sf.nel['max']['files']['lines'] = int(linesS.idxmax())
     sf.nel['max']['files']['files'] = linesS.max()

@@ -52,15 +52,18 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
     graph.dom.slider = $('#chart-lines-distribution-slider')
     graph.dom.slider.slider({
       range: true
-      values: [0, 100]
+      min: 1
+      max: graph.vars.maxLinesCount
+      values: [1, graph.vars.maxLinesCount]
       change: graph.draw
       slide: graph.setSliderValues
+      stop: graph.setSliderValues
     })
 
   graph.setSliderValues = ->
     transformToLogValue = (sliderValue)->
-      minp = 0
-      maxp = 100
+      minp = 1
+      maxp = graph.vars.maxLinesCount
       minv = Math.log 1
       maxv = Math.log graph.vars.maxLinesCount
 
@@ -76,7 +79,7 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
 
   graph.setScales = ->
     graph.scales.x = d3.scale.log()
-      .domain [graph.vars.sliderValues[0] + 0.5, graph.vars.sliderValues[1] + 1]
+      .domain [graph.vars.sliderValues[0] - 0.5, graph.vars.sliderValues[1] + 1]
       .range [0, graph.cg.width - graph.cg.margin.left - 20]
 
     graph.scales.y = d3.scale.log()
@@ -141,7 +144,7 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
 
   graph.createBars = ->
     dataUsed = graph.data.filter((item, index)->
-      if item.linesCount > graph.vars.sliderValues[0] \
+      if item.linesCount >= graph.vars.sliderValues[0] \
         and item.linesCount <= graph.vars.sliderValues[1] then return item
       else return null
     )

@@ -17,7 +17,7 @@ define 'app', ['charts/charts'], ->
       for linesCount in Object.keys($scope.data.nel.hist)
         $scope.data.nel.total += linesCount * $scope.data.nel.hist[linesCount]
         $scope.data.nel.parsedHist.push({
-          linesCount: linesCount
+          linesCount: Number(linesCount)
           filesCount: $scope.data.nel.hist[linesCount]
         })
 

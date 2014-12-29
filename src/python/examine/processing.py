@@ -1,20 +1,61 @@
-from pandas import Series
+from pandas import Series, DataFrame
+import numpy as np
 
 class Data():
-  def calculate_lines_mean(sf):
-    linesS = Series(sf.nel['hist'])
-    number_files = linesS.index
-    number_files = number_files.astype(int)
-    lines = linesS.multiply(number_files)
-    sf.nel['mean'] = lines.mean()
-    sf.nel['median'] = lines.median()
-    sf.nel['std'] = lines.std()
+  def process_files_data(sf):
+    sf.files = DataFrame(sf.files, columns=['extension', 'nel', 'size'])
     
-    sf.nel['max'] = dict({
-      'lines': dict(),
-      'files': dict()
-    })
-    sf.nel['max']['lines']['lines'] = max(linesS.index.astype(int).tolist())
-    sf.nel['max']['lines']['files'] = sf.nel['hist'][str(sf.nel['max']['lines']['lines'])]
-    sf.nel['max']['files']['lines'] = int(linesS.idxmax())
-    sf.nel['max']['files']['files'] = linesS.max()
+    sf.calculate_extensions_stats()
+    sf.calculate_nel_stats()
+    sf.calculate_sizes_stats()
+
+
+  def calculate_sizes_stats(sf):
+    sf.sizes = dict()
+    sf.sizes['hist'] = sf.convert_df_column_to_hist(sf.files, 'size')
+    sf.sizes.update(sf.get_summary_indicators_from_hist(sf.sizes['hist'], True))
+
+
+  def calculate_extensions_stats(sf):
+    sf.extensions = dict()
+    sf.extensions['hist'] = sf.convert_df_column_to_hist(sf.files, 'extension')
+    sf.extensions.update(sf.get_summary_indicators_from_hist(sf.extensions['hist']))
+
+
+  def calculate_nel_stats(sf):
+    sf.nel = dict()
+    sf.nel['hist'] = sf.convert_df_column_to_hist(sf.files, 'nel')
+    sf.nel.update(sf.get_summary_indicators_from_hist(sf.nel['hist'], True))
+
+
+  def convert_df_column_to_hist(sf, df, column):
+    return df[column].value_counts().to_dict()
+
+
+  def get_summary_indicators_from_hist(sf, hist, intIndex= False):
+    seriesHist = Series(hist)
+    maxs = {
+      'freq': dict()
+    }
+    
+    maxs['freq']['freq'] = seriesHist.max()
+    maxs['freq']['index'] = seriesHist.idxmax()
+    
+    if intIndex:
+      index = seriesHist.index
+      index = index.astype(int)
+      
+      maxs['freq']['index'] = int(maxs['freq']['index'])
+      
+      seriesHist = seriesHist.multiply(index)
+
+      maxs['index'] = dict()
+      maxs['index']['index'] = max(index.tolist())
+      maxs['index']['freq'] = hist[str(maxs['index']['index'])]
+
+    return {
+      'mean': seriesHist.mean(),
+      'median': seriesHist.median(),
+      'std': seriesHist.std(),
+      'max': maxs
+    }

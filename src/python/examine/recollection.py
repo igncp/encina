@@ -15,17 +15,11 @@ class Data():
     sf.structure['total_files'] = total_files
     sf.structure['total_dirs'] = total_dirs
 
-  def count_lines_and_collect(sf, path):
+  def count_nels(sf, path):
     counter = 0
     with open(path, 'r') as f:
       for line in f:
         if line.strip() != '': counter += 1
-    
-    if str(counter) in sf.nel['hist']:
-      sf.nel['hist'][str(counter)] += 1
-    else:
-      sf.nel['hist'][str(counter)] = 1
-    
     return counter
 
   def set_tree_and_extras(sf): sf.tree = sf.generate_tree_and_extras()
@@ -47,23 +41,21 @@ class Data():
             else:
               sf.check_characteristics(name)
       else:
+
           sf.check_characteristics(name)
-          d['extension'] = sf.collect_file_extension(name)
-          d['lines'] = str(sf.count_lines_and_collect(path))
-          d['size'] = str(sf.get_sizes_and_collect(path))
+          d['extension'] = sf.get_file_extension(name)
+          d['lines'] = str(sf.count_nels(path))
+          d['size'] = str(sf.get_size(path))
           d['type'] = "file"
+          sf.files.append([d['extension'], d['lines'], d['size']])
       
       return d
 
-  def collect_file_extension(sf, path):
+  def get_file_extension(sf, path):
     extension = os.path.splitext(path)[1]
     
     if extension:
       extension = extension[1:]
-      if extension in sf.extensions['hist']:
-        sf.extensions['hist'][extension] += 1
-      else:
-        sf.extensions['hist'][extension] = 1
     else:
       extension = 'NA'
 
@@ -77,13 +69,8 @@ class Data():
     if element == 'bower.json':
       sf.characteristics['uses_bower'] = True
 
-  def get_sizes_and_collect(sf, path):
+  def get_size(sf, path):
     size = os.path.getsize(path)
-    if str(size) in sf.sizes['hist']:
-      sf.sizes['hist'][str(size)] += 1
-    else:
-      sf.sizes['hist'][str(size)] = 1
-    
     return size
 
   def set_root_data(sf):

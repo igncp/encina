@@ -35,8 +35,15 @@ define 'app', ['charts/charts'], ->
       (require('charts/extensions-pie')).render($scope.data.extensions.parsedHist)
       (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
       
+      $scope.bsToKbs = (size, decimals = 2)-> (size / 1000).toFixed(decimals) + ' kbs'
+
+      $scope.nbrWCommas = (x)->
+        parts = x.toString().split '.'
+        parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
+        parts.join '.'
+        
       console.log '$scope.data', $scope.data
-      $scope.loaded = -> document.body.style.opacity = 1
+      $scope.loaded = -> $('#container').css 'opacity', 1
 
   encina.directive 'bootstrapAccordion', ->
     return {

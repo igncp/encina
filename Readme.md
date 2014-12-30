@@ -26,7 +26,7 @@ You can use `encina` from the command line once the module is installed. If you 
 ## Technologies covered
 
 - Backend: Python for the data analysis, Node.js, CoffeeScript, Stylus (nib)
-- Frontend: Angular.js, D3.js, Bootstrap, Require.js, Lodash.js
+- Frontend: Angular.js, D3.js, Bootstrap, Require.js, Lodash.js, jQuery (UI)
 
 ## Development
 

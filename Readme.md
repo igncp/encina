@@ -34,6 +34,6 @@ Download the repository and run the Makefile using `make`.
 
 ## Author and License
 
-Ignacio Carbajo - 2014
+Ignacio Carbajo · 2014 - 2015
 
 MIT

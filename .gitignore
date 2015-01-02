@@ -3,7 +3,5 @@ node_modules
 *.pyc
 
 # Devel
-src/output/devel/js
-src/output/devel/css
-src/output/devel/components
-src/output/devel/index.html
+src/output/devel/*
+!src/output/devel/Readme.md

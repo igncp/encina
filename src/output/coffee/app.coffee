@@ -10,6 +10,8 @@ define 'app', ['charts/charts'], ->
         $scope.data.extensions.parsedHist.push({
           name: extension
           count: $scope.data.extensions.hist[extension]
+          percentage: (100 * $scope.data.extensions.hist[extension] / \
+            $scope.data.structure.total_files).toFixed(2)
         })
 
       $scope.data.nel.parsedHist = []
@@ -32,7 +34,7 @@ define 'app', ['charts/charts'], ->
       
       $scope.treeString = JSON.stringify $scope.data.tree, undefined, 2
       
-      (require('charts/extensions-pie')).render($scope.data.extensions.parsedHist)
+      (require('charts/extensions-pie'))($scope.data.extensions.parsedHist)
       (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
       
       $scope.bsToKbs = (size, decimals = 2)-> (size / 1000).toFixed(decimals) + ' kbs'
@@ -43,7 +45,10 @@ define 'app', ['charts/charts'], ->
         parts.join '.'
         
       console.log '$scope.data', $scope.data
-      $scope.loaded = -> $('#container').css 'opacity', 1
+      $scope.loaded = ->
+        container = document.getElementById 'container'
+        angular.element(container).css 'opacity', 1
+        false
 
   encina.directive 'bootstrapAccordion', ->
     return {

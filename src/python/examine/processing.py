@@ -32,7 +32,7 @@ class Data():
     return df[column].value_counts().to_dict()
 
 
-  def get_summary_indicators_from_hist(sf, hist, intIndex= False):
+  def get_summary_indicators_from_hist(sf, hist, int_index= False):
     seriesHist = Series(hist)
     maxs = {
       'freq': dict()
@@ -40,22 +40,26 @@ class Data():
     
     maxs['freq']['freq'] = seriesHist.max()
     maxs['freq']['index'] = seriesHist.idxmax()
-    
-    if intIndex:
+    total_index = 'NA'
+
+    if int_index:
       index = seriesHist.index
       index = index.astype(int)
+      index_list = index.tolist()
+      total_index = sum(index_list)
       
       maxs['freq']['index'] = int(maxs['freq']['index'])
       
       seriesHist = seriesHist.multiply(index)
 
       maxs['index'] = dict()
-      maxs['index']['index'] = max(index.tolist())
+      maxs['index']['index'] = max(index_list)
       maxs['index']['freq'] = hist[str(maxs['index']['index'])]
 
     return {
       'mean': seriesHist.mean(),
       'median': seriesHist.median(),
       'std': seriesHist.std(),
-      'max': maxs
+      'max': maxs,
+      'total_index': total_index
     }

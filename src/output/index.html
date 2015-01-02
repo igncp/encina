@@ -59,7 +59,7 @@
         <bootstrap-accordion title-text="File extensions" name="extensions" expanded="true">
             <div class="col-lg-6">
                 <ul>
-                    <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}}</li>
+                    <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
                 </ul>
             </div>
             <div class="col-lg-6">

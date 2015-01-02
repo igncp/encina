@@ -3,5 +3,7 @@ node_modules
 *.pyc
 
 # Devel
+encina-report
 src/output/devel/*
 !src/output/devel/Readme.md
+

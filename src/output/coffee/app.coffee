@@ -1,7 +1,7 @@
 define 'app', ['charts/charts'], ->
   encina = angular.module('encina', [])
 
-  encina.controller 'MainCtrl', ($scope, $http)->
+  encina.controller 'MainCtrl', ($scope, $http, $timeout)->
     $http.get('data.json').then (res)->
       $scope.data = res.data
 
@@ -41,14 +41,23 @@ define 'app', ['charts/charts'], ->
         parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
         parts.join '.'
         
-      renderCharts = ->
-        (require('charts/extensions-pie'))($scope.data.extensions.parsedHist)
-        (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
+      renderCharts = (cb)->
+        async.parallel [
+          (end)-> (require('charts/extensions-pie'))($scope.data.extensions.parsedHist, end)
+          (end)-> (require('charts/lines-distribution')).render($scope.data.nel.parsedHist, end)
+        ], cb
 
       angular.element(document).ready ->
-        renderCharts()
-        container = document.getElementById 'container'
-        angular.element(container).css 'opacity', 1
+        # Need to wait till all directives containing charts are rendered
+        async.series [renderCharts, (end)->
+          show = (elId)->
+            container = document.getElementById elId
+            angular.element(container).css 'opacity', 1
+
+          show 'container'
+          show 'footer'
+          end()
+        ]
         false
 
   encina.directive 'bootstrapAccordion', ->

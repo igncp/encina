@@ -16,4 +16,14 @@ define 'charts/common', ->
     colorScaleFn = (d)-> colorScale(c(d))
     colorScaleFn
 
+  common.waitTillElPresent = (elId, cb)->
+    # This is not done with async's `until` because it stopped the loop
+    wait = (wcb)->
+      if document.getElementById(elId)
+        wcb()
+      else
+        console.log 'wait'
+        setTimeout (-> wait(wcb)), 100
+    wait(cb)
+
   common

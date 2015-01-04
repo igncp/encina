@@ -162,13 +162,15 @@ define 'charts/lines-distribution', ['charts/common'], (common)->
       .append 'title'
       .text (d)-> d.linesCount + ' line(s), ' + d.filesCount + ' file(s)'
 
-  graph.render = (origData)->
-    graph.setData _.cloneDeep origData
-    graph.setCg()
-    graph.setVars()
-    graph.createSlider()
-    graph.setSliderValues()
-    graph.draw()
+  graph.render = (origData, cb)->
+    common.waitTillElPresent 'chart-lines-distribution', ->
+      graph.setData _.cloneDeep origData
+      graph.setCg()
+      graph.setVars()
+      graph.createSlider()
+      graph.setSliderValues()
+      graph.draw()
+      cb()
 
   graph.draw = ()->
     graph.createChart()

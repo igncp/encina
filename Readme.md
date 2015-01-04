@@ -1,7 +1,5 @@
 # Encina
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/igncp/encina?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![npm version](https://badge.fury.io/js/encina.svg)](http://badge.fury.io/js/encina)
 
 A command line tool for analyzing projects and retrieving statistics. Once completed, you can inspect the result using an interactive interface, with charts (D3) and formatted data.

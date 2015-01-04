@@ -11,8 +11,5 @@ server:
 grunt:
 	@grunt watch
 
-generate-devel-data:
-	@./bin/encina.js examine . >/dev/null
-	@cp encina-report/data.json src/output/devel/
-	@rm -rf ./encina-report
-	@echo 'Data copied to ./src/output/devel/data.json'
+clear-devel:
+	@cd src/output/devel; rm -rf components css js data.json index.html

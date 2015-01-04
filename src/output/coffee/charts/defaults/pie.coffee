@@ -7,7 +7,7 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
     outerRadius = 100
     color = d3.scale.category20()
     arc = {}
-    
+
     svg = d3.select elId
       .append 'svg'
       .attr 'width', width

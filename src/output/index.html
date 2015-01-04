@@ -16,8 +16,8 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 
-<body>
-    <div id="container" ng-controller="MainCtrl" class="col-lg-offset-1 col-lg-10">
+<body ng-controller="MainCtrl">
+    <div id="container" class="col-lg-offset-1 col-lg-10">
         <div class="page-header">
             <h1>Encina Report - <strong>{{data.root.name}}</strong> <small>{{data.root.dir}}</small></h1>
         </div>
@@ -91,11 +91,12 @@
             <pre>{{treeString}}</pre>
         </bootstrap-accordion>
 
-        <p style="display: none">{{loaded()}}</p>
     </div>
 
     <footer class="col-lg-offset-1 col-lg-10">
-        <p><a href="https://github.com/igncp/encina">Encina Source</a>
+        <p>
+            Generated with version <strong>{{data.meta.version}}</strong> · 
+            <a href="https://github.com/igncp/encina">Encina Source</a>
         </p>
     </footer>
 </body>

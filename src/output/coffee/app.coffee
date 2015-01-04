@@ -34,9 +34,6 @@ define 'app', ['charts/charts'], ->
       
       $scope.treeString = JSON.stringify $scope.data.tree, undefined, 2
       
-      (require('charts/extensions-pie'))($scope.data.extensions.parsedHist)
-      (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
-      
       $scope.bsToKbs = (size, decimals = 2)-> (size / 1000).toFixed(decimals) + ' kbs'
 
       $scope.nbrWCommas = (x)->
@@ -44,8 +41,12 @@ define 'app', ['charts/charts'], ->
         parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
         parts.join '.'
         
-      console.log '$scope.data', $scope.data
-      $scope.loaded = ->
+      renderCharts = ->
+        (require('charts/extensions-pie'))($scope.data.extensions.parsedHist)
+        (require('charts/lines-distribution')).render($scope.data.nel.parsedHist)
+
+      angular.element(document).ready ->
+        renderCharts()
         container = document.getElementById 'container'
         angular.element(container).css 'opacity', 1
         false

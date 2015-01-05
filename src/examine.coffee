@@ -1,3 +1,4 @@
+hrInterval = process.hrtime()
 exec = require('child_process').exec
 path = require 'path'
 fs = require 'fs'
@@ -17,7 +18,8 @@ runGrunt = ->
   child = exec command, (error, stdout, stderr)->
     if stderr then console.log stderr
     else
-      console.log 'Done!'
+      hrInterval = process.hrtime hrInterval
+      console.log 'Done. [%d.%d seconds]', hrInterval[0], (hrInterval[1]/10000000).toFixed(0)
 
 module.exports = (rootDir)->
   if typeof rootDir is 'string'

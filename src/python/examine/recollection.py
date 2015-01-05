@@ -24,8 +24,11 @@ class Data():
 
   def set_tree_and_extras(sf): sf.tree = sf.generate_tree_and_extras()
   
-  def generate_tree_and_extras(sf, path=''):
+  def generate_tree_and_extras(sf, path='', top_depth=''):
       if path == '': path = sf.root['dir']
+      if top_depth == '':
+        top_depth = path.count(os.sep)
+        sf.structure['top_depth'] = top_depth
       name = os.path.basename(path)
       d = {'name': name}
       if os.path.isdir(path):
@@ -37,7 +40,7 @@ class Data():
               if not 'children' in d:
                 d['children'] = list()
               new_path = os.path.join(path,name)
-              d['children'].append(sf.generate_tree_and_extras(new_path))
+              d['children'].append(sf.generate_tree_and_extras(new_path, top_depth))
             else:
               sf.check_characteristics(name)
       else:
@@ -46,8 +49,9 @@ class Data():
           d['extension'] = sf.get_file_extension(name)
           d['lines'] = str(sf.count_nels(path))
           d['size'] = str(sf.get_size(path))
+          d['depth'] = str(path.count(os.sep) - top_depth)
           d['type'] = "file"
-          sf.files.append([d['extension'], d['lines'], d['size']])
+          sf.files.append([d['extension'], d['lines'], d['size'], d['depth']])
       
       return d
 

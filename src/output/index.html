@@ -4,6 +4,7 @@
 <head>
     <title>Encina Report</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js" data-main="js/main.js"></script>
@@ -36,22 +37,7 @@
         </ul>
         <p>Directories excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
         <bootstrap-accordion title-text="Non Empty Lines Count" name="lines" expanded="true">
-            <div class="row">
-                <div class="col-lg-6">
-                    <p>Total Number of Non Empty Lines: <strong>{{nbrWCommas(data.nel.total)}}</strong>
-                    </p>
-                    <p>Mean of Non Empty Lines Per File: <strong>{{data.nel.mean.toFixed(0)}}</strong>
-                    </p>
-                    <p>Median of Non Empty Lines Per File: <strong>{{data.nel.median.toFixed(0)}}</strong>
-                    </p>
-                    <p>STD of Non Empty Lines Per File: <strong>{{data.nel.std.toFixed(2)}}</strong>
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <p>Maximum Non Empty Lines in a single file: <strong>{{nbrWCommas(data.nel.max.index.index)}}</strong> (in {{data.nel.max.index.freq}} file(s))</p>
-                    <p>Maximum repeated files: <strong>{{data.nel.max.freq.freq}}</strong> (with {{data.nel.max.freq.index}} non empty line(s))</p>
-                </div>
-            </div>
+            <summary-statistics var-title="Non Empty Lines" var-name="nel" json-data="data" integers-index="true"></summary-statistics>
             <div class="row">
                 <div id="chart-lines-distribution" class="col-lg-12"></div>
             </div>
@@ -68,24 +54,13 @@
             </div>
         </bootstrap-accordion>
 
-
         <bootstrap-accordion title-text="Files Size" name="sizes">
-            <div class="row">
-                <div class="col-lg-6">
-                    <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
-                    </p>
-                    <p>Mean of files size: <strong>{{bsToKbs(data.sizes.mean)}}</strong>
-                    </p>
-                    <p>Median of files size: <strong>{{bsToKbs(data.sizes.median)}}</strong>
-                    </p>
-                    <p>STD of files size: <strong>{{bsToKbs(data.sizes.std)}}</strong>
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <p>Maximum size of a file: <strong>{{nbrWCommas(bsToKbs(data.sizes.max.index.index))}}</strong> (in {{data.sizes.max.index.freq}} file(s))</p>
-                    <p>Maximum repeated files size: <strong>{{data.sizes.max.freq.freq}}</strong> (with {{bsToKbs(data.sizes.max.freq.index)}})</p>
-                </div>
-            </div>
+            <summary-statistics var-title="files size" var-name="sizes" json-data="data" to-kbs="true"></summary-statistics>
+        </bootstrap-accordion>
+
+        <bootstrap-accordion title-text="Depth Of Files" name="depths" expanded="true">
+            <summary-statistics var-title="levels of depth" var-name="depths" json-data="data" integers-index="true"></summary-statistics>
+            <div id="chart-depths-distribution" class="col-lg-12"></div>
         </bootstrap-accordion>
 
         <bootstrap-accordion title-text="File Structure JSON" name="structure">
@@ -96,7 +71,13 @@
 
     <footer class="col-lg-offset-1 col-lg-10" id="footer">
         <p>
-            Generated with version <strong>{{data.meta.version}}</strong> · 
+            Generated the {{data.meta.date.day}} at {{data.meta.date.time}} ({{data.meta.tzname}})
+        </p>
+        <p>
+            using <span ng-if="data.meta.linux">{{data.meta.linux}} - </span>{{data.meta.os}} {{data.meta.machine}}
+        </p>
+        <p>
+            with version <strong>{{data.meta.version}}</strong> · 
             <a href="https://github.com/igncp/encina">Encina Source</a>
         </p>
     </footer>

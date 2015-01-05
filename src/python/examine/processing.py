@@ -3,11 +3,12 @@ import numpy as np
 
 class Data():
   def process_files_data(sf):
-    sf.files = DataFrame(sf.files, columns=['extension', 'nel', 'size'])
+    sf.files = DataFrame(sf.files, columns=['extension', 'nel', 'size', 'depth'])
     
     sf.calculate_extensions_stats()
     sf.calculate_nel_stats()
     sf.calculate_sizes_stats()
+    sf.calculate_depth_stats()
 
 
   def calculate_sizes_stats(sf):
@@ -27,6 +28,10 @@ class Data():
     sf.nel['hist'] = sf.convert_df_column_to_hist(sf.files, 'nel')
     sf.nel.update(sf.get_summary_indicators_from_hist(sf.nel['hist'], True))
 
+  def calculate_depth_stats(sf):
+    sf.depths = dict()
+    sf.depths['hist'] = sf.convert_df_column_to_hist(sf.files, 'depth')
+    sf.depths.update(sf.get_summary_indicators_from_hist(sf.depths['hist'], True))
 
   def convert_df_column_to_hist(sf, df, column):
     return df[column].value_counts().to_dict()
@@ -38,28 +43,35 @@ class Data():
       'freq': dict()
     }
     
+    means = {'freq': seriesHist.mean()}
+    medians = {'freq': seriesHist.median()}
+    stds = {'freq': seriesHist.std()}
+    
     maxs['freq']['freq'] = seriesHist.max()
     maxs['freq']['index'] = seriesHist.idxmax()
-    total_index = 'NA'
+    index_total = 'NA'
 
     if int_index:
       index = seriesHist.index
       index = index.astype(int)
       index_list = index.tolist()
-      total_index = sum(index_list)
+      index_total = sum(index_list)
+      index_series = Series(index_list)
+
+      means['index'] = index_series.mean()
+      medians['index'] = index_series.median()
+      stds['index'] = index_series.std()
       
       maxs['freq']['index'] = int(maxs['freq']['index'])
-      
-      seriesHist = seriesHist.multiply(index)
 
       maxs['index'] = dict()
       maxs['index']['index'] = max(index_list)
       maxs['index']['freq'] = hist[str(maxs['index']['index'])]
 
     return {
-      'mean': seriesHist.mean(),
-      'median': seriesHist.median(),
-      'std': seriesHist.std(),
+      'means': means,
+      'medians': medians,
+      'stds': stds,
       'max': maxs,
-      'total_index': total_index
+      'index_total': index_total
     }

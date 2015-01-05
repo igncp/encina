@@ -1,7 +1,10 @@
-define 'app', ['charts/charts'], ->
+define 'app', [
+  'charts/charts'
+  'directives/directives'
+], (charts, directives)->
   encina = angular.module('encina', [])
 
-  encina.controller 'MainCtrl', ($scope, $http, $timeout)->
+  mainCtrl = encina.controller 'MainCtrl', ($scope, $http, $timeout)->
     $http.get('data.json').then (res)->
       $scope.data = res.data
 
@@ -31,20 +34,30 @@ define 'app', ['charts/charts'], ->
           size: size
           filesCount: $scope.data.sizes.hist[size]
         })
+
+      $scope.data.depths.parsedHist = []
+      $scope.data.depths.total = 0
+      for depthLevel in Object.keys($scope.data.depths.hist)
+        $scope.data.depths.parsedHist.push({
+          depthLevel: Number(depthLevel)
+          filesCount: $scope.data.depths.hist[depthLevel]
+        })
       
       $scope.treeString = JSON.stringify $scope.data.tree, undefined, 2
       
       $scope.bsToKbs = (size, decimals = 2)-> (size / 1000).toFixed(decimals) + ' kbs'
 
-      $scope.nbrWCommas = (x)->
-        parts = x.toString().split '.'
-        parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
-        parts.join '.'
+      $scope.data.meta.date = {
+        day: moment.unix($scope.data.meta.time).format 'Do of MMMM (YYYY)'
+        time: moment.unix($scope.data.meta.time).format 'HH:mm '
+      }
+      
         
       renderCharts = (cb)->
         async.parallel [
           (end)-> (require('charts/extensions-pie'))($scope.data.extensions.parsedHist, end)
-          (end)-> (require('charts/lines-distribution')).render($scope.data.nel.parsedHist, end)
+          (end)-> (require('charts/lines-distribution'))($scope.data.nel.parsedHist, end)
+          (end)-> (require('charts/depths-distribution'))($scope.data.depths.parsedHist, end)
         ], cb
 
       angular.element(document).ready ->
@@ -56,20 +69,12 @@ define 'app', ['charts/charts'], ->
 
           show 'container'
           show 'footer'
+          console.log '$scope.data', $scope.data
           end()
         ]
         false
 
-  encina.directive 'bootstrapAccordion', ->
-    return {
-      restrict: 'E'
-      templateUrl: 'components/bootstrap-accordion.html'
-      replace: true
-      scope:
-        titleText: '@'
-        expanded: '@'
-        name: '@'
-      transclude: true
-    }
+  # Creates directives
+  directives(mainCtrl)
 
   angular.bootstrap document, ['encina']

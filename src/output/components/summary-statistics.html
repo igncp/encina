@@ -1,0 +1,24 @@
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <p ng-if="exists(varName + '.total')">Summation of {{varTitle}}: <strong>{{parseNumber(varName + '.total', undefined, {toKbs: false, toMbs: true})}}</strong>
+            </p>
+            <p>Mean of {{varTitle}}: <strong>{{parseNumber(varName + '.means.index', 2)}}</strong>
+            </p>
+            <p>Mean of file repetions by {{varTitle}}: <strong>{{parseNumber(varName + '.means.freq', 2, {isFile: true})}}</strong>
+            </p>
+            <p>Median of {{varTitle}}: <strong>{{parseNumber(varName + '.medians.index')}}</strong>
+            </p>
+            <p>Median of files repetitions by {{varTitle}}: <strong>{{parseNumber(varName + '.medians.freq', 0)}}</strong>
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <p>STD of {{varTitle}}: <strong>{{parseNumber(varName + '.stds.index', 3)}}</strong>
+            </p>
+            <p>STD of file repetitions by {{varTitle}}: <strong>{{parseNumber(varName + '.stds.freq', 3, {isFile: true})}}</strong>
+            </p>
+            <p>Maximum {{varTitle}} of a file (or more): <strong>{{parseNumber(varName + '.max.index.index')}}</strong> (in {{parseNumber(varName + '.max.index.freq', 0)}} file(s))</p>
+            <p>Maximum repeated files: <strong>{{parseNumber(varName + '.max.freq.freq', 0)}}</strong> (with {{parseNumber(varName + '.max.freq.index')}} {{varTitle}})</p>
+        </div>
+    </div>
+</div>

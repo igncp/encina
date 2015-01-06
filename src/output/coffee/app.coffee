@@ -8,6 +8,12 @@ define 'app', [
     $http.get('data.json').then (res)->
       $scope.data = res.data
 
+      $scope.nbrWCommas = (x, decimals = 0)->
+        x = x.toFixed(decimals)
+        parts = x.toString().split '.'
+        final = parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
+        final = parts.join '.'
+
       $scope.data.extensions.parsedHist = []
       for extension in Object.keys($scope.data.extensions.hist)
         $scope.data.extensions.parsedHist.push({

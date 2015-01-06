@@ -3,12 +3,14 @@ import json
 import time
 import platform
 
+
 class Data():
   def linux_distribution(sf):
       try:
         dist = platform.linux_distribution()
         sf.meta['linux'] = ' '.join(dist)
-      except: pass
+      except:
+        pass
 
   def save_file(sf):
     if not os.path.exists('encina-report'):
@@ -17,7 +19,7 @@ class Data():
     packagejson = open(os.path.dirname(os.path.abspath(__file__)) + '/../../../package.json')
     package = json.load(packagejson)
     packagejson.close()
-    
+
     sf.meta['version'] = package['version']
     sf.meta['os'] = platform.system() + ' ' + platform.release()
     sf.meta['machine'] = platform.machine()
@@ -28,7 +30,7 @@ class Data():
     data = {
       'depths': sf.depths,
       'root': sf.root,
-      'nel': sf.nel, # Non Empty Lines
+      'nel': sf.nel,  # Non Empty Lines
       'sizes': sf.sizes,
       'extensions': sf.extensions,
       'structure': sf.structure,

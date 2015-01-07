@@ -17,8 +17,20 @@
             </p>
             <p>STD of file repetitions by {{varTitle}}: <strong>{{parseNumber(varName + '.stds.freq', 3, {isFile: true})}}</strong>
             </p>
-            <p>Maximum {{varTitle}} of a file (or more): <strong>{{parseNumber(varName + '.max.index.index')}}</strong> (in {{parseNumber(varName + '.max.index.freq', 0)}} file(s))</p>
-            <p>Maximum repeated files: <strong>{{parseNumber(varName + '.max.freq.freq', 0)}}</strong> (with {{parseNumber(varName + '.max.freq.index')}} {{varTitle}})</p>
+            <p>Maximum {{varTitle}} of a file (or more): <strong>{{parseNumber(varName + '.max.index.index')}}</strong> <a href="" ng-click="launchModal(1, varName)">in {{parseNumber(varName + '.max.index.freq', 0)}} file(s)</a></p>
+            <bootstrap-modal modal-number="1" var-name="{{varName}}" modal-title="{{parseNumber(varName + '.max.index.index')}} {{varTitle}}">
+                <p>List of matches ({{getPaths(varName + '.max.index.paths').length}}):</p>
+                <ol>
+                    <li class="modal-item" ng-repeat="path in getPaths(varName + '.max.index.paths')">{{path}}</li>
+                </ol>
+            </bootstrap-modal>
+            <p>Maximum repeated files: <strong><a href="" ng-click="launchModal(2, varName)">{{parseNumber(varName + '.max.freq.freq', 0)}}</a></strong> (with {{parseNumber(varName + '.max.freq.index')}} {{varTitle}})</p>
+            <bootstrap-modal modal-number="2" var-name="{{varName}}" modal-title="{{parseNumber(varName + '.max.freq.index')}} {{varTitle}}">
+                <p>List of matches ({{getPaths(varName + '.max.freq.paths').length}}):</p>
+                <ol>
+                    <li class="modal-item" ng-repeat="path in getPaths(varName + '.max.freq.paths')">{{path}}</li>
+                </ol>
+            </bootstrap-modal>
         </div>
     </div>
 </div>

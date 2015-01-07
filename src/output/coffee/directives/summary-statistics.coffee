@@ -48,5 +48,12 @@ define 'directives/summary-statistics', [], ()->
               return final
 
             else return 'waiting...' # The data is not loaded yet
+          
+          scope.launchModal = (number, id)->
+            $('#modal-' + number + '-' + id).modal()
+            false
+
+          scope.getPaths = (dataProp)->
+            x = eval 'scope.jsonData.' + dataProp
       }
   create

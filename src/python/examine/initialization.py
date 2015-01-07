@@ -7,6 +7,7 @@ class Data(recollection.Data, storage.Data, processing.Data):
     sf.root = dict()
 
     sf.files = list()
+    sf.dirs = list()
     
     sf.structure = dict()
     sf.meta = dict()

@@ -51,7 +51,8 @@ class Data():
           d['size'] = str(sf.get_size(path))
           d['depth'] = str(path.count(os.sep) - top_depth)
           d['type'] = "file"
-          sf.files.append([d['extension'], d['lines'], d['size'], d['depth']])
+          rel_path = path.replace(sf.root['dir'],'')
+          sf.files.append([rel_path, d['extension'], d['lines'], d['size'], d['depth']])
       
       return d
 

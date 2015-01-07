@@ -108,8 +108,8 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           # Digits different than zero (except first one)
           dString = d.toFixed(0).toString()
           digits = d % Math.pow(10, (dString.length) - 1)
-          firstDigitOneOrFive = dString[0] is '1' or dString[0] is '5'
-          if digits is 0 and firstDigitOneOrFive then return d
+          firstDigitOneTwoOrFive = dString[0] is '1' or dString[0] is '2' or dString[0] is '5'
+          if digits is 0 and firstDigitOneTwoOrFive then return d
           else return null
         )
 
@@ -120,8 +120,8 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           # Digits different than zero (except first one)
           dString = d.toFixed(0).toString()
           digits = d % Math.pow(10, (dString.length) - 1)
-          firstDigitOneOrFive = dString[0] is '1' or dString[0] is '5'
-          if digits is 0 and firstDigitOneOrFive then return d
+          firstDigitOneTwoOrFive = dString[0] is '1' or dString[0] is '2' or dString[0] is '5'
+          if digits is 0 and firstDigitOneTwoOrFive then return d
           else return null
         )
       

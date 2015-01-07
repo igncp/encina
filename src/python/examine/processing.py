@@ -3,7 +3,7 @@ import numpy as np
 
 class Data():
   def process_files_data(sf):
-    sf.files = DataFrame(sf.files, columns=['extension', 'nel', 'size', 'depth'])
+    sf.files = DataFrame(sf.files, columns=['path', 'extension', 'nel', 'size', 'depth'])
     
     sf.calculate_extensions_stats()
     sf.calculate_nel_stats()
@@ -15,6 +15,7 @@ class Data():
     sf.sizes = dict()
     sf.sizes['hist'] = sf.convert_df_column_to_hist(sf.files, 'size')
     sf.sizes.update(sf.get_summary_indicators_from_hist(sf.sizes['hist'], True))
+    sf.find_max_paths(sf.sizes['max'], 'size')
 
 
   def calculate_extensions_stats(sf):
@@ -24,14 +25,18 @@ class Data():
 
 
   def calculate_nel_stats(sf):
+    key = 'nel'
     sf.nel = dict()
-    sf.nel['hist'] = sf.convert_df_column_to_hist(sf.files, 'nel')
+    sf.nel['hist'] = sf.convert_df_column_to_hist(sf.files, key)
     sf.nel.update(sf.get_summary_indicators_from_hist(sf.nel['hist'], True))
+    sf.find_max_paths(sf.nel['max'], key)
 
   def calculate_depth_stats(sf):
+    key = 'depth'
     sf.depths = dict()
-    sf.depths['hist'] = sf.convert_df_column_to_hist(sf.files, 'depth')
+    sf.depths['hist'] = sf.convert_df_column_to_hist(sf.files, key)
     sf.depths.update(sf.get_summary_indicators_from_hist(sf.depths['hist'], True))
+    sf.find_max_paths(sf.depths['max'], key)
 
   def convert_df_column_to_hist(sf, df, column):
     return df[column].value_counts().to_dict()
@@ -75,3 +80,8 @@ class Data():
       'max': maxs,
       'index_total': index_total
     }
+
+  def find_max_paths(sf, max, key):
+    max['freq']['paths'] = sf.files.loc[sf.files[key] == str(max['freq']['index'])]['path'].tolist()
+    if 'index' in max:
+      max['index']['paths'] = sf.files.loc[sf.files[key] == str(max['index']['index'])]['path'].tolist()

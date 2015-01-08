@@ -34,15 +34,24 @@ class Data():
       if os.path.isdir(path):
           sf.check_characteristics(name)
           d['type'] = 'directory'
+          list_dir = os.listdir(path)
+          inside_files = []
+          inside_dirs = []
 
-          for name in os.listdir(path):
+          for name in list_dir:
+            new_path = os.path.join(path,name)
+            if os.path.isdir(new_path):
+              inside_dirs.append(name)
+            else:
+              inside_files.append(name)
             if name not in sf.structure['excluded_dirs']:
               if not 'children' in d:
                 d['children'] = list()
-              new_path = os.path.join(path,name)
               d['children'].append(sf.generate_tree_and_extras(new_path, top_depth))
             else:
               sf.check_characteristics(name)
+          
+          sf.dirs.append([path, str(len(inside_dirs)), str(len(inside_files)), str(len(inside_files) + len(inside_dirs))])
       else:
 
           sf.check_characteristics(name)

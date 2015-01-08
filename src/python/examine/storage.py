@@ -36,6 +36,7 @@ class Data():
       'structure': sf.structure,
       'characteristics': sf.characteristics,
       'tree': sf.tree,
+      'dirs': sf.dirs,
       'meta': sf.meta
     }
 

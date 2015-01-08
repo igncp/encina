@@ -30,12 +30,13 @@
         </p>
         <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
         </p>
+        <p>If they were present, these directories were excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
+        <p ng-show="passingChs > 0">Miscellaneous info:</p>
         <ul>
-            <li ng-if="data.special_cases.has_git === true">Has a git repository</li>
-            <li ng-if="data.special_cases.uses_node === true">Uses Node.js</li>
-            <li ng-if="data.special_cases.uses_bower === true">Uses Bower.js</li>
+            <li ng-show="getChs('has_git')">Has a git repository</li>
+            <li ng-show="getChs('uses_node')">Uses Node.js</li>
+            <li ng-show="getChs('uses_bower')">Uses Bower.js</li>
         </ul>
-        <p>Directories excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
         <bootstrap-accordion title-text="Non Empty Lines Count" name="lines" expanded="true">
             <summary-statistics var-title="Non Empty Lines" var-name="nel" json-data="data" integers-index="true"></summary-statistics>
             <div class="row">
@@ -77,8 +78,8 @@
             using <span ng-if="data.meta.linux">{{data.meta.linux}} - </span>{{data.meta.os}} {{data.meta.machine}}
         </p>
         <p>
-            with version <strong>{{data.meta.version}}</strong> · 
-            <a href="https://github.com/igncp/encina">Source</a> · 
+            with version <strong>{{data.meta.version}}</strong> ·
+            <a href="https://github.com/igncp/encina">Source</a> ·
             <a href="http://igncp.github.io/encina/">Website</a>
         </p>
     </footer>

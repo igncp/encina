@@ -14,6 +14,15 @@ define 'app', [
         final = parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
         final = parts.join '.'
 
+      $scope.passingChs = 0
+      $scope.getChs = (key)->
+        console.log 'pasa'
+        if $scope.data.characteristics[key] is true
+          $scope.passingChs += 1
+          return true
+        else
+          return false
+
       $scope.data.extensions.parsedHist = []
       for extension in Object.keys($scope.data.extensions.hist)
         $scope.data.extensions.parsedHist.push({

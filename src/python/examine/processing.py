@@ -10,12 +10,33 @@ class Data():
     sf.calculate_sizes_stats()
     sf.calculate_depth_stats()
 
+  def process_dirs_data(sf):
+    for row in sf.dirs:
+      row.append(float(row[2]) / float(row[3]))
+
+    sf.dirs_df = DataFrame(sf.dirs, columns=['path', 'inside_dirs', 'inside_files', 'total_children', 'files_percent'])
+    sf.dirs = {
+      'inside_files': dict(),
+      'inside_dirs': dict(),
+      'total_children': dict(),
+      'files_percent': dict()
+    }
+    sf.calculate_dirs_stats('inside_files')
+    sf.calculate_dirs_stats('inside_dirs')
+    sf.calculate_dirs_stats('total_children')
+    # TODO: calc stats of 'files_percent' (float)
+    
+  def calculate_dirs_stats(sf, key):
+    sf.dirs[key]['hist'] = sf.convert_df_column_to_hist(sf.dirs_df, 'inside_files')
+    sf.dirs[key].update(sf.get_summary_indicators_from_hist(sf.dirs[key]['hist'], True))
+    if key != 'files_percent': sf.find_max_paths_in_dirs(sf.dirs[key]['max'], key)
+
 
   def calculate_sizes_stats(sf):
     sf.sizes = dict()
     sf.sizes['hist'] = sf.convert_df_column_to_hist(sf.files, 'size')
     sf.sizes.update(sf.get_summary_indicators_from_hist(sf.sizes['hist'], True))
-    sf.find_max_paths(sf.sizes['max'], 'size')
+    sf.find_max_paths_in_files(sf.sizes['max'], 'size')
 
 
   def calculate_extensions_stats(sf):
@@ -29,14 +50,14 @@ class Data():
     sf.nel = dict()
     sf.nel['hist'] = sf.convert_df_column_to_hist(sf.files, key)
     sf.nel.update(sf.get_summary_indicators_from_hist(sf.nel['hist'], True))
-    sf.find_max_paths(sf.nel['max'], key)
+    sf.find_max_paths_in_files(sf.nel['max'], key)
 
   def calculate_depth_stats(sf):
     key = 'depth'
     sf.depths = dict()
     sf.depths['hist'] = sf.convert_df_column_to_hist(sf.files, key)
     sf.depths.update(sf.get_summary_indicators_from_hist(sf.depths['hist'], True))
-    sf.find_max_paths(sf.depths['max'], key)
+    sf.find_max_paths_in_files(sf.depths['max'], key)
 
   def convert_df_column_to_hist(sf, df, column):
     return df[column].value_counts().to_dict()
@@ -81,7 +102,13 @@ class Data():
       'index_total': index_total
     }
 
-  def find_max_paths(sf, max, key):
-    max['freq']['paths'] = sf.files.loc[sf.files[key] == str(max['freq']['index'])]['path'].tolist()
+  def find_max_paths(sf, df, max, key):
+    max['freq']['paths'] = df.loc[df[key] == str(max['freq']['index'])]['path'].tolist()
     if 'index' in max:
-      max['index']['paths'] = sf.files.loc[sf.files[key] == str(max['index']['index'])]['path'].tolist()
+      max['index']['paths'] = df.loc[df[key] == str(max['index']['index'])]['path'].tolist()
+
+  def find_max_paths_in_files(sf, max, key):
+    sf.find_max_paths(sf.files, max, key)
+    
+  def find_max_paths_in_dirs(sf, max, key):
+    sf.find_max_paths(sf.dirs_df, max, key)

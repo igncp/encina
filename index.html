@@ -6,6 +6,9 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
 
+    <link href='http://fonts.googleapis.com/css?family=Overlock' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
@@ -15,33 +18,38 @@
 </head>
 
 <body>
-    <div id="container" ng-controller="MainCtrl" class="col-lg-offset-1 col-lg-10">
-        <div class="row">
-            <div class="page-header col-lg-8">
-                <h1>Encina <small>Generates and displays stats from projects</small></h1>
+    <div id="container" ng-controller="MainCtrl" class="row">
+        <div class="col-lg-offset-1 col-lg-10">
+
+            <div class="row">
+                <div class="page-header col-lg-8">
+                    <h1>Encina <small>Generates and displays stats from projects</small></h1>
+                </div>
+                <p class="gh-buttons col-lg-4">
+                    <iframe src="http://ghbtns.com/github-btn.html?user=igncp&repo=encina&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>
+                    <iframe class="star-btn" src="http://ghbtns.com/github-btn.html?user=igncp&repo=encina&type=watch" allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>
+                </p>
             </div>
-            <p class="gh-buttons col-lg-4">
-                <iframe src="http://ghbtns.com/github-btn.html?user=igncp&repo=encina&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>
-                <iframe class="star-btn" src="http://ghbtns.com/github-btn.html?user=igncp&repo=encina&type=watch" allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>
-            </p>
-        </div>
-        <div class="row">
-            <h2>Demo</h2>
-            <p><strong><a href="http://encina-report.herokuapp.com/">Example of a report</a></strong> (from this project) using the <strong>last published version</strong>. (You may have to wait ~10 seconds till the Heroku server is woken up)</p>
-        </div>
-        <div class="row">
-            <h2>Documentation</h2>
-            <ng-include src="'docs/all.html'"></ng-include>
-        </div>
-        <div class="row">
-            <h2>Technologies covered</h2>
-            <p><strong>Backend</strong>: Python for the data analysis, Node.js, CoffeeScript, Stylus (nib)</p>
-            <p><strong>Frontend</strong>: Angular.js, D3.js, Bootstrap, Require.js, Lodash.js, jQuery (UI), Moment.js</p>
+            <div class="row">
+                <h2><span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span> Demo</h2>
+                <p><strong><a href="http://encina-report.herokuapp.com/">Example of a report</a></strong> (from this project) using the <strong>last published version</strong>. (You may have to wait ~10 seconds till the Heroku server is woken up)</p>
+            </div>
+            <div class="row">
+                <h2><span class="glyphicon glyphicon glyphicon-book" aria-hidden="true"></span> Documentation</h2>
+                <ng-include src="'docs/all.html'"></ng-include>
+            </div>
+            <div class="row">
+
+                <h2><span class="glyphicon glyphicon-tint" aria-hidden="true"></span> Technologies covered</h2>
+                <p><strong>Backend</strong>: Python for the data analysis, Node.js, CoffeeScript, Stylus (nib)</p>
+                <p><strong>Frontend</strong>: Angular.js, D3.js, Bootstrap, Require.js, Lodash.js, jQuery (UI), Moment.js</p>
+            </div>
         </div>
     </div>
 
-    <footer id="footer" class="col-lg-offset-1 col-lg-10">
-        <p>2014 - 2015 · <a href="http://opensource.org/licenses/MIT">MIT License</a>
+    <footer id="footer" class="row">
+        <p id="footer-shadow"></p>
+        <p id="footer-text">2014 - 2015 · <a href="http://opensource.org/licenses/MIT">MIT License</a>
         </p>
     </footer>
     <script type="text/javascript" src="js/ganalytics.js"></script>

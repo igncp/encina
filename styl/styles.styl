@@ -1,18 +1,59 @@
 @import _sticky-footer
 
+a
+  &:hover
+    text-decoration none
+
+body
+  font-family 'Overlock', cursive
+  font-size 16px
+  text-shadow 1px 1px 0.5px #eee
+
 footer
+  background-color #E9F0EB
+  border-top 4px solid #AFCDE0
   text-align center
+  overflow hidden
 
 footer, #container
   opacity 0
   transition opacity 1s linear
+
+h1
+  font-family 'Raleway', sans-serif
+  font-size 40px
+  small
+    font-size 20px
 
 .gh-buttons
   padding-top 30px
   text-align right
   .star-btn
     margin-left 9px
+
+.glyphicon
+  font-size 25px
+  height auto
+  margin-right 5px
+  color #7F9E7E
+
+.page-header
+  margin-top 0px
+  
+.row
+  margin 0px
     
 pre.code
   display inline-block
+  box-shadow 0px 0px 5px 1px #E5E5E5
   padding 20px
+
+#container
+  padding-bottom 50px
+
+#footer-shadow
+  height 0
+  box-shadow 0 1px 10px 1px #777
+
+#footer-text
+  margin-top 25px

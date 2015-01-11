@@ -1,0 +1,49 @@
+<h2>Extract</h2>
+<p>Number of files: <strong>{{nbrWCommas(data.structure.total_files)}}</strong>
+</p>
+<p>Number of directories: <strong>{{nbrWCommas(data.structure.total_dirs)}}</strong>
+</p>
+<p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
+</p>
+<p>If they were present, these directories were excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
+<p ng-show="passingChs > 0">Miscellaneous info:</p>
+<ul>
+    <li ng-show="getChs('has_git')">Has a git repository</li>
+    <li ng-show="getChs('uses_node')">Uses Node.js</li>
+    <li ng-show="getChs('uses_bower')">Uses Bower.js</li>
+</ul>
+<bootstrap-accordion title-text="Non Empty Lines Count" name="lines" expanded="true">
+    <summary-statistics var-title="Non Empty Lines" var-name="nel" json-data="data" integers-index="true"></summary-statistics>
+    <div class="row">
+        <div id="chart-lines-distribution" class="col-lg-12"></div>
+    </div>
+</bootstrap-accordion>
+
+<bootstrap-accordion title-text="File extensions" name="extensions" expanded="true">
+    <div class="col-lg-6">
+        <ol>
+            <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
+        </ol>
+    </div>
+    <div class="col-lg-6">
+        <div id="chart-extensions-pie"></div>
+    </div>
+</bootstrap-accordion>
+
+<bootstrap-accordion title-text="Files Size" name="sizes" expanded="true">
+    <summary-statistics var-title="files size" var-name="sizes" json-data="data" to-kbs="true"></summary-statistics>
+</bootstrap-accordion>
+
+<bootstrap-accordion title-text="Depth Of Files" name="depths" expanded="true">
+    <summary-statistics var-title="levels of depth" var-name="depths" json-data="data" integers-index="true"></summary-statistics>
+    <div id="chart-depths-distribution" class="col-lg-12"></div>
+</bootstrap-accordion>
+
+<bootstrap-accordion title-text="Directories" name="dirs" expanded="true">
+    <p>Stats of <i>children elements</i> (files or dirs):</p>
+    <summary-statistics var-title="children elements" var-name="total_children" json-data="data.dirs" integers-index="true" dirs="true"></summary-statistics>
+</bootstrap-accordion>
+
+<!-- <bootstrap-accordion title-text="File Structure JSON" name="structure">
+    <pre>{{treeString}}</pre>
+</bootstrap-accordion> -->

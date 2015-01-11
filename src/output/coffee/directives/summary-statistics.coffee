@@ -7,12 +7,14 @@ define 'directives/summary-statistics', [], ()->
         replace: true
         scope:
           varTitle: '@'
+          dirs: '@'
           varName: '@'
           toKbs: '@'
           integersIndex: '@'
           jsonData: '='
         transclude: true
         link: (scope, elem, attr)->
+          scope.FoD = if scope.dirs then 'dir' else 'file' # File or Dir
           scope.exists = (dataProp)->
             if scope.jsonData
               x = eval 'scope.jsonData.' + dataProp
@@ -54,6 +56,9 @@ define 'directives/summary-statistics', [], ()->
             false
 
           scope.getPaths = (dataProp)->
-            x = eval 'scope.jsonData.' + dataProp
+            if scope.jsonData
+              x = eval 'scope.jsonData.' + dataProp
+              return if x then x else false
+            else return false
       }
   create

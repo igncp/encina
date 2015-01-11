@@ -39,6 +39,12 @@ module.exports = (grunt) ->
           src: '**'
           dest: if env is 'prod' then  currentDir + '/encina-report/components/' \
             else __dirname + '/src/output/devel/components/'
+        }, {
+          expand: true
+          cwd: __dirname + '/src/output/views/'
+          src: '**'
+          dest: if env is 'prod' then  currentDir + '/encina-report/views/' \
+            else __dirname + '/src/output/devel/views/'
         }]
     watch: # For devel
       outputDevel:

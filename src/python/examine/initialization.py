@@ -1,8 +1,9 @@
 import recollection
 import storage
 import processing
+import utilities
 
-class Data(recollection.Data, storage.Data, processing.Data):
+class Data(recollection.Data, storage.Data, processing.Data, utilities.Data):
   def __init__(sf):
     sf.root = dict()
 

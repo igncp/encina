@@ -71,6 +71,6 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
 
       slices.append('title').text((d)-> d.data.label)
 
-      cb()
+      cb() if cb
 
   graph

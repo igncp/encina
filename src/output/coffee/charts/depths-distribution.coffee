@@ -5,6 +5,6 @@ define 'charts/depths-distribution', ['charts/defaults/distribution-bars'], (dis
       xLabel: 'Depth level'
       xTitle: 'level(s)'
       xProp: 'depthLevel'
-    }, cb
+    }
 
   render

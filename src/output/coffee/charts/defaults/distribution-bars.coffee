@@ -177,7 +177,7 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
         graph.createSlider()
         graph.setSliderValues()
         graph.draw()
-        cb()
+        cb() if cb
 
     graph.draw = ()->
       graph.createChart()

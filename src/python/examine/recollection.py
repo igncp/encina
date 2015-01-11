@@ -51,7 +51,8 @@ class Data():
             else:
               sf.check_characteristics(name)
           
-          sf.dirs.append([path, str(len(inside_dirs)), str(len(inside_files)), str(len(inside_files) + len(inside_dirs))])
+          sf.dirs.append([sf.relative_path(path) + '/', str(len(inside_dirs)), \
+            str(len(inside_files)), str(len(inside_files) + len(inside_dirs))])
       else:
 
           sf.check_characteristics(name)
@@ -60,8 +61,8 @@ class Data():
           d['size'] = str(sf.get_size(path))
           d['depth'] = str(path.count(os.sep) - top_depth)
           d['type'] = "file"
-          rel_path = path.replace(sf.root['dir'],'')
-          sf.files.append([rel_path, d['extension'], d['lines'], d['size'], d['depth']])
+          sf.files.append([sf.relative_path(path), d['extension'], d['lines'], \
+            d['size'], d['depth']])
       
       return d
 

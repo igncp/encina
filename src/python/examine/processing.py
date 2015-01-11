@@ -27,7 +27,7 @@ class Data():
     # TODO: calc stats of 'files_percent' (float)
     
   def calculate_dirs_stats(sf, key):
-    sf.dirs[key]['hist'] = sf.convert_df_column_to_hist(sf.dirs_df, 'inside_files')
+    sf.dirs[key]['hist'] = sf.convert_df_column_to_hist(sf.dirs_df, key)
     sf.dirs[key].update(sf.get_summary_indicators_from_hist(sf.dirs[key]['hist'], True))
     if key != 'files_percent': sf.find_max_paths_in_dirs(sf.dirs[key]['max'], key)
 

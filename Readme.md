@@ -37,7 +37,7 @@ A demo of a report of the last published version can be found [here](http://enci
 ## Technologies covered
 
 - Backend: Python for the data analysis, Node.js, CoffeeScript, Stylus (nib)
-- Frontend: Angular.js, D3.js, Bootstrap, Require.js, Lodash.js, jQuery (UI)
+- Frontend: Angular.js, Angular UI Router, D3.js, Bootstrap, Require.js, Lodash.js, jQuery (UI), Moment.js
 
 ## Development
 

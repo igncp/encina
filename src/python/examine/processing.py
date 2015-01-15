@@ -4,7 +4,7 @@ import numpy as np
 class Data():
   def process_files_data(sf):
     sf.files = DataFrame(sf.files, columns=['path', 'extension', 'nel', 'size', 'depth'])
-    
+
     sf.calculate_extensions_stats()
     sf.calculate_nel_stats()
     sf.calculate_sizes_stats()

@@ -1,0 +1,4 @@
+- name: png
+  for:
+    - nel
+    - size

@@ -1,0 +1,3 @@
+- name: node_modules
+- name: .git
+- name: bower_components

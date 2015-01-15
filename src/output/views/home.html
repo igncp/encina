@@ -5,7 +5,7 @@
 </p>
 <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
 </p>
-<p>If they were present, these directories were excluded: {{data.structure.excluded_dirs.join(', ')}}</strong>.</p>
+<p>Rhese directories were present and excluded: {{data.structure.excluded.dirs.join(', ')}}</strong>.</p>
 <p ng-show="passingChs > 0">Miscellaneous info:</p>
 <ul>
     <li ng-show="getChs('has_git')">Has a git repository</li>

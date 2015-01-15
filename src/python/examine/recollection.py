@@ -1,17 +1,17 @@
 import os
 import sys
-import json
+
 
 class Data():
   def set_structure(sf):
     total_files = 0
     total_dirs = 0
-    
+
     for root, dirs, files in os.walk(sf.root['dir'], topdown=True):
-      dirs[:] = [d for d in dirs if d not in sf.structure['excluded_dirs']]
+      dirs[:] = [d for d in dirs if d not in sf.static['excluded']['all']['dirs']]
       total_files += len(files)
       total_dirs += len(dirs)
-    
+
     sf.structure['total_files'] = total_files
     sf.structure['total_dirs'] = total_dirs
 
@@ -44,13 +44,14 @@ class Data():
               inside_dirs.append(name)
             else:
               inside_files.append(name)
-            if name not in sf.structure['excluded_dirs']:
+            if name not in sf.static['excluded']['all']['dirs']:
               if not 'children' in d:
                 d['children'] = list()
               d['children'].append(sf.generate_tree_and_extras(new_path, top_depth))
             else:
+              sf.structure['excluded']['dirs'].append(name)
               sf.check_characteristics(name)
-          
+
           sf.dirs.append([sf.relative_path(path) + '/', str(len(inside_dirs)), \
             str(len(inside_files)), str(len(inside_files) + len(inside_dirs))])
       else:

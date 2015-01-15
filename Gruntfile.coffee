@@ -55,6 +55,7 @@ module.exports = (grunt) ->
           'src/output/styl/**/*.styl'
           'src/output/index.html'
           'src/output/components/**/*.html'
+          'src/output/views/**/*.html'
         ]
         tasks: ['compilations']
 

@@ -1,0 +1,20 @@
+- name: bower.json
+  desc: Uses Bower.js
+
+- name: Gemfile
+  desc: Uses ruby gems
+
+- name: package.json
+  desc: Uses Node.js
+
+- name: .travis.yml
+  desc: Uses Travis CI
+
+- name: LICENSE.md
+  desc: Has a specific file for the license
+
+- name: .npmignore
+  desc: Uses the NPM repository
+
+- name: README.md
+  desc: Has a Readme file

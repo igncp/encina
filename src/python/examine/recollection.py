@@ -8,7 +8,7 @@ class Data():
     total_dirs = 0
 
     for root, dirs, files in os.walk(sf.root['dir'], topdown=True):
-      dirs[:] = [d for d in dirs if d not in sf.static['excluded']['all']['dirs']]
+      dirs[:] = [d for d in dirs if d not in sf.static['excluded']['all']['dir']]
       total_files += len(files)
       total_dirs += len(dirs)
 
@@ -32,40 +32,59 @@ class Data():
       name = os.path.basename(path)
       d = {'name': name}
       if os.path.isdir(path):
-          sf.check_characteristics(name)
+        sf.check_characteristics('dir', name)
+        if name not in sf.static['excluded']['all']['dir']:
           d['type'] = 'directory'
-          list_dir = os.listdir(path)
           inside_files = []
           inside_dirs = []
-
-          for name in list_dir:
-            new_path = os.path.join(path,name)
+          list_dir = os.listdir(path)
+          
+          for child_name in list_dir:
+            new_path = os.path.join(path, child_name)
+            
             if os.path.isdir(new_path):
-              inside_dirs.append(name)
-            else:
-              inside_files.append(name)
-            if name not in sf.static['excluded']['all']['dirs']:
-              if not 'children' in d:
-                d['children'] = list()
-              d['children'].append(sf.generate_tree_and_extras(new_path, top_depth))
-            else:
-              sf.structure['excluded']['dirs'].append(name)
-              sf.check_characteristics(name)
+              inside_dirs.append(child_name)
+            else: inside_files.append(child_name)
+            
+            if 'children' not in d: d['children'] = list()
 
-          sf.dirs.append([sf.relative_path(path) + '/', str(len(inside_dirs)), \
+            child = sf.generate_tree_and_extras(new_path, top_depth)
+            
+            if child is not False: d['children'].append(child)
+          
+          sf.dirs.append([sf.relative_path(path) + '/', str(len(inside_dirs)),
             str(len(inside_files)), str(len(inside_files) + len(inside_dirs))])
+            
+          return d
+        else:
+          sf.structure['excluded']['all']['dir'].append(name)
+          return False
       else:
+        sf.check_characteristics('dir', name)
+        d['extension'] = sf.get_file_extension(name)
+        sf.check_characteristics('file', name)
+        sf.check_characteristics('extension', d['extension'])
+        
+        permitted_extension = d['extension'] not in sf.static['excluded']['all']['extension']
+        permitted_file = name not in sf.static['excluded']['all']['file']
+        if permitted_extension and permitted_file:
+            d['lines'] = str(sf.count_nels(path))
+            d['size'] = str(sf.get_size(path))
+            d['depth'] = str(path.count(os.sep) - top_depth)
+            d['type'] = "file"
+            
+            sf.files.append([name, sf.relative_path(path), d['extension'], d['lines'],
+              d['size'], d['depth']])
+            return d
+        else:
+          if not permitted_extension:
+            if d['extension'] not in sf.structure['excluded']['all']['extension']:
+              sf.structure['excluded']['all']['extension'].append(d['extension'])
+          if not permitted_file:
+            if name not in sf.structure['excluded']['all']['file']:
+              sf.structure['excluded']['all']['file'].append(name)
 
-          sf.check_characteristics(name)
-          d['extension'] = sf.get_file_extension(name)
-          d['lines'] = str(sf.count_nels(path))
-          d['size'] = str(sf.get_size(path))
-          d['depth'] = str(path.count(os.sep) - top_depth)
-          d['type'] = "file"
-          sf.files.append([sf.relative_path(path), d['extension'], d['lines'], \
-            d['size'], d['depth']])
-      
-      return d
+      return False
 
   def get_file_extension(sf, path):
     extension = os.path.splitext(path)[1]
@@ -77,13 +96,13 @@ class Data():
 
     return extension
 
-  def check_characteristics(sf, element):
-    if element == '.git':
-      sf.characteristics['has_git'] = True
-    if element == 'package.json':
-      sf.characteristics['uses_node'] = True
-    if element == 'bower.json':
-      sf.characteristics['uses_bower'] = True
+  def check_characteristics(sf, children_type, name):
+    if children_type in sf.static['characteristics']['raw']:
+      for possible_charac in sf.static['characteristics']['raw'][children_type]:
+        if name == possible_charac['name']:
+          if children_type not in sf.characteristics: sf.characteristics[children_type] = dict()
+          if name not in sf.characteristics[children_type]:
+            sf.characteristics[children_type][name] = possible_charac['desc']
 
   def get_size(sf, path):
     size = os.path.getsize(path)

@@ -17,7 +17,7 @@
             </p>
             <p>STD of {{FoD}} repetitions by {{varTitle}}: <strong>{{parseNumber(varName + '.stds.freq', 3, {isFile: true})}}</strong>
             </p>
-            <p>Maximum {{varTitle}} of a {{FoD}} (or more): <strong>{{parseNumber(varName + '.max.index.index')}}</strong> <a href="" ng-click="launchModal(1, varName)">in {{parseNumber(varName + '.max.index.freq', 0)}} {{FoD}}(s)</a></p>
+            <p>Maximum {{varTitle}} of a {{FoD}} (or more): <strong>{{parseNumber(varName + '.max.index.index')}} <a href="" ng-click="launchModal(1, varName)">in {{parseNumber(varName + '.max.index.freq', 0)}} {{FoD}}(s)</a></strong></p>
             <bootstrap-modal modal-number="1" var-name="{{varName}}" modal-title="{{parseNumber(varName + '.max.index.index')}} {{varTitle}}">
                 <p>List of matches ({{getPaths(varName + '.max.index.paths').length}}):</p>
                 <ol>

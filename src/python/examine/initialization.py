@@ -11,10 +11,14 @@ class Data(recollection.Data, storage.Data, processing.Data, utilities.Data, sta
 
     sf.files = list()
     sf.dirs = list()
-
+    
     sf.structure = dict()
     sf.structure['excluded'] = {
-      'dirs': []
+      'all': {
+        'dir': [],
+        'file': [],
+        'extension': []
+      }
     }
     sf.meta = dict()
     sf.characteristics = dict()

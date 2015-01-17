@@ -1,9 +1,9 @@
 from pandas import Series, DataFrame
-import numpy as np
+
 
 class Data():
   def process_files_data(sf):
-    sf.files = DataFrame(sf.files, columns=['path', 'extension', 'nel', 'size', 'depth'])
+    sf.files = DataFrame(sf.files, columns=['file', 'path', 'extension', 'nel', 'size', 'depth'])
 
     sf.calculate_extensions_stats()
     sf.calculate_nel_stats()
@@ -12,15 +12,21 @@ class Data():
 
   def process_dirs_data(sf):
     for row in sf.dirs:
-      row.append(float(row[2]) / float(row[3]))
+      if int(row[3]) != 0:
+        row.append(float(row[2]) / float(row[3]))
+      else:
+        row.append('NA')
 
-    sf.dirs_df = DataFrame(sf.dirs, columns=['path', 'inside_dirs', 'inside_files', 'total_children', 'files_percent'])
+    sf.dirs_df = DataFrame(sf.dirs, columns=['path', 'inside_dirs',
+      'inside_files', 'total_children', 'files_percent'])
+
     sf.dirs = {
       'inside_files': dict(),
       'inside_dirs': dict(),
       'total_children': dict(),
       'files_percent': dict()
     }
+
     sf.calculate_dirs_stats('inside_files')
     sf.calculate_dirs_stats('inside_dirs')
     sf.calculate_dirs_stats('total_children')
@@ -31,19 +37,16 @@ class Data():
     sf.dirs[key].update(sf.get_summary_indicators_from_hist(sf.dirs[key]['hist'], True))
     if key != 'files_percent': sf.find_max_paths_in_dirs(sf.dirs[key]['max'], key)
 
-
   def calculate_sizes_stats(sf):
     sf.sizes = dict()
     sf.sizes['hist'] = sf.convert_df_column_to_hist(sf.files, 'size')
     sf.sizes.update(sf.get_summary_indicators_from_hist(sf.sizes['hist'], True))
     sf.find_max_paths_in_files(sf.sizes['max'], 'size')
 
-
   def calculate_extensions_stats(sf):
     sf.extensions = dict()
     sf.extensions['hist'] = sf.convert_df_column_to_hist(sf.files, 'extension')
     sf.extensions.update(sf.get_summary_indicators_from_hist(sf.extensions['hist']))
-
 
   def calculate_nel_stats(sf):
     key = 'nel'
@@ -59,11 +62,31 @@ class Data():
     sf.depths.update(sf.get_summary_indicators_from_hist(sf.depths['hist'], True))
     sf.find_max_paths_in_files(sf.depths['max'], key)
 
+  def filter_df_excluding_static_rule(sf, df, column, type):
+    if sf.static['excluded'][column][type]:
+        compared_set = set(sf.static['excluded'][column][type])
+        for item in compared_set:
+          if len(df[df[type] == item][type]):
+            if column not in sf.structure['excluded']: sf.structure['excluded'][column] = dict()
+            if type not in sf.structure['excluded'][column]:
+              sf.structure['excluded'][column][type] = []
+            if item not in sf.structure['excluded'][column][type]:
+              sf.structure['excluded'][column][type].append(item)
+        df = df[~df[type].isin(compared_set)]
+    return df
+
+  def filter_df_excluding_static_rules(sf, df, column):
+    filtered_df = df
+    if column in sf.static['excluded']:
+      filtered_df = sf.filter_df_excluding_static_rule(filtered_df, column, 'extension')
+      filtered_df = sf.filter_df_excluding_static_rule(filtered_df, column, 'file')
+    return filtered_df
+
   def convert_df_column_to_hist(sf, df, column):
-    return df[column].value_counts().to_dict()
+    filtered_df = sf.filter_df_excluding_static_rules(df, column)
+    return filtered_df[column].value_counts().to_dict()
 
-
-  def get_summary_indicators_from_hist(sf, hist, int_index= False):
+  def get_summary_indicators_from_hist(sf, hist, int_index=False):
     seriesHist = Series(hist)
     maxs = {
       'freq': dict()
@@ -72,7 +95,6 @@ class Data():
     means = {'freq': seriesHist.mean()}
     medians = {'freq': seriesHist.median()}
     stds = {'freq': seriesHist.std()}
-    
     maxs['freq']['freq'] = seriesHist.max()
     maxs['freq']['index'] = seriesHist.idxmax()
     index_total = 'NA'
@@ -103,9 +125,12 @@ class Data():
     }
 
   def find_max_paths(sf, df, max, key):
-    max['freq']['paths'] = df.loc[df[key] == str(max['freq']['index'])]['path'].tolist()
+    filtered_df = sf.filter_df_excluding_static_rules(df, key)
+    max['freq']['paths'] = filtered_df.loc[filtered_df[key] ==
+      str(max['freq']['index'])]['path'].tolist()
     if 'index' in max:
-      max['index']['paths'] = df.loc[df[key] == str(max['index']['index'])]['path'].tolist()
+      max['index']['paths'] = filtered_df.loc[filtered_df[key] ==
+        str(max['index']['index'])]['path'].tolist()
 
   def find_max_paths_in_files(sf, max, key):
     sf.find_max_paths(sf.files, max, key)

@@ -1,4 +1,7 @@
 - name: png
   for:
     - nel
-    - size
+- name: jpg
+  for:
+    - nel
+- name: pyc

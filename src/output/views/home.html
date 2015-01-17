@@ -1,37 +1,59 @@
 <h2>Extract</h2>
-<p>Number of files: <strong>{{nbrWCommas(data.structure.total_files)}}</strong>
-</p>
-<p>Number of directories: <strong>{{nbrWCommas(data.structure.total_dirs)}}</strong>
-</p>
-<p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
-</p>
-<p>Rhese directories were present and excluded: {{data.structure.excluded.dirs.join(', ')}}</strong>.</p>
-<p ng-show="passingChs > 0">Miscellaneous info:</p>
-<ul>
-    <li ng-show="getChs('has_git')">Has a git repository</li>
-    <li ng-show="getChs('uses_node')">Uses Node.js</li>
-    <li ng-show="getChs('uses_bower')">Uses Bower.js</li>
-</ul>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>Number of files: <strong>{{nbrWCommas(data.structure.total_files)}}</strong>
+        </p>
+        <p>Number of directories: <strong>{{nbrWCommas(data.structure.total_dirs)}}</strong>
+        </p>
+        <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
+        </p>
+        <p ng-if="data.structure.excluded.all.dir.length">These directories were found and excluded: <strong>{{data.structure.excluded.all.dir.join(', ')}}</strong>.</p>
+        <p ng-if="data.structure.excluded.all.extension.length">These extensions were found and excluded: <strong>{{data.structure.excluded.all.extension.join(', ')}}</strong>.</p>
+    </div>
+</div>
+<bootstrap-accordion ng-show="data.characteristics.parsed.length > 0" title-text="Miscellaneous" name="miscellaneous" expanded="true">
+    <div id="characteristics">
+        <div class="row">
+
+            <ul class="col-lg-6">
+                <li ng-repeat="charac in data.characteristics.parsed[0]"><span class="star" title="{{charac.explanation}}">&#9733;</span> {{charac.desc}}.</li>
+            </ul>
+            <ul class="col-lg-6">
+                <li ng-repeat="charac in data.characteristics.parsed[1]"><span class="star" title="{{charac.explanation}}">&#9733;</span> {{charac.desc}}.</li>
+            </ul>
+        </div>
+        <p class="charac-tip">Place the mouse over each <i>star</i> to see the reason</p>
+    </div>
+</bootstrap-accordion>
 <bootstrap-accordion title-text="Non Empty Lines Count" name="lines" expanded="true">
     <summary-statistics var-title="Non Empty Lines" var-name="nel" json-data="data" integers-index="true"></summary-statistics>
     <div class="row">
         <div id="chart-lines-distribution" class="col-lg-12"></div>
     </div>
+    <p ng-if="data.structure.excluded.nel.extension">For this section, these extensions were found and excluded: <strong>{{data.structure.excluded.nel.extension.join(', ')}}</strong>.</p>
 </bootstrap-accordion>
 
 <bootstrap-accordion title-text="File extensions" name="extensions" expanded="true">
-    <div class="col-lg-6">
-        <ol>
-            <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
-        </ol>
+    <div class="row">
+        <div class="col-lg-6">
+            <ol>
+                <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
+            </ol>
+        </div>
+        <div class="col-lg-6">
+            <div id="chart-extensions-pie"></div>
+        </div>
     </div>
-    <div class="col-lg-6">
-        <div id="chart-extensions-pie"></div>
+    <div class="row">
+        <div class="col-lg-6">
+            <p><strong>NA</strong>: Not Applied (Without extension)</p>
+        </div>
     </div>
 </bootstrap-accordion>
 
 <bootstrap-accordion title-text="Files Size" name="sizes" expanded="true">
     <summary-statistics var-title="files size" var-name="sizes" json-data="data" to-kbs="true"></summary-statistics>
+    <p ng-if="data.structure.excluded.size.extension">For this section, these extensions were found and excluded: <strong>{{data.structure.excluded.size.extension.join(', ')}}</strong>.</p>
 </bootstrap-accordion>
 
 <bootstrap-accordion title-text="Depth Of Files" name="depths" expanded="true">

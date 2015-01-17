@@ -1,0 +1,4 @@
+- name: .git
+  desc: Has a Git repository
+- name: encina-report
+  desc: Was analyzed by Encina

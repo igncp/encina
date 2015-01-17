@@ -1,3 +1,4 @@
+@import '_colors'
 @import 'charts/*'
 
 a:hover, a:focus
@@ -22,7 +23,7 @@ nav
 
 .panel-default>.panel-heading
   color #333
-  background-color #E0F0E0
+  background-color green-pale
 
 .modal-item
   word-wrap break-word
@@ -30,7 +31,16 @@ nav
 #container, #footer
   opacity 0
   transition opacity 1s linear
-  
+
+#characteristics
+  ul
+    list-style-type none
+  .star
+    color blue-dark
+    font-size 20px
+    cursor default
+  .charac-tip
+    margin-top 20px
   
 // Sticky Footer
 footer-height = 100px

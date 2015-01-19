@@ -56,4 +56,11 @@ define 'charts/common', ->
     feMerge.append 'feMergeNode'
       .attr 'in', 'SourceGraphic'
 
+
+  common.nbrWCommas = (x, decimals = 0)->
+    x = x.toFixed(decimals)
+    parts = x.toString().split '.'
+    final = parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
+    final = parts.join '.'
+
   common

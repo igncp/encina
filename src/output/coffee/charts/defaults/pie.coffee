@@ -1,12 +1,12 @@
 define 'charts/defaults/pie', ['charts/common'], (common)->
   graph = {}
 
-  graph.render = (data, elId, cb)->
+  graph.render = (data, elId, title, sliceTitleSuffix)->
     common.waitTillElPresent elId, ->
-      width = 230
-      height = 230
+      width = 330
+      height = 330
       margin = {
-        top: 30
+        top: 130
         bottom: 30
         left: 30
         right: 30
@@ -20,6 +20,17 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
         .append 'svg'
         .attr 'width', width
         .attr 'height', height
+
+      svgTitle = svg
+        .append 'g'
+        .attr 'transform', 'translate(' + width / 2 + ',50)'
+        .attr 'width', 100
+        .attr 'height', 100
+        .append 'text'
+        .attr 'class', 'chart-pie-title'
+        .text title
+
+      chart = svg
         .append 'g'
         .attr 'transform', 'translate(' + width / 2 + ',' + height / 2 + ')'
 
@@ -40,11 +51,11 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
           .transition().duration(400)
           .style {'stroke-width': '0.5px', fill: color(d.data.i)}
 
-      common.createSvgFilterBlack(elId + '-drop-shadow-filter', svg, 3, .4)
+      common.createSvgFilterBlack(elId + '-drop-shadow-filter', chart, 3, .4)
       pie = d3.layout.pie().sort(null).value(((d)-> d.count))
       arc = d3.svg.arc().outerRadius(outerRadius)
 
-      slices = svg
+      slices = chart
         .selectAll '.slice'
         .data pie(data)
         .enter()
@@ -67,10 +78,10 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
 
       slices
         .append 'title'
-        .text (d)-> d.data.name + ' (' + d.data.count + ')'
+        .text (d)-> d.data.name + ' (' + common.nbrWCommas(d.data.count) + \
+          ' ' + sliceTitleSuffix + ') (' + d.data.percentage + '%)'
+
 
       slices.append('title').text((d)-> d.data.label)
-
-      cb() if cb
 
   graph

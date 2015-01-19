@@ -26,6 +26,7 @@ define 'controllers/home', ->
           Math.ceil(tmpParsedCharacs.length / 2)))
         $scope.data.characteristics.parsed.push tmpParsedCharacs
 
+        $scope.data.extensions.parsedHist
         $scope.data.extensions.parsedHist = []
         for extension in Object.keys($scope.data.extensions.hist)
           $scope.data.extensions.parsedHist.push({
@@ -34,6 +35,8 @@ define 'controllers/home', ->
             percentage: (100 * $scope.data.extensions.hist[extension] / \
               $scope.data.structure.total_files).toFixed(2)
           })
+        $scope.data.extensions.parsedHist = _.sortBy($scope.data.extensions.parsedHist, \
+          (obj)-> (-1) * obj.count)
 
         $scope.data.nel.parsedHist = []
         $scope.data.nel.total = 0
@@ -69,9 +72,30 @@ define 'controllers/home', ->
           day: moment.unix($scope.data.meta.time).format 'Do of MMMM (YYYY)'
           time: moment.unix($scope.data.meta.time).format 'HH:mm '
         }
+
+        _.each $scope.data.extensions.hist_by_size, (item)-> item[1] = item[1] / 1000
+
+        addKeysToExtensionsHists = (dataArray)->
+          dataArray = _.map dataArray, (item)-> {name: item[0], count: item[1]}
+          sum = _.reduce dataArray, ((sum, d)-> sum + d.count), 0
+          _.each dataArray, (item)-> item.percentage = ((item.count / sum) * 100).toFixed 2
+          dataArray
+
+        $scope.data.extensions.hist_by_nel = \
+          addKeysToExtensionsHists $scope.data.extensions.hist_by_nel
+        
+        $scope.data.extensions.hist_by_size = \
+          addKeysToExtensionsHists $scope.data.extensions.hist_by_size
         
         renderCharts = ()->
-          (require('charts/extensions-pie'))($scope.data.extensions.parsedHist)
+          extensionsPie = require('charts/extensions-pie')
+          extensionsData = $scope.data.extensions
+          extensionsPie extensionsData.parsedHist, 'chart-extensions-pie-by-file', \
+            'Extensions by total number of Files', 'files'
+          extensionsPie extensionsData.hist_by_nel, 'chart-extensions-pie-by-nel', \
+            'Extensions by total Non Empty Lines', 'Non Empty Lines'
+          extensionsPie extensionsData.hist_by_size, 'chart-extensions-pie-by-size', \
+            'Extensions grouped by total Size', 'kbs'
           (require('charts/lines-distribution'))($scope.data.nel.parsedHist)
           (require('charts/depths-distribution'))($scope.data.depths.parsedHist)
 

@@ -1,4 +1,8 @@
 from pandas import Series, DataFrame
+import pandas as pd
+
+# Disable warning when converting hist.to_dict()
+pd.options.mode.chained_assignment = None
 
 
 class Data():
@@ -47,6 +51,20 @@ class Data():
     sf.extensions = dict()
     sf.extensions['hist'] = sf.convert_df_column_to_hist(sf.files, 'extension')
     sf.extensions.update(sf.get_summary_indicators_from_hist(sf.extensions['hist']))
+    sf.extensions['hist_by_nel'] = \
+      sf.generate_sorted_listed_hist_of_key_grouped_by_column('extension', 'nel', int)
+    sf.extensions['hist_by_size'] = \
+      sf.generate_sorted_listed_hist_of_key_grouped_by_column('extension', 'size', float)
+
+  def generate_sorted_listed_hist_of_key_grouped_by_column(sf, key, column, type):
+    result = sf.filter_df_excluding_static_rules(sf.files, key)
+    result = result[[key, column]]
+    result[[column]] = result[[column]].astype(type)
+    print result[[column]]
+    result = result.groupby(key).sum()
+    result = result.sort([column], ascending=[0])
+    return [[result[column].index[idx], result[column][idx]]
+      for idx, val in enumerate(result[column])]
 
   def calculate_nel_stats(sf):
     key = 'nel'

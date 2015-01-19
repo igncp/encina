@@ -35,13 +35,26 @@
 
 <bootstrap-accordion title-text="File extensions" name="extensions" expanded="true">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
+            <p>List of all the extensions sorted by number of files:</p>
             <ol>
                 <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
             </ol>
         </div>
-        <div class="col-lg-6">
-            <div id="chart-extensions-pie"></div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div id="chart-extensions-pie-by-file"></div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="chart-extensions-pie-by-nel"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="chart-extensions-pie-by-size"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

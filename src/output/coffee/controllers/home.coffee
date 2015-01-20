@@ -1,101 +1,26 @@
 define 'controllers/home', ->
   createController = (encina)->
-    encina.controller 'HomeController', ($scope, $timeout)->
+    encina.controller 'HomeController', ($scope, $timeout, EncinaFormatting)->
       runController = ->
         $scope.data = $scope.$parent.data
-        $scope.nbrWCommas = (x, decimals = 0)->
-          x = x.toFixed(decimals)
-          parts = x.toString().split '.'
-          final = parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
-          final = parts.join '.'
-
-        tmpParsedCharacs = []
-        delete $scope.data.characteristics.parsed
-        explanationsTpls =
-          dir: (s)-> 'The directory ' + s + ' was found.'
-          file: (s)-> 'The file ' + s + ' was found.'
-          extension: (s)-> 'One or more files with the extension .' + s + ' were found.'
-        for type in Object.keys($scope.data.characteristics)
-          for charac in Object.keys($scope.data.characteristics[type])
-            tmpParsedCharacs.push {
-              desc: $scope.data.characteristics[type][charac]
-              explanation: explanationsTpls[type](charac)
-            }
-        $scope.data.characteristics.parsed = []
-        $scope.data.characteristics.parsed.push(tmpParsedCharacs.splice(0, \
-          Math.ceil(tmpParsedCharacs.length / 2)))
-        $scope.data.characteristics.parsed.push tmpParsedCharacs
-
-        $scope.data.extensions.parsedHist
-        $scope.data.extensions.parsedHist = []
-        for extension in Object.keys($scope.data.extensions.hist)
-          $scope.data.extensions.parsedHist.push({
-            name: extension
-            count: $scope.data.extensions.hist[extension]
-            percentage: (100 * $scope.data.extensions.hist[extension] / \
-              $scope.data.structure.total_files).toFixed(2)
-          })
-        $scope.data.extensions.parsedHist = _.sortBy($scope.data.extensions.parsedHist, \
-          (obj)-> (-1) * obj.count)
-
-        $scope.data.nel.parsedHist = []
-        $scope.data.nel.total = 0
-        for linesCount in Object.keys($scope.data.nel.hist)
-          $scope.data.nel.total += linesCount * $scope.data.nel.hist[linesCount]
-          $scope.data.nel.parsedHist.push({
-            linesCount: Number(linesCount)
-            filesCount: $scope.data.nel.hist[linesCount]
-          })
-
-        $scope.data.sizes.parsedHist = []
-        $scope.data.sizes.total = 0
-        for size in Object.keys($scope.data.sizes.hist)
-          $scope.data.sizes.total += size * $scope.data.sizes.hist[size] / 131072
-          $scope.data.sizes.parsedHist.push({
-            size: size
-            filesCount: $scope.data.sizes.hist[size]
-          })
-
-        $scope.data.depths.parsedHist = []
-        $scope.data.depths.total = 0
-        for depthLevel in Object.keys($scope.data.depths.hist)
-          $scope.data.depths.parsedHist.push({
-            depthLevel: Number(depthLevel)
-            filesCount: $scope.data.depths.hist[depthLevel]
-          })
         
-        $scope.treeString = JSON.stringify $scope.data.tree, undefined, 2
-        
-        $scope.bsToKbs = (size, decimals = 2)-> (size / 1000).toFixed(decimals) + ' kbs'
+        $scope.nbrWCommas = EncinaFormatting.nbrWCommas
 
-        $scope.data.meta.date = {
-          day: moment.unix($scope.data.meta.time).format 'Do of MMMM (YYYY)'
-          time: moment.unix($scope.data.meta.time).format 'HH:mm '
-        }
-
-        _.each $scope.data.extensions.hist_by_size, (item)-> item[1] = item[1] / 1000
-
-        addKeysToExtensionsHists = (dataArray)->
-          dataArray = _.map dataArray, (item)-> {name: item[0], count: item[1]}
-          sum = _.reduce dataArray, ((sum, d)-> sum + d.count), 0
-          _.each dataArray, (item)-> item.percentage = ((item.count / sum) * 100).toFixed 2
-          dataArray
-
-        $scope.data.extensions.hist_by_nel = \
-          addKeysToExtensionsHists $scope.data.extensions.hist_by_nel
-        
-        $scope.data.extensions.hist_by_size = \
-          addKeysToExtensionsHists $scope.data.extensions.hist_by_size
-        
         renderCharts = ()->
           extensionsPie = require('charts/extensions-pie')
           extensionsData = $scope.data.extensions
+          
           extensionsPie extensionsData.parsedHist, 'chart-extensions-pie-by-file', \
-            'Extensions by total number of Files', 'files'
+            'Extensions by total number of Files (' + \
+            $scope.nbrWCommas($scope.data.structure.total_files) + ')', 'files'
+          
           extensionsPie extensionsData.hist_by_nel, 'chart-extensions-pie-by-nel', \
-            'Extensions by total Non Empty Lines', 'Non Empty Lines'
+            'Extensions by total Non Empty Lines (' + \
+              $scope.nbrWCommas($scope.data.nel.index_total) + ')', 'Non Empty Lines'
+
           extensionsPie extensionsData.hist_by_size, 'chart-extensions-pie-by-size', \
-            'Extensions grouped by total Size', 'kbs'
+            'Extensions grouped by total size (' + $scope.data.sizes.totalMbs + ' Mbs)', 'kbs'
+
           (require('charts/lines-distribution'))($scope.data.nel.parsedHist)
           (require('charts/depths-distribution'))($scope.data.depths.parsedHist)
 

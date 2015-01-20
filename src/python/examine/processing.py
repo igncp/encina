@@ -60,7 +60,6 @@ class Data():
     result = sf.filter_df_excluding_static_rules(sf.files, key)
     result = result[[key, column]]
     result[[column]] = result[[column]].astype(type)
-    print result[[column]]
     result = result.groupby(key).sum()
     result = result.sort([column], ascending=[0])
     return [[result[column].index[idx], result[column][idx]]
@@ -121,7 +120,7 @@ class Data():
       index = seriesHist.index
       index = index.astype(int)
       index_list = index.tolist()
-      index_total = sum(index_list)
+      index_total = sum([seriesHist[i] * index_list[i] for i in range(len(index_list))])
       index_series = Series(index_list)
 
       means['index'] = index_series.mean()

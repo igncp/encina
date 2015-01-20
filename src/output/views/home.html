@@ -5,7 +5,7 @@
         </p>
         <p>Number of directories: <strong>{{nbrWCommas(data.structure.total_dirs)}}</strong>
         </p>
-        <p>Total size: <strong>{{data.sizes.total.toFixed(2)}} Mbs</strong>
+        <p>Total size: <strong>{{data.sizes.totalMbs}} Mbs</strong>
         </p>
         <p ng-if="data.structure.excluded.all.dir.length">These directories were found and excluded: <strong>{{data.structure.excluded.all.dir.join(', ')}}</strong>.</p>
         <p ng-if="data.structure.excluded.all.extension.length">These extensions were found and excluded: <strong>{{data.structure.excluded.all.extension.join(', ')}}</strong>.</p>
@@ -35,30 +35,42 @@
 
 <bootstrap-accordion title-text="File extensions" name="extensions" expanded="true">
     <div class="row">
-        <div class="col-lg-4">
-            <p>List of all the extensions sorted by number of files:</p>
-            <ol>
-                <li ng-repeat="extension in data.extensions.parsedHist | orderBy:'count':true"><a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
-            </ol>
-        </div>
-        <div class="col-lg-8">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div id="chart-extensions-pie-by-file"></div>
-                </div>
-                <div class="col-lg-6">
-                    <div id="chart-extensions-pie-by-nel"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div id="chart-extensions-pie-by-size"></div>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p class="col-lg-12">List of all the extensions sorted by <i>number of files</i>:</p>
+                    <div class="col-lg-4">
+                        <ul>
+                            <li ng-repeat="extension in data.extensions.threeColumnsHist[0]">{{$index + 1}}.- <a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul>
+                            <li ng-repeat="extension in data.extensions.threeColumnsHist[1]">{{$index + data.extensions.threeColumnsHist[0].length + 1}}.- <a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul>
+                            <li ng-repeat="extension in data.extensions.threeColumnsHist[2]">{{$index + data.extensions.threeColumnsHist[0].length + data.extensions.threeColumnsHist[1].length + 1}}.- <a href="https://www.google.com/webhp?q=.{{extension.name}}%20extension#q=.{{extension.name}}+extension&title=Special%3ASearch&go=Go">{{extension.name}}</a>: {{extension.count}} ({{extension.percentage}} %)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
+            <div id="chart-extensions-pie-by-file"></div>
+        </div>
+        <div class="col-lg-4">
+            <div id="chart-extensions-pie-by-nel"></div>
+        </div>
+        <div class="col-lg-4">
+            <div id="chart-extensions-pie-by-size"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
             <p><strong>NA</strong>: Not Applied (Without extension)</p>
         </div>
     </div>

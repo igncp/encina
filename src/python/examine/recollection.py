@@ -9,6 +9,9 @@ class Data():
 
     for root, dirs, files in os.walk(sf.root['dir'], topdown=True):
       dirs[:] = [d for d in dirs if d not in sf.static['excluded']['all']['dir']]
+      files[:] = [d for d in files if d not in sf.static['excluded']['all']['file']
+        and sf.get_file_extension(d) not in sf.static['excluded']['all']['extension']]
+      
       total_files += len(files)
       total_dirs += len(dirs)
 

@@ -1,12 +1,14 @@
 define 'app', [
   'router'
+  'factories/factories'
   'controllers/controllers'
   'directives/directives'
   'charts/charts'
-], (router, controllers, directives)->
+], (router, factories, controllers, directives)->
   encina = angular.module 'encina', ['ui.router']
   
   router encina
+  factories encina
   controllers encina
   directives encina
 

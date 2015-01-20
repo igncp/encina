@@ -1,6 +1,6 @@
 define 'directives/summary-statistics', [], ()->
   create = (encina)->
-    encina.directive 'summaryStatistics', ->
+    encina.directive 'summaryStatistics', (EncinaFormatting)->
       return {
         restrict: 'E'
         templateUrl: 'components/summary-statistics.html'
@@ -39,10 +39,7 @@ define 'directives/summary-statistics', [], ()->
               if (scope.toKbs is 'true') and (decimals isnt 0) and \
                 (opts.toKbs isnt false) and (opts.isFile isnt true) then x /= 1000
 
-              x = x.toFixed(decimals)
-              parts = x.toString().split '.'
-              final = parts[0] = parts[0].replace /\B(?=(\d{3})+(?!\d))/g, ','
-              final = parts.join '.'
+              final = EncinaFormatting.nbrWCommas x, decimals
               
               if (scope.toKbs is 'true') and (decimals isnt 0) and (opts.isFile isnt true)
                 final += if opts.toMbs isnt true then ' kbs' else ' mbs'

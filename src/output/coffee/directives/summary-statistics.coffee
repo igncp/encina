@@ -17,8 +17,8 @@ define 'directives/summary-statistics', [], ()->
           scope.FoD = if scope.dirs then 'dir' else 'file' # File or Dir
           scope.exists = (dataProp)->
             if scope.jsonData
-              x = eval 'scope.jsonData.' + dataProp
-              return if x then true else false
+              propertyIsPresent = if eval('scope.jsonData.' + dataProp)  then true else false
+              return propertyIsPresent
             else return false
 
           scope.parseNumber = (dataProp, decimals, opts={})->
@@ -34,12 +34,12 @@ define 'directives/summary-statistics', [], ()->
               
               setOptsDefaults [['isFile', false], ['toKbs', 'default'], ['toMbs', false]]
 
-              x = eval 'scope.jsonData.' + dataProp
+              propValue = eval 'scope.jsonData.' + dataProp
               
               if (scope.toKbs is 'true') and (decimals isnt 0) and \
-                (opts.toKbs isnt false) and (opts.isFile isnt true) then x /= 1000
+                (opts.toKbs isnt false) and (opts.isFile isnt true) then propValue /= 1000
 
-              final = EncinaFormatting.nbrWCommas x, decimals
+              final = EncinaFormatting.nbrWCommas propValue, decimals
               
               if (scope.toKbs is 'true') and (decimals isnt 0) and (opts.isFile isnt true)
                 final += if opts.toMbs isnt true then ' kbs' else ' mbs'
@@ -54,8 +54,8 @@ define 'directives/summary-statistics', [], ()->
 
           scope.getPaths = (dataProp)->
             if scope.jsonData
-              x = eval 'scope.jsonData.' + dataProp
-              return if x then x else false
+              propValue = eval 'scope.jsonData.' + dataProp
+              return if propValue then propValue else false
             else return false
       }
   create

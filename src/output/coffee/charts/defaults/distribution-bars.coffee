@@ -27,7 +27,8 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
       graph.vars.maxFilesCount = d3.max(graph.data, (d)-> d.filesCount)
       graph.vars.verticalMargin = graph.cg.margin.top + graph.cg.margin.bottom
       graph.vars.floor = graph.cg.height - graph.cg.margin.bottom * 2
-      graph.vars.barHeight = (graph.cg.height - graph.vars.verticalMargin) / graph.vars.maxFilesCount
+      graph.vars.barHeight = (graph.cg.height - \
+        graph.vars.verticalMargin) / graph.vars.maxFilesCount
       graph.vars.color = common.createColorsScale  graph.cg.colorsArr, graph.data, 'filesCount'
 
     graph.setData = (data)-> graph.data = data
@@ -147,25 +148,33 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
         .style({'text-anchor': 'end'})
         .text('Files Count')
 
+    graph.calcX = (d)-> graph.scales.x(d[graph.cg.xProp])
+    graph.calcY = (d)-> graph.scales.y(d.filesCount) + graph.vars.floor
+    graph.calcHeight = (d)-> graph.scales.y(d.filesCount) * (-1)
+
     graph.createBars = ->
       dataUsed = graph.data.filter((item, index)->
         if item[graph.cg.xProp] >= graph.vars.sliderValues[0] \
           and item[graph.cg.xProp] <= graph.vars.sliderValues[1] then return item
         else return null
       )
+      
       dataUsed = _.compact dataUsed
 
       graph.dom.chart.selectAll('rect')
         .data(dataUsed)
         .enter()
         .append('rect')
-        .attr('x', (d, i)-> graph.scales.x(d[graph.cg.xProp]))
-        .attr('y', (d)-> graph.scales.y(d.filesCount) + graph.vars.floor)
-        .attr('width', 2)
-        .attr('height', (d)-> graph.scales.y(d.filesCount) * (-1))
+        .attr 'x', (d)-> graph.calcX d
+        .attr 'y', (d)-> graph.calcY d
+        .attr 'width', 2
+        .attr 'height', (d)-> graph.calcHeight d
         .attr('fill', (d)-> graph.vars.color(d.filesCount))
-        .append 'title'
-        .text (d)-> d[graph.cg.xProp] + ' ' + graph.cg.xTitle + ', ' + d.filesCount + ' file(s)'
+        .style 'filter', 'url(#' + graph.vars.elId + '-drop-shadow-filter)'
+
+      graph.vars.points = []
+      graph.dom.chart.selectAll('rect').each (d)->
+        graph.vars.points.push graph.calcX(d)
 
     graph.render = (origData, opts, cb)->
       graph.vars.elId = opts.elId
@@ -179,11 +188,54 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
         graph.draw()
         cb() if cb
 
+    graph.createFilter = ()->
+      common.createSvgFilterBlack(graph.vars.elId + '-drop-shadow-filter', graph.dom.chart, 1, .6)
+
+    graph.createMouseOverEvent = ()->
+      foreground = graph.dom.svg.append('g')
+        .attr 'id', 'foreground-' + graph.vars.elId
+        .attr 'class', 'foreground'
+
+      foreground.append('title').text('')
+      
+      foreground.append('rect')
+        .attr('fill', 'green')
+        .attr('stroke', 'black')
+        .attr('class', 'title-rect')
+        .attr 'x', graph.cg.margin.left
+        .attr 'y', 0
+        .attr 'width', (d, i)-> graph.cg.width - graph.cg.margin.left
+        .attr 'height', graph.vars.floor + graph.cg.margin.bottom
+        .style 'opacity', '0'
+        .on 'mousemove', ()->
+          # TODO: Improve performance of this algorithm
+          mouse = d3.mouse(this)
+          foregroundTitle = d3.select('#foreground-' + graph.vars.elId).select('title')
+          x = d3.mouse(this)[0] - graph.cg.margin.left
+          newPoints = angular.copy graph.vars.points
+          newPoints = _.map newPoints, (point)-> Math.abs x - point
+          minPoint = _.min newPoints
+          index = newPoints.indexOf minPoint
+          barsEl = graph.dom.chart.selectAll('rect')
+          barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+          bar = barsEl[0][index]
+          barEl = d3.select(bar)
+          barEl.attr 'fill', '#C87200'
+          barData = barEl.data()[0]
+          titleText = barData[graph.cg.xProp] + ' ' + graph.cg.xTitle + ' in '
+          titleText += barData.filesCount + ' file(s)'
+          foregroundTitle.text titleText
+        .on 'mouseleave', ()->
+          barsEl = graph.dom.chart.selectAll('rect')
+          barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+          
     graph.draw = ()->
       graph.createChart()
       graph.setScales()
       graph.createAxis()
       graph.createBars()
+      graph.createFilter()
+      graph.createMouseOverEvent()
       
     graph
 

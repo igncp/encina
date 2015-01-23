@@ -216,19 +216,20 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           newPoints = _.map newPoints, (point)-> Math.abs x - point
           minPoint = _.min newPoints
           index = newPoints.indexOf minPoint
-          barsEl = graph.dom.chart.selectAll('rect')
-          barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+          graph.resetBarsColor()
           bar = barsEl[0][index]
           barEl = d3.select(bar)
           barEl.attr 'fill', '#C87200'
           barData = barEl.data()[0]
-          titleText = barData[graph.cg.xProp] + ' ' + graph.cg.xTitle + ' in '
-          titleText += barData.filesCount + ' file(s)'
+          titleText = barData.filesCount + ' file(s) with '
+          titleText += barData[graph.cg.xProp] + ' ' + graph.cg.xTitle
           foregroundTitle.text titleText
-        .on 'mouseleave', ()->
-          barsEl = graph.dom.chart.selectAll('rect')
-          barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
-          
+        .on 'mouseleave', -> graph.resetBarsColor()
+    
+    graph.resetBarsColor = ->
+      barsEl = graph.dom.chart.selectAll('rect')
+      barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+
     graph.draw = ()->
       graph.createChart()
       graph.setScales()

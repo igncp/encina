@@ -14,7 +14,7 @@ A command line tool for analyzing projects and retrieving statistics. Once compl
 
 - Debian environment
 - Node.js
-- Python (with NumPy and Pandas libraries)
+- Python and pip
 
 ## Usage
 
@@ -41,7 +41,7 @@ A demo of a report of the last published version can be found [here](http://enci
 
 ## Development
 
-Download the repository and use the Makefile. For example, `make server` and `make grunt` for the output development.
+Download the repository and use the Makefile. For example, `make server` and `make grunt` for the output development. To install dev dependencies use: `make`
 
 ## Author and License
 

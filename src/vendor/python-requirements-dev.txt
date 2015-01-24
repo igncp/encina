@@ -1,0 +1,4 @@
+-r python-requirements-prod.txt
+
+nose
+selenium

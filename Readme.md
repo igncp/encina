@@ -1,6 +1,6 @@
 # [Encina](http://igncp.github.io/encina/)
 
-[![npm version](https://badge.fury.io/js/encina.svg)](http://badge.fury.io/js/encina)
+[![npm version](https://badge.fury.io/js/encina.svg)](http://badge.fury.io/js/encina) [![Build Status](https://travis-ci.org/igncp/encina.svg?branch=master)](https://travis-ci.org/igncp/encina)
 
 A command line tool for analyzing projects and retrieving statistics. Once completed, you can inspect the result using an interactive interface, with charts (D3) and formatted data. Encina stands for ***holm oak*** in Spanish.
 

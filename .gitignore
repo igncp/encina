@@ -6,4 +6,4 @@ node_modules
 encina-report
 src/output/devel/*
 !src/output/devel/Readme.md
-
+.tmp

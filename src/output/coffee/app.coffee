@@ -13,3 +13,5 @@ define 'app', [
   directives encina
 
   angular.bootstrap document, ['encina']
+
+  encina

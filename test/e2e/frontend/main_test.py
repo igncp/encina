@@ -1,13 +1,8 @@
-import sys
-import os
-
-helpers_path = os.path.realpath(os.path.dirname(__file__) + '../../../helpers/python/')
-sys.path.insert(0, helpers_path)
-import encina_helpers as h
+import importer
 
 
-class MainTestCase(h.FrontendVisualTestcase):
-  def testUnity(self):
-    """ Main Test """
+class MainTestCase(importer.common.FrontendTestcase):
+  def chart_pies_present_test(self):
+    """ Pie charts are present in the report """
     self.s.go_to('/')
-    self.assertEquals(1, 1)
+    self.assert_page_contains_elements_by_css_selector('.chart-pie')

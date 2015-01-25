@@ -2,3 +2,4 @@
 
 nose
 selenium
+pyvirtualdisplay

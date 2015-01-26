@@ -1,12 +1,16 @@
-<h3>Installation</h3>
-<div class="col-lg-6">
+<div class="row">
+  <h3>Installation</h3>
+  <div class="col-lg-6">
     <p>To install, first set the npm package:</p>
     <pre class="code">
 sudo install npm -g encina</pre>
-</div>
-<div class="col-lg-6">
-    <p>Then install dependencies if necessary</p>
+    <p>This should already install all python dependencies for production, if you had pip installed.</p>
+  </div>
+  <div class="col-lg-6">
+    <p>If you want to help with the development, run</p>
     <pre class="code">
-sudo apt-get install -y python-dev python-pandas python-numpy
-sudo pip install pyyaml</pre>
+make install-python-libraries-dev</pre>
+    <p>in the forked encina directory to install the development depencies, such as nose or selenium. In order to get selenium to work, you need the chrome driver available in your <i>$PATH</i>.</p>
+  </div>
+
 </div>

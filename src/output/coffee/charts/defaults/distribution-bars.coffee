@@ -216,7 +216,7 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           newPoints = _.map newPoints, (point)-> Math.abs x - point
           minPoint = _.min newPoints
           index = newPoints.indexOf minPoint
-          graph.resetBarsColor()
+          barsEl = graph.resetBarsColor()
           bar = barsEl[0][index]
           barEl = d3.select(bar)
           barEl.attr 'fill', '#C87200'
@@ -229,6 +229,7 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
     graph.resetBarsColor = ->
       barsEl = graph.dom.chart.selectAll('rect')
       barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+      barsEl
 
     graph.draw = ()->
       graph.createChart()

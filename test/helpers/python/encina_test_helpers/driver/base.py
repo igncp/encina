@@ -30,6 +30,11 @@ class Base:
   def go_to(self, relative_url):
     self.d.get(self.base_url + relative_url)
 
+  def get_current_relative_url(self):
+    # self.d.current_url # this way it doesn't get the latest url
+    absoule_url = self.script('return document.URL;')
+    return absoule_url.replace(self.base_url, '')
+
   def wait_until_presence_of_element_located(self, condition):
     self.wait().until(EC.presence_of_element_located(condition))
 
@@ -63,8 +68,17 @@ class Base:
   def close_browser(self):
     self.d.close()
 
+  def wait_seconds(self, seconds):
+    time.sleep(seconds)
+    
   def wait(self, time=10):
     return WebDriverWait(self.d, time)
 
   def script(self, script_string):
-    self.d.execute_script(script_string)
+    return self.d.execute_script(script_string)
+
+  def get_console_output(self):
+    entries = 'console logs:'
+    for entry in self.d.get_log('browser'):
+      entries += '\n' + entry
+    return entries

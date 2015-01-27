@@ -29,10 +29,10 @@ tests-e2e-backend:
 	@nosetests test/e2e/backend
 
 tests-e2e-frontend-visual:
-	@(export ENCINA_TEST_MODE='visual' && nosetests test/e2e/frontend)
+	@(export ENCINA_TEST_MODE='visual' && nosetests test/e2e/frontend --nocapture)
 
 tests-e2e-frontend-headless:
-	@(export ENCINA_TEST_MODE='headless' && nosetests test/e2e/frontend)
+	@(export ENCINA_TEST_MODE='headless' && nosetests test/e2e/frontend --nocapture)
 
 tests-unit-frontend:
 	@node_modules/karma-cli/bin/karma start test/unit/frontend/karma.conf.coffee --single-run

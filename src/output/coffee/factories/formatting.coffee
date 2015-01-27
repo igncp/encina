@@ -9,6 +9,7 @@ define 'factories/formatting', [], ()->
           final = parts.join '.'
 
         split: (a, n)->
+          if n is 0 then return a
           len = a.length; out = []; i = 0
           while i < len
             size = Math.ceil((len - i) / n--)

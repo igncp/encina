@@ -22,6 +22,10 @@ server:
 
 tests-travis: tests-e2e-backend tests-unit-frontend
 
+set-test-bin-executable:
+	@chmod +x test/bin/*
+	@echo "The bin files in the test directory are now executables"
+
 
 # Tests
 
@@ -29,10 +33,10 @@ tests-e2e-backend:
 	@nosetests test/e2e/backend
 
 tests-e2e-frontend-visual:
-	@(export ENCINA_TEST_MODE='visual' && nosetests test/e2e/frontend --nocapture)
+	@sh test/bin/e2e-frontend visual
 
 tests-e2e-frontend-headless:
-	@(export ENCINA_TEST_MODE='headless' && nosetests test/e2e/frontend --nocapture)
+	@sh test/bin/e2e-frontend headless
 
 tests-unit-frontend:
 	@node_modules/karma-cli/bin/karma start test/unit/frontend/karma.conf.coffee --single-run

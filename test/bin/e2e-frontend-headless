@@ -1,0 +1,1 @@
+./test/bin/e2e-frontend headless $@

@@ -1,0 +1,6 @@
+export ENCINA_TEST_MODE=$1
+if [ -n "$2" ]; then
+  nosetests test/e2e/frontend/$2 --nocapture
+else
+  nosetests test/e2e/frontend --nocapture
+fi

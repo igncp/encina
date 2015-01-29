@@ -20,12 +20,11 @@ server:
 	@echo "Server running in 8081"
 	@cd src/output/devel; http-server -c-1 -s
 
-tests-travis: tests-e2e-backend tests-unit-frontend
+tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
 
 set-test-bin-executable:
 	@chmod +x test/bin/*
 	@echo "The bin files in the test directory are now executables"
-
 
 # Tests
 
@@ -40,3 +39,6 @@ tests-e2e-frontend-headless:
 
 tests-unit-frontend:
 	@node_modules/karma-cli/bin/karma start test/unit/frontend/karma.conf.coffee --single-run
+
+tests-unit-backend:
+	@sh test/bin/unit-backend

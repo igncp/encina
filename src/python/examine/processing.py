@@ -142,6 +142,10 @@ class Data():
     }
 
   def find_max_paths(sf, df, max, key):
+    """
+    Finds the paths that match the max values for a given key and
+    inserts them into the passed max dict.
+    """
     filtered_df = sf.filter_df_excluding_static_rules(df, key)
     max['freq']['paths'] = filtered_df.loc[filtered_df[key] ==
       str(max['freq']['index'])]['path'].tolist()

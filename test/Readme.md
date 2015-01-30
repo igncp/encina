@@ -11,3 +11,7 @@ Run this script to select a specific directory or test. As each file requires to
 `./test/bin/e2e-frontend headless home`
 
 This would run just the tests in that directory. You can also specify a file. There are also the `e2e-frontend-visual` and `e2e-frontend-headless` helpers that automatically set the display mode so you can put one or zero arguments.
+
+### unit-backend
+
+The same as before, you can select a specific test with this command.

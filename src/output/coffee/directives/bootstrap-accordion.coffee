@@ -3,7 +3,7 @@ define 'directives/bootstrap-accordion', [], ()->
     encina.directive 'bootstrapAccordion', ->
       return {
         restrict: 'E'
-        templateUrl: 'components/bootstrap-accordion.html'
+        templateUrl: '/components/bootstrap-accordion.html'
         replace: true
         scope:
           titleText: '@'

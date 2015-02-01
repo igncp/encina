@@ -9,8 +9,8 @@ module.exports = (grunt) ->
         cwd: './src/output/coffee/'
         src: ['**/*.coffee']
         dest: (->
-          if env is 'prod' then return currentDir + 'encina-report/js/'
-          else return 'src/output/devel/js/'
+          if env is 'prod' then return currentDir + 'encina-reports/js/'
+          else return 'src/output/devel/encina-reports/js/'
         )()
         ext: '.js'
     stylus:
@@ -18,10 +18,10 @@ module.exports = (grunt) ->
         files: (->
           obj = {}
           if env is 'prod'
-            obj[currentDir + '/encina-report/css/styles.css'] = \
+            obj[currentDir + '/encina-reports/css/styles.css'] = \
               __dirname + '/src/output/styl/styles.styl'
           else
-            obj[__dirname + '/src/output/devel/css/styles.css'] = \
+            obj[__dirname + '/src/output/devel/encina-reports/css/styles.css'] = \
               __dirname + '/src/output/styl/styles.styl'
           obj
         )()
@@ -31,20 +31,20 @@ module.exports = (grunt) ->
           expand: true
           cwd: __dirname + '/src/output/'
           src: 'index.html'
-          dest: if env is 'prod' then currentDir + '/encina-report/' \
-            else __dirname + '/src/output/devel/'
+          dest: if env is 'prod' then currentDir + '/encina-reports/' \
+            else __dirname + '/src/output/devel/encina-reports/'
         }, {
           expand: true
           cwd: __dirname + '/src/output/components/'
           src: '**'
-          dest: if env is 'prod' then  currentDir + '/encina-report/components/' \
-            else __dirname + '/src/output/devel/components/'
+          dest: if env is 'prod' then  currentDir + '/encina-reports/components/' \
+            else __dirname + '/src/output/devel/encina-reports/components/'
         }, {
           expand: true
           cwd: __dirname + '/src/output/views/'
           src: '**'
-          dest: if env is 'prod' then  currentDir + '/encina-report/views/' \
-            else __dirname + '/src/output/devel/views/'
+          dest: if env is 'prod' then  currentDir + '/encina-reports/views/' \
+            else __dirname + '/src/output/devel/encina-reports/views/'
         }]
     watch: # For devel
       outputDevel:

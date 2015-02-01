@@ -8,6 +8,7 @@ body
   color #777
   
 footer
+  padding-top 30px
   p
     text-align center
 
@@ -24,11 +25,20 @@ nav
 .panel-default>.panel-heading
   color #333
   background-color green-pale
-
+  
+.panel-primary
+  border-color #818181
+  ul
+    list-style-type none
+  & > .panel-heading
+    background-color #FFF
+    border-color #818181
+    color #333
+  
 .modal-item
   word-wrap break-word
 
-#container, #footer
+#report-container
   opacity 0
   transition opacity 1s linear
 
@@ -43,7 +53,7 @@ nav
     margin-top 20px
   
 // Sticky Footer
-footer-height = 100px
+footer-height = 80px
 h1
   margin-top 0
   padding-top 20px
@@ -63,5 +73,6 @@ footer, #container:after
   height: footer-height
     
 // jQuery UI
+
 .ui-widget-header
   background #CDDAE4

@@ -22,27 +22,14 @@
 <body ng-controller="MainCtrl">
     <div id="container" class="col-lg-offset-1 col-lg-10">
         <div class="page-header">
-            <h1>Encina Report - <strong>{{data.root.name}}</strong> <small>{{data.root.dir}}</small></h1>
+            <h1><a href="/">Encina Reports</a></h1>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/" class="btn btn-default">Result</a></li>
-                <li><a href="/conclusions" class="btn btn-default">Conclusions</a></li>
-            </ul>
-        </nav>
-        <div ui-view></div>
+        <div class="row" ui-view></div>
     </div>
 
     <footer class="col-lg-offset-1 col-lg-10" id="footer">
         <p>
-            Generated the {{data.meta.date.day}} at {{data.meta.date.time}} ({{data.meta.tzname}})
-        </p>
-        <p>
-            using <span ng-if="data.meta.linux">{{data.meta.linux}} - </span>{{data.meta.os}} {{data.meta.machine}}
-        </p>
-        <p>
-            with version <strong>{{data.meta.version}}</strong> ·
-            <a href="https://github.com/igncp/encina">Source</a> ·
+            <a href="https://github.com/igncp/encina">Project</a> ·
             <a href="http://igncp.github.io/encina/">Website</a>
         </p>
     </footer>

@@ -3,7 +3,7 @@ define 'directives/summary-statistics', [], ()->
     encina.directive 'summaryStatistics', (EncinaFormatting)->
       return {
         restrict: 'E'
-        templateUrl: 'components/summary-statistics.html'
+        templateUrl: '/components/summary-statistics.html'
         replace: true
         scope:
           varTitle: '@'

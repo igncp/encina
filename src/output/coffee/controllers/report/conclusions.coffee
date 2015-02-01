@@ -1,4 +1,4 @@
-define 'controllers/conclusions', ->
+define 'controllers/report/conclusions', ->
   createController = (encina)->
     encina.controller 'ConclusionsCtrl', ($scope)->
       $scope.conclusions = []

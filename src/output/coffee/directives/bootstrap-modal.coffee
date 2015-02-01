@@ -3,7 +3,7 @@ define 'directives/bootstrap-modal', [], ()->
     encina.directive 'bootstrapModal', ->
       return {
         restrict: 'E'
-        templateUrl: 'components/bootstrap-modal.html'
+        templateUrl: '/components/bootstrap-modal.html'
         replace: true
         scope:
           varName: '@'

@@ -21,7 +21,7 @@ A command line tool for analyzing projects and retrieving statistics. Once compl
 You can use `encina` from the command line once the module is installed. If you want to use it anywhere, install it as a global module `npm install -g encina`.
 
 - To retrieve data from a project: `encina examine PATH/TO/PROJECT` 
-- To display the result: `encina server` in the directory that contains the `encina-report` result. In a browser, go to: `http://localhost:9993` or add the `-b` flag to the command.
+- To display the result: `encina server` in the directory that contains the `encina-reports` result. In a browser, go to: `http://localhost:9993` or add the `-b` flag to the command.
 
 Please go to the [homesite](http://igncp.github.io/encina/) for further information.
 
@@ -31,7 +31,7 @@ The `examine` command is relatively fast, for example with the entire Rails proj
 
 ![encina examine](/misc/examine.gif)
 
-A demo of a report of the last published version can be found [here](http://encina-report.herokuapp.com/) (You may have to wait ~10 seconds till the heroku server is woken up).
+A demo of a report of the last published version can be found [here](http://encina-reports.herokuapp.com/) (You may have to wait ~10 seconds till the heroku server is woken up).
 
 
 ## Technologies covered

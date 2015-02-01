@@ -17,8 +17,9 @@ grunt:
 	@grunt watch
 
 server:
-	@echo "Server running in 8081"
-	@cd src/output/devel; http-server -c-1 -s
+	@cd src/output/devel; \
+		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee \
+		-w ../../../src/run-server.coffee -- ../../../bin/encina.js server
 
 tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
 

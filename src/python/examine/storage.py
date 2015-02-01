@@ -13,8 +13,9 @@ class Data():
         pass
 
   def save_file(sf):
-    if not os.path.exists('encina-report'):
-      os.makedirs('encina-report')
+    if not os.path.exists('encina-reports'):
+      os.makedirs('encina-reports')
+      os.makedirs('encina-reports/data')
 
     packagejson = open(os.path.dirname(os.path.abspath(__file__)) + '/../../../package.json')
     package = json.load(packagejson)
@@ -40,5 +41,6 @@ class Data():
       'meta': sf.meta
     }
 
-    with open('encina-report/data.json', 'w') as datafile:
+    file_name = "{}-{}".format(data['root']['name'], str(int(time.time())))
+    with open('encina-reports/data/' + file_name + '.json', 'w') as datafile:
       json.dump(data, datafile)

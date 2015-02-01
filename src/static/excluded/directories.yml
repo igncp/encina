@@ -1,4 +1,4 @@
-- name: encina-report
+- name: encina-reports
 - name: node_modules
 - name: .git
 - name: bower_components

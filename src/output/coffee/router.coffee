@@ -9,11 +9,20 @@ define 'router', ->
       $stateProvider.state('home', {
         url: '/'
         templateUrl: '/views/home.html'
-        controller: 'HomeController'
-      }).state('conclusions', {
+        controller: 'HomeCtrl'
+      }).state('report', {
+        url: '/report/:report'
+        abstract: true
+        templateUrl: '/views/report/report.html'
+        controller: 'ReportCtrl'
+      }).state('report.extract', {
+        url: ''
+        templateUrl: '/views/report/extract.html'
+        controller: 'ExtractCtrl'
+      }).state('report.conclusions', {
         url: '/conclusions'
-        templateUrl: '/views/conclusions.html'
-        controller: 'ConclusionsCtrl'
+        templateUrl: '/views/report/conclusions.html'
+        controller: 'ExtractCtrl'
       })
     )
 

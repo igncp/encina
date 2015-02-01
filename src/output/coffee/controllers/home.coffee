@@ -1,34 +1,27 @@
 define 'controllers/home', ->
   createController = (encina)->
-    encina.controller 'HomeController', ($scope, $timeout, EncinaFormatting)->
-      runController = ->
-        $scope.data = $scope.$parent.data
-        
-        $scope.nbrWCommas = EncinaFormatting.nbrWCommas
+    encina.controller 'HomeCtrl', ($scope, $http, EncinaFormatting)->
+      $http.get('/reports-files').then (res)->
+        files = res.data
+        tempProjects = {}
+        _.each files, (file)->
+          projectName = file.substr 0, file.length - 11
+          projectTimestamp = file.substr file.length - 10
+          if tempProjects[projectName]
+            tempProjects[projectName].push projectTimestamp
+          else
+            tempProjects[projectName] = [projectTimestamp]
 
-        renderCharts = ()->
-          extensionsPie = require('charts/extensions-pie')
-          extensionsData = $scope.data.extensions
+        $scope.projects = []
+        _.each Object.keys(tempProjects), (projectKey)->
+          newProject =
+            name: projectKey
+            reports: tempProjects[projectKey]
           
-          extensionsPie extensionsData.parsedHist, 'chart-extensions-pie-by-file', \
-            'Extensions by total number of Files (' + \
-            $scope.nbrWCommas($scope.data.structure.total_files) + ')', 'files'
-          
-          extensionsPie extensionsData.hist_by_nel, 'chart-extensions-pie-by-nel', \
-            'Extensions by total Non Empty Lines (' + \
-              $scope.nbrWCommas($scope.data.nel.index_total) + ')', 'Non Empty Lines'
+          newProject.reports = _.map newProject.reports, (report)->
+            date: moment.unix(report).format 'YYYY/MM/DD - HH:mm'
+            name: report
 
-          extensionsPie extensionsData.hist_by_size, 'chart-extensions-pie-by-size', \
-            'Extensions grouped by total size (' + $scope.data.sizes.totalMbs + ' Mbs)', 'kbs'
-
-          (require('charts/lines-distribution'))($scope.data.nel.parsedHist)
-          (require('charts/depths-distribution'))($scope.data.depths.parsedHist)
-
-        renderCharts()
-
-      waitTillDataLoaded = ->
-        if $scope.$parent.data then runController()
-        else $timeout(waitTillDataLoaded, 50)
-      waitTillDataLoaded()
+          $scope.projects.push newProject
 
   createController

@@ -1,6 +1,6 @@
 {
   "name": "encina",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Projects analyzer",
   "author": "Ignacio Carbajo",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "grunt-contrib-watch": "^0.6.1"
   },
   "scripts": {
-    "postinstall": "sudo pip install -r src/vendor/python-requirements-prod.txt"
+    "postinstall": "pip install -r src/vendor/python-requirements-prod.txt"
   },
   "preferglobal": true,
   "devDependencies": {

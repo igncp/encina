@@ -1,17 +1,14 @@
-<div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Reports</h3>
-  </div>
-  <div class="panel-body">
-    <ul>
-      <li ng-repeat="project in projects">
-        <strong>{{project.name}}</strong>
+<table class="table" id="home-table">
+  <tbody>
+    <tr ng-repeat="project in projects">
+      <td class="col-lg-6 project-name" style="background-color: {{colorsScale($index, projects)}}"><strong>{{project.name}}</strong></td>
+      <td class="project-reports" style="background-color: {{colorsScale($index, projects)}}">
         <ul>
-          <li ng-repeat="report in project.reports">
-            <a href="report/{{project.name}}-{{report.name}}">{{report.date}}</a>
+          <li ng-repeat="report in project.reports" ng-class="notLastItem($index, project.reports)">
+            <a class="btn btn-default" href="report/{{project.name}}-{{report.name}}">{{report.date}}</a>
           </li>
         </ul>
-      </li>
-    </ul>
-  </div>
-</div>
+      </td>
+    </tr>
+  </tbody>
+</table>

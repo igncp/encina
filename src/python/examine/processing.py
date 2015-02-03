@@ -158,3 +158,8 @@ class Data():
     
   def find_max_paths_in_dirs(sf, max, key):
     sf.find_max_paths(sf.dirs_df, max, key)
+
+  def process_git_info_if_necessary(sf):
+    if '.git' in sf.characteristics['dir']:
+      # print sf.special['git']
+      pass

@@ -116,3 +116,22 @@ class Data():
     if sf.root['dir'][-1] != os.sep: sf.root['dir'] += os.sep
     sf.root['dir'] = os.path.normpath(os.getcwd() + os.sep + sf.root['dir'])
     sf.root['name'] = sf.root['dir'].split(os.sep)[-1]
+
+  def recollect_git_info_if_necessary(sf):
+    def extract_names(array):
+      for idx, item in enumerate(array):
+        array[idx] = item.name
+
+    if '.git' in sf.characteristics['dir']:
+      sf.special['git'] = {}
+      from git import Repo
+      repo = Repo(sf.root['dir'])
+      sf.special['git']['branches'] = repo.branches
+      sf.special['git']['description'] = repo.description
+      sf.special['git']['refs'] = list(repo.refs)
+      sf.special['git']['remote'] = repo.remote().url
+      sf.special['git']['tags'] = repo.tags
+      sf.special['git']['commits_count'] = repo.head.commit.count()
+      
+      for key in ['branches', 'refs', 'tags']:
+        extract_names(sf.special['git'][key])

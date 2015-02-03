@@ -23,5 +23,6 @@ class Data(recollection.Data, storage.Data, processing.Data, utilities.Data, sta
     sf.meta = dict()
     sf.characteristics = dict()
     sf.tree = dict()
+    sf.special = dict()
 
     sf.set_static()

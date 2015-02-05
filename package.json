@@ -4,6 +4,7 @@
   "description": "Projects analyzer",
   "author": "Ignacio Carbajo",
   "license": "MIT",
+  "keywords": ["coffeescript", "python", "data", "analysis", "angular", "d3", "dataviz", "express"],
   "repository": "https://github.com/igncp/encina",
   "bin": {
     "encina": "bin/encina.js"

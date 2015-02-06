@@ -6,6 +6,7 @@
   "license": "MIT",
   "keywords": ["coffeescript", "python", "data", "analysis", "angular", "d3", "dataviz", "express"],
   "repository": "https://github.com/igncp/encina",
+  "bugs": "https://github.com/igncp/encina/issues",
   "bin": {
     "encina": "bin/encina.js"
   },

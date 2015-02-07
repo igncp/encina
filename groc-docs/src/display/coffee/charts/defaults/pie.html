@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/defaults/pie</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/defaults/pie"><meta name="groc-project-path" content="src/display/coffee/charts/defaults/pie.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/defaults/pie.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/defaults/pie'</span>, [<span class="hljs-string">'charts/common'</span>], <span class="hljs-function"><span class="hljs-params">(common)</span>-&gt;</span>
+  graph = {}
+
+  graph.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(data, elId, title, sliceTitleSuffix)</span>-&gt;</span>
+    common.waitTillElPresent elId,<span class="hljs-function"> -&gt;</span>
+      width = <span class="hljs-number">330</span>
+      height = <span class="hljs-number">330</span>
+      margin = {
+        <span class="hljs-attribute">top</span>: <span class="hljs-number">130</span>
+        <span class="hljs-attribute">bottom</span>: <span class="hljs-number">30</span>
+        <span class="hljs-attribute">left</span>: <span class="hljs-number">30</span>
+        <span class="hljs-attribute">right</span>: <span class="hljs-number">30</span>
+      }
+      outerRadius = (width - margin.top) / <span class="hljs-number">2</span>
+      color = d3.scale.category20c()
+      arc = {}
+
+      svg = d3.select <span class="hljs-string">'#'</span> + elId
+        .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'chart-pie'</span>
+        .append <span class="hljs-string">'svg'</span>
+        .attr <span class="hljs-string">'width'</span>, width
+        .attr <span class="hljs-string">'height'</span>, height
+
+      svgTitle = svg
+        .append <span class="hljs-string">'g'</span>
+        .attr <span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + width / <span class="hljs-number">2</span> + <span class="hljs-string">',50)'</span>
+        .attr <span class="hljs-string">'width'</span>, <span class="hljs-number">100</span>
+        .attr <span class="hljs-string">'height'</span>, <span class="hljs-number">100</span>
+        .append <span class="hljs-string">'text'</span>
+        .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'chart-pie-title'</span>
+        .text title
+
+      chart = svg
+        .append <span class="hljs-string">'g'</span>
+        .attr <span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + width / <span class="hljs-number">2</span> + <span class="hljs-string">','</span> + height / <span class="hljs-number">2</span> + <span class="hljs-string">')'</span>
+
+      <span class="hljs-function"><span class="hljs-title">textTransform</span> = <span class="hljs-params">(d)</span>-&gt;</span>
+        d.outerRadius = outerRadius
+        d.innerRadius = outerRadius / <span class="hljs-number">2</span>
+        <span class="hljs-string">'translate('</span> + arc.centroid(d) + <span class="hljs-string">')'</span>
+
+      <span class="hljs-function"><span class="hljs-title">mouseenter</span> = <span class="hljs-params">(d)</span>-&gt;</span>
+        d3.select <span class="hljs-keyword">this</span>
+          .select <span class="hljs-string">'path'</span>
+          .transition().duration(<span class="hljs-number">400</span>)
+          .style {<span class="hljs-string">'stroke-width'</span>: <span class="hljs-string">'1px'</span>, <span class="hljs-attribute">fill</span>: <span class="hljs-string">'#FFB61A'</span>}
+
+      <span class="hljs-function"><span class="hljs-title">mouseleave</span> = <span class="hljs-params">(d)</span>-&gt;</span>
+        d3.select <span class="hljs-keyword">this</span>
+          .select <span class="hljs-string">'path'</span>
+          .transition().duration(<span class="hljs-number">400</span>)
+          .style {<span class="hljs-string">'stroke-width'</span>: <span class="hljs-string">'0.5px'</span>, <span class="hljs-attribute">fill</span>: color(d.data.i)}
+
+      common.createSvgFilterBlack(elId + <span class="hljs-string">'-drop-shadow-filter'</span>, chart, <span class="hljs-number">3</span>, <span class="hljs-number">.4</span>)
+      pie = d3.layout.pie<span class="hljs-function"><span class="hljs-params">()</span>.<span class="hljs-title">sort</span><span class="hljs-params">(<span class="hljs-literal">null</span>)</span>.<span class="hljs-title">value</span><span class="hljs-params">(((d)-&gt; d.count))</span>
+      <span class="hljs-title">arc</span> = <span class="hljs-title">d3</span>.<span class="hljs-title">svg</span>.<span class="hljs-title">arc</span><span class="hljs-params">()</span>.<span class="hljs-title">outerRadius</span><span class="hljs-params">(outerRadius)</span>
+
+      <span class="hljs-title">slices</span> = <span class="hljs-title">chart</span>
+        .<span class="hljs-title">selectAll</span> '.<span class="hljs-title">slice</span>'
+        .<span class="hljs-title">data</span> <span class="hljs-title">pie</span><span class="hljs-params">(data)</span>
+        .<span class="hljs-title">enter</span><span class="hljs-params">()</span>
+        .<span class="hljs-title">append</span> '<span class="hljs-title">g</span>'
+        .<span class="hljs-title">attr</span> '<span class="hljs-title">class</span>', '<span class="hljs-title">slice</span>'
+        .<span class="hljs-title">on</span> {<span class="hljs-title">mouseenter</span>: <span class="hljs-title">mouseenter</span>, <span class="hljs-title">mouseleave</span>: <span class="hljs-title">mouseleave</span>}
+        .<span class="hljs-title">style</span> '<span class="hljs-title">filter</span>', '<span class="hljs-title">url</span><span class="hljs-params">(#<span class="hljs-string">' + elId + '</span>-drop-shadow-filter)</span>'
+
+      <span class="hljs-title">path</span> = <span class="hljs-title">slices</span>
+        .<span class="hljs-title">append</span> '<span class="hljs-title">path</span>'
+        .<span class="hljs-title">attr</span> {<span class="hljs-title">fill</span>: <span class="hljs-params">((d,i)-&gt; d.data.i = i; color(i))</span>, <span class="hljs-title">d</span>: <span class="hljs-title">arc</span>, \
+          '<span class="hljs-title">stroke</span>-<span class="hljs-title">width</span>': '0.5<span class="hljs-title">px</span>'}
+
+      <span class="hljs-title">labels</span> = <span class="hljs-title">slices</span>
+        .<span class="hljs-title">filter</span> <span class="hljs-params">(d)</span>-&gt;</span> d.endAngle - d.startAngle &gt; <span class="hljs-number">.3</span>
+        .append <span class="hljs-string">'text'</span>
+        .attr {<span class="hljs-attribute">dy</span>: <span class="hljs-string">'.35em'</span>, <span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">'middle'</span>}
+        .attr <span class="hljs-string">'transform'</span>, textTransform
+        .text <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> d.data.name
+
+      slices
+        .append <span class="hljs-string">'title'</span>
+        .text <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> d.data.name + <span class="hljs-string">' ('</span> + common.nbrWCommas(d.data.count) + \
+          <span class="hljs-string">' '</span> + sliceTitleSuffix + <span class="hljs-string">') ('</span> + d.data.percentage + <span class="hljs-string">'%)'</span>
+
+
+      slices.append<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'title'</span>)</span>.<span class="hljs-title">text</span><span class="hljs-params">((d)-&gt; d.data.label)</span>
+
+  <span class="hljs-title">graph</span></span></div></div></div></div></body></html>

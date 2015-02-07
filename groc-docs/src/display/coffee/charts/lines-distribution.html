@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/lines-distribution</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/lines-distribution"><meta name="groc-project-path" content="src/display/coffee/charts/lines-distribution.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/lines-distribution.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/lines-distribution'</span>, [<span class="hljs-string">'charts/defaults/distribution-bars'</span>], <span class="hljs-function"><span class="hljs-params">(dist)</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(data, cb)</span>-&gt;</span>
+    dist().render data, {
+      <span class="hljs-attribute">elId</span>: <span class="hljs-string">'chart-lines-distribution'</span>
+      <span class="hljs-attribute">xLabel</span>: <span class="hljs-string">'Lines Count'</span>
+      <span class="hljs-attribute">xTitle</span>: <span class="hljs-string">'line(s)'</span>
+      <span class="hljs-attribute">xProp</span>: <span class="hljs-string">'linesCount'</span>
+    }, cb
+
+  render</div></div></div></div></body></html>

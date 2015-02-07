@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><title>src/cli/examine</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="src/cli/examine"><meta name="groc-project-path" content="src/cli/examine.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/cli/examine.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">hrInterval = process.hrtime()
+exec = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).exec
+path = <span class="hljs-built_in">require</span> <span class="hljs-string">'path'</span>
+fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
+grunt = <span class="hljs-built_in">require</span> <span class="hljs-string">'grunt'</span>
+
+<span class="hljs-function"><span class="hljs-title">generateData</span> = <span class="hljs-params">(rootDir)</span>-&gt;</span>
+  command = <span class="hljs-string">'python '</span> + __dirname + <span class="hljs-string">'/../data-analysis/examine.py '</span> + rootDir
+  child = exec command, <span class="hljs-function"><span class="hljs-params">(error, stdout, stderr)</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> stderr <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.log stdout + <span class="hljs-string">'\n'</span> + stderr
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-built_in">console</span>.log stdout.trim() <span class="hljs-keyword">if</span> stdout.trim()
+      runGrunt()
+  
+<span class="hljs-function"><span class="hljs-title">runGrunt</span> = -&gt;</span>
+  command = <span class="hljs-string">'grunt compilations --gruntfile '</span> + __dirname + <span class="hljs-string">'/../../Gruntfile.coffee '</span> + \
+    <span class="hljs-string">' --root_dir="'</span> + process.cwd() + <span class="hljs-string">'/" --env=prod'</span>
+  child = exec command, <span class="hljs-function"><span class="hljs-params">(error, stdout, stderr)</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> stderr <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.log stderr
+    <span class="hljs-keyword">else</span>
+      hrInterval = process.hrtime hrInterval
+      <span class="hljs-built_in">console</span>.log <span class="hljs-string">'Done. [%d.%d seconds]'</span>, hrInterval[<span class="hljs-number">0</span>], (hrInterval[<span class="hljs-number">1</span>]/<span class="hljs-number">10000000</span>).toFixed(<span class="hljs-number">0</span>)
+
+<span class="hljs-built_in">module</span>.<span class="hljs-function"><span class="hljs-title">exports</span> = <span class="hljs-params">(rootDir)</span>-&gt;</span>
+  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> rootDir <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+    generateData rootDir</div></div></div></div></body></html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/factories/formatting</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/factories/formatting"><meta name="groc-project-path" content="src/display/coffee/factories/formatting.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/factories/formatting.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'factories/formatting'</span>, [], <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">create</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.factory <span class="hljs-string">'EncinaFormatting'</span>,<span class="hljs-function"> -&gt;</span>
+      {
+        <span class="hljs-attribute">nbrWCommas</span>: <span class="hljs-function"><span class="hljs-params">(x, decimals = <span class="hljs-number">0</span>)</span>-&gt;</span>
+          x = x.toFixed(decimals)
+          parts = x.toString().split <span class="hljs-string">'.'</span>
+          final = parts[<span class="hljs-number">0</span>] = parts[<span class="hljs-number">0</span>].replace <span class="hljs-regexp">/\B(?=(\d{3})+(?!\d))/g</span>, <span class="hljs-string">','</span>
+          final = parts.join <span class="hljs-string">'.'</span>
+
+        <span class="hljs-attribute">split</span>: <span class="hljs-function"><span class="hljs-params">(a, n)</span>-&gt;</span>
+          <span class="hljs-keyword">if</span> n <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> a
+          len = a.length; out = []; i = <span class="hljs-number">0</span>
+          <span class="hljs-keyword">while</span> i &lt; len
+            size = Math.ceil((len - i) / n--)
+            out.push(a.slice(i, i += size))
+          out
+      }
+      
+  create</div></div></div></div></body></html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><title>src/cli/run-server</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="src/cli/run-server"><meta name="groc-project-path" content="src/cli/run-server.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/cli/run-server.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">express = <span class="hljs-built_in">require</span> <span class="hljs-string">'express'</span>
+exec = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).exec
+fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'fs'</span>
+
+<span class="hljs-built_in">module</span>.<span class="hljs-function"><span class="hljs-title">exports</span> = <span class="hljs-params">(options)</span>-&gt;</span>
+  urlExceptions = [
+    <span class="hljs-string">'/'</span>
+    <span class="hljs-string">'/reports-files'</span>
+  ]
+
+  encinaPath = process.cwd() + <span class="hljs-string">'/encina-reports/'</span>
+
+  dataFiles = fs.readdirSync encinaPath + <span class="hljs-string">'data/'</span>
+  dataFilesUrls = dataFiles.map <span class="hljs-function"><span class="hljs-params">(file)</span>-&gt;</span> <span class="hljs-string">'/data/'</span> + file
+  dataFilesNames = dataFiles.map <span class="hljs-function"><span class="hljs-params">(file)</span>-&gt;</span> file.substr <span class="hljs-number">0</span>, file.length - <span class="hljs-number">5</span>
+
+  urlExceptions = urlExceptions.concat dataFilesUrls
+  
+  server = express()
+  server.use express.static( <span class="hljs-string">'./encina-reports'</span>)
+  port = process.env.PORT || <span class="hljs-number">9993</span>
+  
+  server.get <span class="hljs-string">'*'</span>, <span class="hljs-function"><span class="hljs-params">(req, res, next)</span>-&gt;</span>
+    <span class="hljs-keyword">if</span> urlExceptions.indexOf(req.path) &lt; <span class="hljs-number">0</span>
+      newPath = <span class="hljs-string">'/#'</span> + req.path.substr(<span class="hljs-number">1</span>,req.path.length - <span class="hljs-number">1</span>)
+      res.redirect(newPath)
+
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-keyword">if</span> req.path <span class="hljs-keyword">is</span> <span class="hljs-string">'/'</span>
+        res.sendFile encinaPath + <span class="hljs-string">'index.html'</span>
+
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> req.path <span class="hljs-keyword">is</span> <span class="hljs-string">'/reports-files'</span>
+        res.send dataFilesNames
+
+  <span class="hljs-built_in">console</span>.log <span class="hljs-string">'Running a server in port '</span> + port + <span class="hljs-string">' using ./encina-reports directory.'</span>
+  
+  <span class="hljs-keyword">if</span> options.browser
+    command = <span class="hljs-string">'xdg-open http://localhost:'</span> + port
+    child = exec command
+  
+  server.listen port</div></div></div></div></body></html>

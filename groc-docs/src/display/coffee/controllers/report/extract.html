@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/controllers/report/extract</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/controllers/report/extract"><meta name="groc-project-path" content="src/display/coffee/controllers/report/extract.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/controllers/report/extract.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'controllers/report/extract'</span>,<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">createController</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.controller <span class="hljs-string">'ExtractCtrl'</span>, <span class="hljs-function"><span class="hljs-params">($scope, $timeout, EncinaFormatting)</span>-&gt;</span>
+      <span class="hljs-function"><span class="hljs-title">runController</span> = -&gt;</span>
+        $scope.data = $scope.$parent.data
+
+        $scope.nbrWCommas = EncinaFormatting.nbrWCommas
+
+        <span class="hljs-function"><span class="hljs-title">renderCharts</span> = <span class="hljs-params">()</span>-&gt;</span>
+          extensionsPie = <span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/extensions-pie'</span>)
+          extensionsData = $scope.data.extensions
+          
+          extensionsPie extensionsData.parsedHist, <span class="hljs-string">'chart-extensions-pie-by-file'</span>, \
+            <span class="hljs-string">'Extensions by total number of Files ('</span> + \
+            $scope.nbrWCommas($scope.data.structure.total_files) + <span class="hljs-string">')'</span>, <span class="hljs-string">'files'</span>
+          
+          extensionsPie extensionsData.hist_by_nel, <span class="hljs-string">'chart-extensions-pie-by-nel'</span>, \
+            <span class="hljs-string">'Extensions by total Non Empty Lines ('</span> + \
+              $scope.nbrWCommas($scope.data.nel.index_total) + <span class="hljs-string">')'</span>, <span class="hljs-string">'Non Empty Lines'</span>
+
+          extensionsPie extensionsData.hist_by_size, <span class="hljs-string">'chart-extensions-pie-by-size'</span>, \
+            <span class="hljs-string">'Extensions grouped by total size ('</span> + $scope.data.sizes.totalMbs + <span class="hljs-string">' Mbs)'</span>, <span class="hljs-string">'kbs'</span>
+
+          (<span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/lines-distribution'</span>))($scope.data.nel.parsedHist)
+          (<span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/depths-distribution'</span>))($scope.data.depths.parsedHist)
+
+        renderCharts()
+
+      <span class="hljs-function"><span class="hljs-title">waitTillDataLoaded</span> = -&gt;</span>
+        <span class="hljs-keyword">if</span> $scope.$parent.data <span class="hljs-keyword">then</span> runController()
+        <span class="hljs-keyword">else</span> $timeout(waitTillDataLoaded, <span class="hljs-number">50</span>)
+      waitTillDataLoaded()
+
+  createController</div></div></div></div></body></html>

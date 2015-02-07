@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/controllers/home</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/controllers/home"><meta name="groc-project-path" content="src/display/coffee/controllers/home.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/controllers/home.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'controllers/home'</span>,<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">createController</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.controller <span class="hljs-string">'HomeCtrl'</span>, <span class="hljs-function"><span class="hljs-params">($scope, $http, EncinaFormatting)</span>-&gt;</span>
+      $http.get<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'/reports-files'</span>)</span>.<span class="hljs-title">then</span> <span class="hljs-params">(res)</span>-&gt;</span>
+        files = res.data
+        tempProjects = {}
+        _.each files, <span class="hljs-function"><span class="hljs-params">(file)</span>-&gt;</span>
+          projectName = file.substr <span class="hljs-number">0</span>, file.length - <span class="hljs-number">11</span>
+          projectTimestamp = file.substr file.length - <span class="hljs-number">10</span>
+          <span class="hljs-keyword">if</span> tempProjects[projectName]
+            tempProjects[projectName].push projectTimestamp
+          <span class="hljs-keyword">else</span>
+            tempProjects[projectName] = [projectTimestamp]
+
+        $scope.projects = []
+        _.each Object.keys<span class="hljs-function"><span class="hljs-params">(tempProjects)</span>, <span class="hljs-params">(projectKey)</span>-&gt;</span>
+          newProject =
+            <span class="hljs-attribute">name</span>: projectKey
+            <span class="hljs-attribute">reports</span>: tempProjects[projectKey]
+          
+          newProject.reports = _.map newProject.reports, <span class="hljs-function"><span class="hljs-params">(report)</span>-&gt;</span>
+            <span class="hljs-attribute">date</span>: moment.unix(report).format <span class="hljs-string">'YYYY/MM/DD - HH:mm'</span>
+            <span class="hljs-attribute">name</span>: report
+
+          $scope.projects.push newProject
+
+        $scope.<span class="hljs-function"><span class="hljs-title">notLastItem</span> = <span class="hljs-params">(index, array)</span>-&gt;</span>
+          <span class="hljs-keyword">if</span> index <span class="hljs-keyword">isnt</span> array.length - <span class="hljs-number">1</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-string">'not-last'</span>
+          <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-string">'last'</span>
+
+        $scope.<span class="hljs-function"><span class="hljs-title">colorsScale</span> = <span class="hljs-params">(index, array)</span>-&gt;</span>
+          colors = [<span class="hljs-string">'#F2F4FF'</span>, <span class="hljs-string">'#EAF9ED'</span>]
+          c = d3.scale.linear().domain([<span class="hljs-number">0</span>, array.length - <span class="hljs-number">1</span>]).range([<span class="hljs-number">0</span>,<span class="hljs-number">1</span>])
+          colorScale = d3.scale.linear()
+            .domain(d3.range(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1.0</span> / (colors.length))).range(colors)
+          <span class="hljs-function"><span class="hljs-title">scaleFn</span> = <span class="hljs-params">(p)</span>-&gt;</span> colorScale(c(p))
+          scaleFn(index)
+
+
+  createController</div></div></div></div></body></html>

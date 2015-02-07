@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/router</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="src/display/coffee/router"><meta name="groc-project-path" content="src/display/coffee/router.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/router.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'router'</span>,<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">createRouter</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.config<span class="hljs-function"><span class="hljs-params">(($stateProvider, $urlRouterProvider, $locationProvider)-&gt;
+      $locationProvider.html5Mode(
+        enabled: <span class="hljs-literal">true</span>,
+        requireBase: <span class="hljs-literal">false</span>
+      )
+      $urlRouterProvider.otherwise <span class="hljs-string">'/'</span>
+      $stateProvider.state(<span class="hljs-string">'home'</span>, {
+        url: <span class="hljs-string">'/'</span>
+        templateUrl: <span class="hljs-string">'/views/home.html'</span>
+        controller: <span class="hljs-string">'HomeCtrl'</span>
+      }).state(<span class="hljs-string">'report'</span>, {
+        url: <span class="hljs-string">'/report/:report'</span>
+        abstract: <span class="hljs-literal">true</span>
+        templateUrl: <span class="hljs-string">'/views/report/report.html'</span>
+        controller: <span class="hljs-string">'ReportCtrl'</span>
+      }).state(<span class="hljs-string">'report.extract'</span>, {
+        url: <span class="hljs-string">''</span>
+        templateUrl: <span class="hljs-string">'/views/report/extract.html'</span>
+        controller: <span class="hljs-string">'ExtractCtrl'</span>
+      }).state(<span class="hljs-string">'report.conclusions'</span>, {
+        url: <span class="hljs-string">'/conclusions'</span>
+        templateUrl: <span class="hljs-string">'/views/report/conclusions.html'</span>
+        controller: <span class="hljs-string">'ExtractCtrl'</span>
+      })
+    )</span>
+
+  <span class="hljs-title">createRouter</span></span></div></div></div></div></body></html>

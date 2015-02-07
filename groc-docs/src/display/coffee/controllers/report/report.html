@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/controllers/report/report</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/controllers/report/report"><meta name="groc-project-path" content="src/display/coffee/controllers/report/report.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/controllers/report/report.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'controllers/report/report'</span>,<span class="hljs-function"> -&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">createController</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.controller <span class="hljs-string">'ReportCtrl'</span>, <span class="hljs-function"><span class="hljs-params">($scope, $http, $stateParams, EncinaFormatting)</span>-&gt;</span>
+      $scope.report = $stateParams.report
+      $http.get<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'/data/'</span> + $scope.report + <span class="hljs-string">'.json'</span>)</span>.<span class="hljs-title">then</span> <span class="hljs-params">(res)</span>-&gt;</span>
+        $scope.data = res.data
+
+        tmpParsedCharacs = []
+        
+        explanationsTpls =
+          <span class="hljs-attribute">dir</span>: <span class="hljs-function"><span class="hljs-params">(s)</span>-&gt;</span> <span class="hljs-string">'The directory '</span> + s + <span class="hljs-string">' was found.'</span>
+          <span class="hljs-attribute">file</span>: <span class="hljs-function"><span class="hljs-params">(s)</span>-&gt;</span> <span class="hljs-string">'The file '</span> + s + <span class="hljs-string">' was found.'</span>
+          <span class="hljs-attribute">extension</span>: <span class="hljs-function"><span class="hljs-params">(s)</span>-&gt;</span> <span class="hljs-string">'One or more files with the extension .'</span> + s + <span class="hljs-string">' were found.'</span>
+        <span class="hljs-keyword">for</span> type <span class="hljs-keyword">in</span> Object.keys($scope.data.characteristics)
+          <span class="hljs-keyword">for</span> charac <span class="hljs-keyword">in</span> Object.keys($scope.data.characteristics[type])
+            tmpParsedCharacs.push {
+              <span class="hljs-attribute">desc</span>: $scope.data.characteristics[type][charac]
+              <span class="hljs-attribute">explanation</span>: explanationsTpls[type](charac)
+            }
+        $scope.data.characteristics.parsed = []
+        $scope.data.characteristics.parsed.push(tmpParsedCharacs.splice(<span class="hljs-number">0</span>, \
+          Math.ceil(tmpParsedCharacs.length / <span class="hljs-number">2</span>)))
+        $scope.data.characteristics.parsed.push tmpParsedCharacs
+
+        $scope.data.extensions.parsedHist
+        $scope.data.extensions.parsedHist = []
+        <span class="hljs-keyword">for</span> extension <span class="hljs-keyword">in</span> Object.keys($scope.data.extensions.hist)
+          $scope.data.extensions.parsedHist.push({
+            <span class="hljs-attribute">name</span>: extension
+            <span class="hljs-attribute">count</span>: $scope.data.extensions.hist[extension]
+            <span class="hljs-attribute">percentage</span>: (<span class="hljs-number">100</span> * $scope.data.extensions.hist[extension] / \
+              $scope.data.structure.total_files).toFixed(<span class="hljs-number">2</span>)
+          })
+        $scope.data.extensions.parsedHist = _.sortBy($scope.data.extensions.parsedHist, \
+          <span class="hljs-function"><span class="hljs-params">(obj)</span>-&gt;</span> (-<span class="hljs-number">1</span>) * obj.count)
+        
+        $scope.data.extensions.threeColumnsHist = \
+          EncinaFormatting.split $scope.data.extensions.parsedHist, <span class="hljs-number">3</span>
+
+        $scope.data.nel.parsedHist = []
+        $scope.data.nel.total = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> linesCount <span class="hljs-keyword">in</span> Object.keys($scope.data.nel.hist)
+          $scope.data.nel.total += linesCount * $scope.data.nel.hist[linesCount]
+          $scope.data.nel.parsedHist.push({
+            <span class="hljs-attribute">linesCount</span>: Number(linesCount)
+            <span class="hljs-attribute">filesCount</span>: $scope.data.nel.hist[linesCount]
+          })
+
+        $scope.data.sizes.parsedHist = []
+        $scope.data.sizes.totalMbs = ($scope.data.sizes.index_total / <span class="hljs-number">1000000</span>).toFixed(<span class="hljs-number">2</span>)
+        $scope.data.sizes.total = $scope.data.sizes.index_total / <span class="hljs-number">1000000</span>
+        <span class="hljs-keyword">for</span> size <span class="hljs-keyword">in</span> Object.keys($scope.data.sizes.hist)
+          $scope.data.sizes.parsedHist.push({
+            <span class="hljs-attribute">size</span>: size
+            <span class="hljs-attribute">filesCount</span>: $scope.data.sizes.hist[size]
+          })
+
+        $scope.data.depths.parsedHist = []
+        $scope.data.depths.total = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> depthLevel <span class="hljs-keyword">in</span> Object.keys($scope.data.depths.hist)
+          $scope.data.depths.parsedHist.push({
+            <span class="hljs-attribute">depthLevel</span>: Number(depthLevel)
+            <span class="hljs-attribute">filesCount</span>: $scope.data.depths.hist[depthLevel]
+          })
+        
+        $scope.treeString = JSON.stringify $scope.data.tree, <span class="hljs-literal">undefined</span>, <span class="hljs-number">2</span>
+        
+        $scope.<span class="hljs-function"><span class="hljs-title">bsToKbs</span> = <span class="hljs-params">(size, decimals = <span class="hljs-number">2</span>)</span>-&gt;</span> (size / <span class="hljs-number">1000</span>).toFixed(decimals) + <span class="hljs-string">' kbs'</span>
+
+        dateTimestamp = moment.unix($scope.data.meta.time)
+        $scope.data.meta.date = {
+          <span class="hljs-attribute">day</span>: dateTimestamp.format <span class="hljs-string">'Do of MMMM (YYYY)'</span>
+          <span class="hljs-attribute">time</span>: dateTimestamp.format <span class="hljs-string">'HH:mm '</span>
+          <span class="hljs-attribute">short</span>: dateTimestamp.format <span class="hljs-string">'YYYY/MM/DD - HH:mm'</span>
+        }
+
+        _.each $scope.data.extensions.hist_by_size, <span class="hljs-function"><span class="hljs-params">(item)</span>-&gt;</span> item[<span class="hljs-number">1</span>] = item[<span class="hljs-number">1</span>] / <span class="hljs-number">1000</span>
+
+        <span class="hljs-function"><span class="hljs-title">addKeysToExtensionsHists</span> = <span class="hljs-params">(dataArray, sum)</span>-&gt;</span>
+          dataArray = _.map dataArray, <span class="hljs-function"><span class="hljs-params">(item)</span>-&gt;</span> {<span class="hljs-attribute">name</span>: item[<span class="hljs-number">0</span>], <span class="hljs-attribute">count</span>: item[<span class="hljs-number">1</span>]}
+          _.each dataArray, <span class="hljs-function"><span class="hljs-params">(item)</span>-&gt;</span> item.percentage = ((item.count / sum) * <span class="hljs-number">100</span>).toFixed <span class="hljs-number">2</span>
+          dataArray
+
+        $scope.data.extensions.hist_by_nel = \
+          addKeysToExtensionsHists $scope.data.extensions.hist_by_nel, \
+          $scope.data.nel.total
+        
+        $scope.data.extensions.hist_by_size = \
+          addKeysToExtensionsHists $scope.data.extensions.hist_by_size, \
+          $scope.data.sizes.index_total / <span class="hljs-number">1000</span>
+
+        angular.element(<span class="hljs-built_in">document</span>).ready<span class="hljs-function"> -&gt;</span>
+          <span class="hljs-function"><span class="hljs-title">show</span> = <span class="hljs-params">(elId)</span>-&gt;</span>
+            container = <span class="hljs-built_in">document</span>.getElementById elId
+            angular.element(container).css <span class="hljs-string">'opacity'</span>, <span class="hljs-number">1</span>
+          show <span class="hljs-string">'report-container'</span>
+
+  createController</div></div></div></div></body></html>

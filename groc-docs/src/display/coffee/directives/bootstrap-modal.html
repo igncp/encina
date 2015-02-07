@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/directives/bootstrap-modal</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/directives/bootstrap-modal"><meta name="groc-project-path" content="src/display/coffee/directives/bootstrap-modal.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/directives/bootstrap-modal.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'directives/bootstrap-modal'</span>, [], <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">create</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.directive <span class="hljs-string">'bootstrapModal'</span>,<span class="hljs-function"> -&gt;</span>
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attribute">restrict</span>: <span class="hljs-string">'E'</span>
+        <span class="hljs-attribute">templateUrl</span>: <span class="hljs-string">'/components/bootstrap-modal.html'</span>
+        <span class="hljs-attribute">replace</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">scope</span>:
+          <span class="hljs-attribute">varName</span>: <span class="hljs-string">'@'</span>
+          <span class="hljs-attribute">modalTitle</span>: <span class="hljs-string">'@'</span>
+          <span class="hljs-attribute">modalNumber</span>: <span class="hljs-string">'@'</span>
+        <span class="hljs-attribute">transclude</span>: <span class="hljs-literal">true</span>
+      }
+  create</div></div></div></div></body></html>

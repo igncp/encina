@@ -6,61 +6,94 @@ module.exports = (grunt) ->
     coffee:
       app:
         expand: true
-        cwd: './src/output/coffee/'
+        cwd: './src/display/coffee/'
         src: ['**/*.coffee']
         dest: (->
           if env is 'prod' then return currentDir + 'encina-reports/js/'
-          else return 'src/output/devel/encina-reports/js/'
+          else return 'src/display/devel/encina-reports/js/'
         )()
         ext: '.js'
+
     stylus:
       app:
         files: (->
           obj = {}
           if env is 'prod'
             obj[currentDir + '/encina-reports/css/styles.css'] = \
-              __dirname + '/src/output/styl/styles.styl'
+              __dirname + '/src/display/styl/styles.styl'
           else
-            obj[__dirname + '/src/output/devel/encina-reports/css/styles.css'] = \
-              __dirname + '/src/output/styl/styles.styl'
+            obj[__dirname + '/src/display/devel/encina-reports/css/styles.css'] = \
+              __dirname + '/src/display/styl/styles.styl'
           obj
         )()
+
     copy:
       app:
         files: [{
           expand: true
-          cwd: __dirname + '/src/output/'
+          cwd: __dirname + '/src/display/'
           src: 'index.html'
           dest: if env is 'prod' then currentDir + '/encina-reports/' \
-            else __dirname + '/src/output/devel/encina-reports/'
+            else __dirname + '/src/display/devel/encina-reports/'
         }, {
           expand: true
-          cwd: __dirname + '/src/output/components/'
+          cwd: __dirname + '/src/display/components/'
           src: '**'
           dest: if env is 'prod' then  currentDir + '/encina-reports/components/' \
-            else __dirname + '/src/output/devel/encina-reports/components/'
+            else __dirname + '/src/display/devel/encina-reports/components/'
         }, {
           expand: true
-          cwd: __dirname + '/src/output/views/'
+          cwd: __dirname + '/src/display/views/'
           src: '**'
           dest: if env is 'prod' then  currentDir + '/encina-reports/views/' \
-            else __dirname + '/src/output/devel/encina-reports/views/'
+            else __dirname + '/src/display/devel/encina-reports/views/'
         }]
+
     watch: # For devel
-      outputDevel:
+      displayDevel:
         options:
           atBegin: true
         files: [
-          'src/output/coffee/**/*.coffee'
-          'src/output/styl/**/*.styl'
-          'src/output/index.html'
-          'src/output/components/**/*.html'
-          'src/output/views/**/*.html'
+          'src/display/coffee/**/*.coffee'
+          'src/display/styl/**/*.styl'
+          'src/display/index.html'
+          'src/display/components/**/*.html'
+          'src/display/views/**/*.html'
         ]
         tasks: ['compilations']
 
+    # Dev only
+    bump:
+      options:
+        files: ['package.json'],
+        updateConfigs: [],
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['.'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: true,
+        pushTo: 'origin',
+        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+        globalReplace: false
+
+    groc:
+      files:
+        'src/**/*.coffee'
+      options:
+        out: 'untracked-docs/'
+
+    publish:
+      main:
+        src: '.'
+
+
   grunt.initConfig config
 
+  grunt.loadNpmTasks 'grunt-bump'
+  grunt.loadNpmTasks 'grunt-groc'
+  grunt.loadNpmTasks 'grunt-publish'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-copy'
@@ -68,3 +101,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'compilations', ['coffee', 'stylus', 'copy']
   grunt.registerTask 'default', ['compilations']
+  grunt.registerTask 'release', ['groc', 'bump', 'publish']

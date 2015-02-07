@@ -2,7 +2,7 @@ all: install-node-modules install-python-libraries
 	@echo 'Done!'
 
 clear-devel:
-	@cd src/output/devel; rm -rf components css js data.json index.html
+	@cd src/display/devel; rm -rf components css js data.json index.html
 
 clear-pyc:
 	@find . -type f -name "*.pyc" -print0 | xargs -0 rm -rf
@@ -17,7 +17,7 @@ grunt:
 	@grunt watch
 
 server:
-	@cd src/output/devel; \
+	@cd src/display/devel; \
 		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee \
 		-w ../../../src/run-server.coffee -- ../../../bin/encina.js server
 
@@ -26,6 +26,9 @@ tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
 set-test-bin-executable:
 	@chmod +x test/bin/*
 	@echo "The bin files in the test directory are now executables"
+
+release:
+	@./node_modules/.bin/docco -o no-tracked-docs src/**/*.coffee
 
 # Tests
 

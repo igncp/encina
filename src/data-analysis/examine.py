@@ -1,3 +1,7 @@
+"""
+The process of generating the data.
+"""
+
 from examine.initialization import Data
 
 data = Data()

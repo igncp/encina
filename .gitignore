@@ -4,6 +4,9 @@ node_modules
 
 # Devel
 encina-reports
-src/output/devel/*
-!src/output/devel/Readme.md
+src/display/devel/*
+!src/display/devel/Readme.md
 .tmp
+
+# GH Pages
+untracked-docs

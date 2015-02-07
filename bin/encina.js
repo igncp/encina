@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
 require('coffee-script/register');
-require('../src/encina-cli');
+require('../src/cli/encina-cli');

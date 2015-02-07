@@ -3,7 +3,7 @@ import os
 
 helpers_path = os.path.realpath(os.path.dirname(__file__) + '../../../helpers/python/')
 fixtures_path = os.path.realpath(os.path.dirname(__file__) + '../../../fixtures/python/')
-src_path = os.path.realpath(os.path.dirname(__file__) + '../../../../src/python')
+src_path = os.path.realpath(os.path.dirname(__file__) + '../../../../src/data-analysis/')
 
 sys.path.insert(0, helpers_path)
 sys.path.insert(0, fixtures_path)

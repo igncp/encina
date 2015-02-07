@@ -41,7 +41,7 @@ A demo of a report of the last published version can be found [here](http://enci
 
 ## Development
 
-Download the repository and use the Makefile. For example, `make server` and `make grunt` for the output development. To install dev dependencies use: `make`
+Download the repository and use the Makefile. For example, `make server` and `make grunt` for the display development. To install dev dependencies use: `make`
 
 ## Author and License
 

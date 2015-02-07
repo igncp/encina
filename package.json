@@ -4,7 +4,16 @@
   "description": "Projects analyzer",
   "author": "Ignacio Carbajo",
   "license": "MIT",
-  "keywords": ["coffeescript", "python", "data", "analysis", "angular", "d3", "dataviz", "express"],
+  "keywords": [
+    "coffeescript",
+    "python",
+    "data",
+    "analysis",
+    "angular",
+    "d3",
+    "dataviz",
+    "express"
+  ],
   "repository": "https://github.com/igncp/encina",
   "bugs": "https://github.com/igncp/encina/issues",
   "bin": {
@@ -28,6 +37,11 @@
   "preferglobal": true,
   "devDependencies": {
     "chai": "^1.10.0",
+    "docco": "^0.7.0",
+    "groc": "^0.8.0",
+    "grunt-bump": "^0.1.0",
+    "grunt-groc": "^0.5.0",
+    "grunt-publish": "0.0.5",
     "karma": "^0.12.31",
     "karma-chai": "^0.1.0",
     "karma-cli": "0.0.4",

@@ -1,5 +1,5 @@
 program = require 'commander'
-pjson = require '../package.json'
+pjson = require '../../package.json'
 
 examine = require './examine'
 server = require './run-server'
@@ -14,7 +14,7 @@ program
 
 program
   .command 'server'
-  .description 'Run a server to display the generated html output. Press Ctrl+C to stop.'
+  .description 'Run a server to display the generated result. Press Ctrl+C to stop.'
   .option '-b, --browser', 'Opens the default browser'
   .action server
 

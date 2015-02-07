@@ -1,4 +1,4 @@
-srcPath = '../../../../encina/src/output/coffee/'
+srcPath = '../../../../encina/src/display/coffee/'
 cloudflarePath = 'http://cdnjs.cloudflare.com/ajax/libs/'
 
 config =

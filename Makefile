@@ -16,6 +16,12 @@ install-python-libraries-dev:
 grunt:
 	@grunt watch
 
+generate-sphinx-docs:
+	@sphinx-apidoc -o untracked-docs/sphinx src/data-analysis
+
+release: generate-sphinx-docs
+	@grunt release
+
 server:
 	@cd src/display/devel; \
 		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee \
@@ -26,9 +32,6 @@ tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
 set-test-bin-executable:
 	@chmod +x test/bin/*
 	@echo "The bin files in the test directory are now executables"
-
-release:
-	@./node_modules/.bin/docco -o no-tracked-docs src/**/*.coffee
 
 # Tests
 

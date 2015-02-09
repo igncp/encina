@@ -82,7 +82,7 @@ module.exports = (grunt) ->
       files:
         'src/**/*.coffee'
       options:
-        out: 'untracked-docs/'
+        out: 'untracked-docs/groc'
 
     publish:
       main:

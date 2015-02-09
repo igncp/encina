@@ -3,3 +3,4 @@
 nose
 selenium
 pyvirtualdisplay
+sphinx

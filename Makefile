@@ -9,4 +9,4 @@ copy-docs: copy-docs-groc
 
 copy-docs-groc:
 	@rm -rf groc-docs
-	@mv untracked-docs groc-docs
+	@mv untracked-docs/groc groc-docs

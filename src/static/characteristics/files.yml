@@ -21,3 +21,6 @@
 
 - name: Makefile
   desc: Uses make
+
+- name: .jshintrc
+  desc: Uses the JSHint linter

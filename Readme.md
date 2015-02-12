@@ -15,6 +15,7 @@ A command line tool for analyzing projects and retrieving statistics. Once compl
 - Debian environment
 - Node.js
 - Python and pip
+- Git (to pull out repository info)
 
 ## Usage
 

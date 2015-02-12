@@ -123,15 +123,25 @@ class Data():
         array[idx] = item.name
 
     if '.git' in sf.characteristics['dir']:
-      sf.special['git'] = {}
       from git import Repo
+      import subprocess
+      
+      sf.special['git'] = {}
+      
+      all_branches_cmd = 'cd ' + sf.root['dir'] + '; git branch -a'
+      output = subprocess.check_output(all_branches_cmd, shell=True)
+      all_branches = output.split('\n')
+      all_branches = [branch.strip() for branch in all_branches if branch != '']
+      all_branches = [branch.replace('* ', '') for branch in all_branches]
+      
       repo = Repo(sf.root['dir'])
-      sf.special['git']['branches'] = repo.branches
+      sf.special['git']['local_branches'] = repo.branches
+      sf.special['git']['all_branches'] = all_branches
       sf.special['git']['description'] = repo.description
       sf.special['git']['refs'] = list(repo.refs)
       sf.special['git']['remote'] = repo.remote().url
       sf.special['git']['tags'] = repo.tags
       sf.special['git']['commits_count'] = repo.head.commit.count()
       
-      for key in ['branches', 'refs', 'tags']:
+      for key in ['local_branches', 'refs', 'tags']:
         extract_names(sf.special['git'][key])

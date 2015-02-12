@@ -1,13 +1,14 @@
 <bootstrap-accordion ng-if="git" title-text="Git Repository" name="git" expanded="true">
   <div class="row">
     <div class="col-lg-6">
-      <p>Commits count on current branch: <strong>{{git.commits_count}}</strong>
+      <p>Commits count on current branch: <strong>{{nbrWCommas(git.commits_count)}}</strong>
       </p>
-      <bootstrap-modal-default-list modal-number="1" var-name="git-branches" label-title="Branches" modal-title="Git Branches" var-array="git.branches"></bootstrap-modal-default-list>
-      <p>Remote: <a href="https://www.google.com/webhp?ie=UTF-8#q={{git.remote}}" target="_blank">{{git.remote}}</a>
-      </p>
+      <bootstrap-modal-default-list modal-number="1" var-name="git-local-branches" label-title="Local branches" modal-title="Git Local Branches" var-array="git.local_branches"></bootstrap-modal-default-list>
+      <bootstrap-modal-default-list modal-number="1" var-name="git--all-branches" label-title="All branches" modal-title="Git All Branches" var-array="git.all_branches"></bootstrap-modal-default-list>
     </div>
     <div class="col-lg-6">
+      <p>Remote: <a href="https://www.google.com/webhp?ie=UTF-8#q={{git.remote}}" target="_blank">{{git.remote}}</a>
+      </p>
       <bootstrap-modal-default-list modal-number="1" var-name="git-tags" label-title="Tags" modal-title="Git Tags" var-array="git.tags"></bootstrap-modal-default-list>
       <bootstrap-modal-default-list modal-number="1" var-name="git-refs" label-title="Refs" modal-title="Git Refs" var-array="git.refs"></bootstrap-modal-default-list>
     </div>

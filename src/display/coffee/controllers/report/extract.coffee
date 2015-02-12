@@ -29,8 +29,6 @@ define 'controllers/report/extract', ->
         $scope.git = $scope.data.special.git
         $scope.launchModal = EncinaUtils.launchModal
 
-        console.log '$scope.git', $scope.git
-
       waitTillDataLoaded = ->
         if $scope.$parent.data then runController()
         else $timeout(waitTillDataLoaded, 50)

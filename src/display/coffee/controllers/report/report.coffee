@@ -1,6 +1,6 @@
 define 'controllers/report/report', ->
   createController = (encina)->
-    encina.controller 'ReportCtrl', ($scope, $http, $stateParams, EncinaFormatting)->
+    encina.controller 'ReportCtrl', ($scope, $http, $stateParams, EncinaUtils)->
       $scope.report = $stateParams.report
       $http.get('/data/' + $scope.report + '.json').then (res)->
         $scope.data = res.data
@@ -35,7 +35,7 @@ define 'controllers/report/report', ->
           (obj)-> (-1) * obj.count)
         
         $scope.data.extensions.threeColumnsHist = \
-          EncinaFormatting.split $scope.data.extensions.parsedHist, 3
+          EncinaUtils.split $scope.data.extensions.parsedHist, 3
 
         $scope.data.nel.parsedHist = []
         $scope.data.nel.total = 0

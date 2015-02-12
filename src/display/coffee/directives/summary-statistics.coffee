@@ -1,6 +1,6 @@
 define 'directives/summary-statistics', [], ()->
   create = (encina)->
-    encina.directive 'summaryStatistics', (EncinaFormatting)->
+    encina.directive 'summaryStatistics', (EncinaUtils)->
       return {
         restrict: 'E'
         templateUrl: '/components/summary-statistics.html'
@@ -39,7 +39,7 @@ define 'directives/summary-statistics', [], ()->
               if (scope.toKbs is 'true') and (decimals isnt 0) and \
                 (opts.toKbs isnt false) and (opts.isFile isnt true) then propValue /= 1000
 
-              final = EncinaFormatting.nbrWCommas propValue, decimals
+              final = EncinaUtils.nbrWCommas propValue, decimals
               
               if (scope.toKbs is 'true') and (decimals isnt 0) and (opts.isFile isnt true)
                 final += if opts.toMbs isnt true then ' kbs' else ' mbs'
@@ -48,9 +48,7 @@ define 'directives/summary-statistics', [], ()->
 
             else return 'waiting...' # The data is not loaded yet
           
-          scope.launchModal = (number, id)->
-            $('#modal-' + number + '-' + id).modal()
-            false
+          scope.launchModal = EncinaUtils.launchModal
 
           scope.getPaths = (dataProp)->
             if scope.jsonData

@@ -5,21 +5,21 @@ describe 'Formatting Spec', ->
   before (done)->
     require ['app'], -> done()
       
-  describe 'EncinaFormatting', ->
-    EncinaFormatting = ''
+  describe 'EncinaUtils', ->
+    EncinaUtils = ''
 
     beforeEach (done)->
       module 'encina'
-      inject (_EncinaFormatting_)->
-        EncinaFormatting = _EncinaFormatting_
+      inject (_EncinaUtils_)->
+        EncinaUtils = _EncinaUtils_
         done()
 
-    it 'is loaded', -> expect(EncinaFormatting).not.to.be.undefined
+    it 'is loaded', -> expect(EncinaUtils).not.to.be.undefined
 
     describe 'nbrWCommas', ->
       it 'passes the formatting requirements', ->
         expectResult = (input, output, decimals)->
-          expect(EncinaFormatting.nbrWCommas(input, decimals)).to.equal output
+          expect(EncinaUtils.nbrWCommas(input, decimals)).to.equal output
         expectResult 1000000, '1,000,000'
         expectResult 1000, '1,000'
         expectResult 10, '10'
@@ -31,7 +31,7 @@ describe 'Formatting Spec', ->
     describe 'split', ->
       it 'acts as expected', ->
         expectResult = (inputArr, times, output)->
-          expect(EncinaFormatting.split(inputArr, times)).to.eql output
+          expect(EncinaUtils.split(inputArr, times)).to.eql output
         expectResult [1, 2], 0, [1, 2]
         expectResult [1, 2], 1, [[1, 2]]
         expectResult [1, 2], 2, [[1], [2]]

@@ -1,6 +1,6 @@
-define 'factories/formatting', [], ()->
+define 'factories/utils', [], ()->
   create = (encina)->
-    encina.factory 'EncinaFormatting', ->
+    encina.factory 'EncinaUtils', ->
       {
         nbrWCommas: (x, decimals = 0)->
           x = x.toFixed(decimals)
@@ -15,6 +15,10 @@ define 'factories/formatting', [], ()->
             size = Math.ceil((len - i) / n--)
             out.push(a.slice(i, i += size))
           out
+
+        launchModal: (number, id)->
+          $('#modal-' + number + '-' + id).modal()
+          false
       }
       
   create

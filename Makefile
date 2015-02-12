@@ -24,8 +24,8 @@ release: generate-sphinx-docs
 
 server:
 	@cd src/display/devel; \
-		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee \
-		-w ../../../src/run-server.coffee -- ../../../bin/encina.js server
+		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee,txt \
+		-w ../../../src/cli/run-server.coffee,../../../src/display/devel/changeme.txt -- ../../../bin/encina.js server
 
 tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
 

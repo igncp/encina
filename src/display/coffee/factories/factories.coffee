@@ -1,5 +1,5 @@
 define 'factories/factories', [
-  'factories/formatting'
+  'factories/utils'
 ], ()->
   factories = arguments
   createFactories = (encina)->

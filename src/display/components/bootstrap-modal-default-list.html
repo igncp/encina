@@ -1,0 +1,10 @@
+<div>
+  <p>{{labelTitle}}: <strong><a href="" ng-click="launchModal(1, varName)">{{varArray.length}}</a></strong>
+  </p>
+  <bootstrap-modal modal-number="{{modalNumber}}" var-name="{{varName}}" modal-title="{{modalTitle}}">
+    <p>Length: {{varArray.length}}.</p>
+    <ol>
+      <li class="modal-item" ng-repeat="item in varArray">{{item}}</li>
+    </ol>
+  </bootstrap-modal>
+</div>

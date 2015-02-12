@@ -1,6 +1,6 @@
 define 'controllers/home', ->
   createController = (encina)->
-    encina.controller 'HomeCtrl', ($scope, $http, EncinaFormatting)->
+    encina.controller 'HomeCtrl', ($scope, $http, EncinaUtils)->
       $http.get('/reports-files').then (res)->
         files = res.data
         tempProjects = {}

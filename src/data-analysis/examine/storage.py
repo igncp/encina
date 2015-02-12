@@ -38,7 +38,8 @@ class Data():
       'characteristics': sf.characteristics,
       'tree': sf.tree,
       'dirs': sf.dirs,
-      'meta': sf.meta
+      'meta': sf.meta,
+      'special': sf.special
     }
 
     file_name = "{}-{}".format(data['root']['name'], str(int(time.time())))

@@ -96,10 +96,13 @@
     <!-- <bootstrap-accordion title-text="File Structure JSON" name="structure">
     <pre>{{treeString}}</pre>
 </bootstrap-accordion> -->
+
+    <ng-include src="'/views/report/special/git.html'"></ng-include>
+
     <bootstrap-accordion title-text="Meta Information" name="meta" expanded="true">
-        <p>
-          Generated the {{data.meta.date.day}} at {{data.meta.date.time}} ({{data.meta.tzname}}) using <span ng-if="data.meta.linux">{{data.meta.linux}} - </span>{{data.meta.os}} {{data.meta.machine}} with version <strong>{{data.meta.version}}</strong>
-        </p>
+      <p>
+        Generated the {{data.meta.date.day}} at {{data.meta.date.time}} ({{data.meta.tzname}}) using <span ng-if="data.meta.linux">{{data.meta.linux}} - </span>{{data.meta.os}} {{data.meta.machine}} with version <strong>{{data.meta.version}}</strong>
+      </p>
     </bootstrap-accordion>
   </div>
 </div>

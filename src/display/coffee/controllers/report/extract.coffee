@@ -1,10 +1,10 @@
 define 'controllers/report/extract', ->
   createController = (encina)->
-    encina.controller 'ExtractCtrl', ($scope, $timeout, EncinaFormatting)->
+    encina.controller 'ExtractCtrl', ($scope, $timeout, EncinaUtils)->
       runController = ->
         $scope.data = $scope.$parent.data
 
-        $scope.nbrWCommas = EncinaFormatting.nbrWCommas
+        $scope.nbrWCommas = EncinaUtils.nbrWCommas
 
         renderCharts = ()->
           extensionsPie = require('charts/extensions-pie')
@@ -25,6 +25,11 @@ define 'controllers/report/extract', ->
           (require('charts/depths-distribution'))($scope.data.depths.parsedHist)
 
         renderCharts()
+
+        $scope.git = $scope.data.special.git
+        $scope.launchModal = EncinaUtils.launchModal
+
+        console.log '$scope.git', $scope.git
 
       waitTillDataLoaded = ->
         if $scope.$parent.data then runController()

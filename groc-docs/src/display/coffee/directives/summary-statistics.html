@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><title>src/display/coffee/directives/summary-statistics</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/directives/summary-statistics"><meta name="groc-project-path" content="src/display/coffee/directives/summary-statistics.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/directives/summary-statistics.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'directives/summary-statistics'</span>, [], <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
   <span class="hljs-function"><span class="hljs-title">create</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
-    encina.directive <span class="hljs-string">'summaryStatistics'</span>, <span class="hljs-function"><span class="hljs-params">(EncinaFormatting)</span>-&gt;</span>
+    encina.directive <span class="hljs-string">'summaryStatistics'</span>, <span class="hljs-function"><span class="hljs-params">(EncinaUtils)</span>-&gt;</span>
       <span class="hljs-keyword">return</span> {
         <span class="hljs-attribute">restrict</span>: <span class="hljs-string">'E'</span>
         <span class="hljs-attribute">templateUrl</span>: <span class="hljs-string">'/components/summary-statistics.html'</span>
@@ -37,7 +37,7 @@
               <span class="hljs-keyword">if</span> (scope.toKbs <span class="hljs-keyword">is</span> <span class="hljs-string">'true'</span>) <span class="hljs-keyword">and</span> (decimals <span class="hljs-keyword">isnt</span> <span class="hljs-number">0</span>) <span class="hljs-keyword">and</span> \
                 (opts.toKbs <span class="hljs-keyword">isnt</span> <span class="hljs-literal">false</span>) <span class="hljs-keyword">and</span> (opts.isFile <span class="hljs-keyword">isnt</span> <span class="hljs-literal">true</span>) <span class="hljs-keyword">then</span> propValue /= <span class="hljs-number">1000</span>
 
-              final = EncinaFormatting.nbrWCommas propValue, decimals
+              final = EncinaUtils.nbrWCommas propValue, decimals
               
               <span class="hljs-keyword">if</span> (scope.toKbs <span class="hljs-keyword">is</span> <span class="hljs-string">'true'</span>) <span class="hljs-keyword">and</span> (decimals <span class="hljs-keyword">isnt</span> <span class="hljs-number">0</span>) <span class="hljs-keyword">and</span> (opts.isFile <span class="hljs-keyword">isnt</span> <span class="hljs-literal">true</span>)
                 final += <span class="hljs-keyword">if</span> opts.toMbs <span class="hljs-keyword">isnt</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">then</span> <span class="hljs-string">' kbs'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">' mbs'</span>
@@ -46,9 +46,7 @@
 
             <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-string">'waiting...'</span> <span class="hljs-comment"># The data is not loaded yet</span>
           
-          scope.<span class="hljs-function"><span class="hljs-title">launchModal</span> = <span class="hljs-params">(number, id)</span>-&gt;</span>
-            $(<span class="hljs-string">'#modal-'</span> + number + <span class="hljs-string">'-'</span> + id).modal()
-            <span class="hljs-literal">false</span>
+          scope.launchModal = EncinaUtils.launchModal
 
           scope.<span class="hljs-function"><span class="hljs-title">getPaths</span> = <span class="hljs-params">(dataProp)</span>-&gt;</span>
             <span class="hljs-keyword">if</span> scope.jsonData

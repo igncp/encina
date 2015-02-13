@@ -519,6 +519,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                           "foldPrefix": "^",
                           "name": "CoffeeScript"
                         },
+                        "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/directives/bootstrap-modal-default-list.coffee",
+                        "projectPath": "src/display/coffee/directives/bootstrap-modal-default-list.coffee",
+                        "targetPath": "src/display/coffee/directives/bootstrap-modal-default-list",
+                        "pageTitle": "src/display/coffee/directives/bootstrap-modal-default-list",
+                        "title": "bootstrap-modal-default-list"
+                      },
+                      "depth": 5,
+                      "outline": []
+                    }, {
+                      "type": "file",
+                      "data": {
+                        "language": {
+                          "nameMatchers": [".coffee", "Cakefile"],
+                          "pygmentsLexer": "coffee-script",
+                          "highlightJS": "coffeescript",
+                          "multiLineComment": ["###*", " *", " ###", "###", "#", "###", "###*", "#", "###"],
+                          "strictMultiLineEnd": false,
+                          "singleLineComment": ["#"],
+                          "ignorePrefix": "}",
+                          "foldPrefix": "^",
+                          "name": "CoffeeScript"
+                        },
                         "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/directives/directives.coffee",
                         "projectPath": "src/display/coffee/directives/directives.coffee",
                         "targetPath": "src/display/coffee/directives/directives",
@@ -595,11 +617,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                           "foldPrefix": "^",
                           "name": "CoffeeScript"
                         },
-                        "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/factories/formatting.coffee",
-                        "projectPath": "src/display/coffee/factories/formatting.coffee",
-                        "targetPath": "src/display/coffee/factories/formatting",
-                        "pageTitle": "src/display/coffee/factories/formatting",
-                        "title": "formatting"
+                        "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/factories/utils.coffee",
+                        "projectPath": "src/display/coffee/factories/utils.coffee",
+                        "targetPath": "src/display/coffee/factories/utils",
+                        "pageTitle": "src/display/coffee/factories/utils",
+                        "title": "utils"
                       },
                       "depth": 5,
                       "outline": []

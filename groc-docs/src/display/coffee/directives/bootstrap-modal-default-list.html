@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/directives/bootstrap-modal-default-list</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/directives/bootstrap-modal-default-list"><meta name="groc-project-path" content="src/display/coffee/directives/bootstrap-modal-default-list.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/directives/bootstrap-modal-default-list.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'directives/bootstrap-modal-default-list'</span>, [], <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">create</span> = <span class="hljs-params">(encina)</span>-&gt;</span>
+    encina.directive <span class="hljs-string">'bootstrapModalDefaultList'</span>, <span class="hljs-function"><span class="hljs-params">(EncinaUtils)</span>-&gt;</span>
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attribute">restrict</span>: <span class="hljs-string">'E'</span>
+        <span class="hljs-attribute">templateUrl</span>: <span class="hljs-string">'/components/bootstrap-modal-default-list.html'</span>
+        <span class="hljs-attribute">replace</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">scope</span>:
+          <span class="hljs-attribute">varArray</span>: <span class="hljs-string">'='</span>
+          <span class="hljs-attribute">varName</span>: <span class="hljs-string">'@'</span>
+          <span class="hljs-attribute">modalTitle</span>: <span class="hljs-string">'@'</span>
+          <span class="hljs-attribute">modalNumber</span>: <span class="hljs-string">'@'</span>
+          <span class="hljs-attribute">labelTitle</span>: <span class="hljs-string">'@'</span>
+        <span class="hljs-attribute">transclude</span>: <span class="hljs-literal">false</span>
+        <span class="hljs-attribute">link</span>: <span class="hljs-function"><span class="hljs-params">(scope, elem, attr)</span>-&gt;</span>
+          scope.launchModal = EncinaUtils.launchModal
+      }
+  create</div></div></div></div></body></html>

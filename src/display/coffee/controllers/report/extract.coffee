@@ -23,11 +23,24 @@ define 'controllers/report/extract', ->
 
           (require('charts/lines-distribution'))($scope.data.nel.parsedHist)
           (require('charts/depths-distribution'))($scope.data.depths.parsedHist)
+          (require('charts/structure-radial-graph'))($scope.data.tree, 'structure-radial-graph')
 
         renderCharts()
 
         $scope.git = $scope.data.special.git
+        if $scope.git
+          if typeof $scope.git.remote is 'string'
+            if EncinaUtils.isGitHubRepo $scope.git.remote
+              remoteLink = EncinaUtils.transformGitRepoToGitHubUrl $scope.git.remote
+            else
+              remoteLink = EncinaUtils.transformToGoogleSearchUrl $scope.git.remote
+            $scope.git.remote =
+              name: $scope.git.remote
+              link: remoteLink
+
         $scope.launchModal = EncinaUtils.launchModal
+
+        console.log '$scope.data', $scope.data
 
       waitTillDataLoaded = ->
         if $scope.$parent.data then runController()

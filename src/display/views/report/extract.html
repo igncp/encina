@@ -13,6 +13,10 @@
     </div>
   </div>
   <div ng-if="data">
+    <bootstrap-accordion title-text="Granular Structure Chart" name="granular-structure-chart" expanded="true">
+      <div id="structure-radial-graph"></div>
+      <p id="structure-radial-graph-advice" style="display: none">This chart requires heavy computation. <a href="" class="btn btn-default">Render</a></p>
+    </bootstrap-accordion>
     <bootstrap-accordion ng-show="data.characteristics.parsed.length > 0" title-text="Miscellaneous" name="miscellaneous" expanded="true">
       <div id="characteristics">
         <div class="row">

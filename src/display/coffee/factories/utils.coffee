@@ -1,5 +1,7 @@
 define 'factories/utils', [], ()->
   create = (encina)->
+    gitHubRepoRegex = /^git@github.com:(.+?\/.+?)\.git$/
+
     encina.factory 'EncinaUtils', ->
       {
         nbrWCommas: (x, decimals = 0)->
@@ -19,6 +21,15 @@ define 'factories/utils', [], ()->
         launchModal: (number, id)->
           $('#modal-' + number + '-' + id).modal()
           false
+
+        isGitHubRepo: (repoStr)-> gitHubRepoRegex.test repoStr
+
+        transformGitRepoToGitHubUrl: (repoStr)->
+          userAndRepo = gitHubRepoRegex.exec(repoStr)[1]
+          'https://github.com/' + userAndRepo
+
+        transformToGoogleSearchUrl: (queryStr)->
+          'https://www.google.com/webhp?ie=UTF-8#q=' + queryStr
       }
       
   create

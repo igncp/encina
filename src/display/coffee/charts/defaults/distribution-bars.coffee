@@ -1,14 +1,14 @@
 define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
-  createGraph = ->
-    graph = {
+  createChart = ->
+    chart = {
       vars: {}
       dom: {}
       scales: {}
     }
 
-    graph.setCg = (opts)->
-      graph.cg = {
-        width: $('#' + graph.vars.elId).width()
+    chart.setCg = (opts)->
+      chart.cg = {
+        width: $('#' + chart.vars.elId).width()
         height: 400
         margin: {left: 160, bottom: 100, top: 10}
         colorsArr: ['#323247','#7C7CC9','#72B66C','#429742']
@@ -17,93 +17,93 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
         xTitle: opts.xTitle
       }
     
-    graph.setVars = ->
-      graph.vars.filesWithZeroLines = false
-      if graph.data[0][graph.cg.xProp] is 0
-        graph.vars.filesWithZeroLines = graph.data[0].filesCount
-        graph.data.splice 0, 1
+    chart.setVars = ->
+      chart.vars.filesWithZeroLines = false
+      if chart.data[0][chart.cg.xProp] is 0
+        chart.vars.filesWithZeroLines = chart.data[0].filesCount
+        chart.data.splice 0, 1
 
-      graph.vars.maxXProp = d3.max(graph.data, (d)-> d[graph.cg.xProp])
-      graph.vars.maxFilesCount = d3.max(graph.data, (d)-> d.filesCount)
-      graph.vars.verticalMargin = graph.cg.margin.top + graph.cg.margin.bottom
-      graph.vars.floor = graph.cg.height - graph.cg.margin.bottom * 2
-      graph.vars.barHeight = (graph.cg.height - \
-        graph.vars.verticalMargin) / graph.vars.maxFilesCount
-      graph.vars.color = common.createColorsScale  graph.cg.colorsArr, graph.data, 'filesCount'
+      chart.vars.maxXProp = d3.max(chart.data, (d)-> d[chart.cg.xProp])
+      chart.vars.maxFilesCount = d3.max(chart.data, (d)-> d.filesCount)
+      chart.vars.verticalMargin = chart.cg.margin.top + chart.cg.margin.bottom
+      chart.vars.floor = chart.cg.height - chart.cg.margin.bottom * 2
+      chart.vars.barHeight = (chart.cg.height - \
+        chart.vars.verticalMargin) / chart.vars.maxFilesCount
+      chart.vars.color = common.createColorsScale  chart.cg.colorsArr, chart.data, 'filesCount'
 
-    graph.setData = (data)-> graph.data = data
+    chart.setData = (data)-> chart.data = data
 
-    graph.createSlider = ->
-      d3.select('#' + graph.vars.elId)
+    chart.createSlider = ->
+      d3.select('#' + chart.vars.elId)
         .append 'div'
         .append 'p'
         .attr 'class', 'col-lg-12 slider-title'
-        .attr 'id', graph.vars.elId + '-slider-title'
+        .attr 'id', chart.vars.elId + '-slider-title'
         .text 'Scale Modification (Logarithmic)'
-      d3.select('#' + graph.vars.elId)
+      d3.select('#' + chart.vars.elId)
         .append 'div'
         .append 'p'
         .attr 'class', 'col-lg-1 slider-val-0'
-        .attr 'id', graph.vars.elId + '-slider-val-0'
-      d3.select('#'  + graph.vars.elId)
+        .attr 'id', chart.vars.elId + '-slider-val-0'
+      d3.select('#'  + chart.vars.elId)
         .append 'div'
         .attr 'class', 'col-lg-10 slider'
-        .attr 'id', graph.vars.elId + '-slider'
-      d3.select('#' + graph.vars.elId)
+        .attr 'id', chart.vars.elId + '-slider'
+      d3.select('#' + chart.vars.elId)
         .append 'div'
         .append 'p'
         .attr 'class', 'col-lg-1 slider-val-1'
-        .attr 'id', graph.vars.elId + '-slider-val-1'
-      graph.dom.slider = $('#' + graph.vars.elId + '-slider')
-      graph.dom.slider.slider({
+        .attr 'id', chart.vars.elId + '-slider-val-1'
+      chart.dom.slider = $('#' + chart.vars.elId + '-slider')
+      chart.dom.slider.slider({
         range: true
         min: 1
-        max: graph.vars.maxXProp
-        values: [1, graph.vars.maxXProp]
-        change: graph.draw
-        slide: graph.setSliderValues
-        stop: graph.setSliderValues
+        max: chart.vars.maxXProp
+        values: [1, chart.vars.maxXProp]
+        change: chart.draw
+        slide: chart.setSliderValues
+        stop: chart.setSliderValues
       })
 
-    graph.setSliderValues = ->
+    chart.setSliderValues = ->
       transformToLogValue = (sliderValue)->
         minp = 1
-        maxp = graph.vars.maxXProp
+        maxp = chart.vars.maxXProp
         minv = Math.log 1
-        maxv = Math.log graph.vars.maxXProp
+        maxv = Math.log chart.vars.maxXProp
 
         # calculate adjustment factor
         factor = (maxv-minv) / (maxp-minp)
         Math.exp(minv + factor * (sliderValue-minp))
 
-      graph.vars.sliderValues = graph.dom.slider.slider('values')
-      _.each graph.vars.sliderValues, (value, index)->
+      chart.vars.sliderValues = chart.dom.slider.slider('values')
+      _.each chart.vars.sliderValues, (value, index)->
         transformedValue = Math.floor transformToLogValue(value)
-        $('#' + graph.vars.elId + '-slider-val-' + index).html transformedValue
-        graph.vars.sliderValues[index] = transformedValue
+        $('#' + chart.vars.elId + '-slider-val-' + index).html transformedValue
+        chart.vars.sliderValues[index] = transformedValue
 
-    graph.setScales = ->
-      graph.scales.x = d3.scale.log()
-        .domain [graph.vars.sliderValues[0] - 0.5, graph.vars.sliderValues[1] + 1]
-        .range [0, graph.cg.width - graph.cg.margin.left - 20]
+    chart.setScales = ->
+      chart.scales.x = d3.scale.log()
+        .domain [chart.vars.sliderValues[0] - 0.5, chart.vars.sliderValues[1] + 1]
+        .range [0, chart.cg.width - chart.cg.margin.left - 20]
 
-      graph.scales.y = d3.scale.log()
-        .domain [0.5, graph.vars.maxFilesCount]
-        .rangeRound [0, (-1) * (graph.cg.height - graph.vars.verticalMargin - 20)]
+      chart.scales.y = d3.scale.log()
+        .domain [0.5, chart.vars.maxFilesCount]
+        .rangeRound [0, (-1) * (chart.cg.height - chart.vars.verticalMargin - 20)]
 
-    graph.createChart = ->
-      previousSvg = d3.select('#' + graph.vars.elId + ' svg')
+    chart.createChart = ->
+      previousSvg = d3.select('#' + chart.vars.elId + ' svg')
       previousSvg.remove() if previousSvg
-      graph.dom.svg = d3.select('#' + graph.vars.elId)
+      chart.dom.svg = d3.select('#' + chart.vars.elId)
         .attr 'class', 'chart-distribution-bars'
         .append('svg')
-        .attr({width: graph.cg.width, height: graph.cg.height})
-      graph.dom.chart = graph.dom.svg.append('g')
-        .attr({transform: 'translate(' + graph.cg.margin.left + ',' + \
-          graph.cg.margin.bottom + ')'})
+        .attr({width: chart.cg.width, height: chart.cg.height})
+      chart.dom.chart = chart.dom.svg.append('g')
+        .attr({transform: 'translate(' + chart.cg.margin.left + ',' + \
+          chart.cg.margin.bottom + ')'})
     
-    graph.createAxis = ->
-      graph.dom.xAxis = d3.svg.axis().scale(graph.scales.x)
+    chart.createAxis = ->
+      chart.dom.xAxis = d3.svg.axis().scale(chart.scales.x)
         .orient('bottom')
         .tickFormat((d)->
           # Digits different than zero (except first one)
@@ -114,9 +114,9 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           else return null
         )
 
-      graph.dom.yAxis = d3.svg.axis().scale(graph.scales.y)
+      chart.dom.yAxis = d3.svg.axis().scale(chart.scales.y)
         .orient('left')
-        .ticks if graph.vars.maxFilesCount < 11 then graph.vars.maxFilesCount else 10
+        .ticks if chart.vars.maxFilesCount < 11 then chart.vars.maxFilesCount else 10
         .tickFormat((d)->
           # Digits different than zero (except first one)
           dString = d.toFixed(0).toString()
@@ -126,74 +126,74 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
           else return null
         )
       
-      graph.dom.chart.append('g')
-        .attr({'transform': 'translate(0,' + graph.vars.floor + ')', class: 'x-axis axis'})
-        .call(graph.dom.xAxis)
+      chart.dom.chart.append('g')
+        .attr({'transform': 'translate(0,' + chart.vars.floor + ')', class: 'x-axis axis'})
+        .call(chart.dom.xAxis)
         .append('text')
-        .attr('transform', 'translate(' + (graph.cg.width - graph.cg.margin.left) / 2 + ' ,0)')
+        .attr('transform', 'translate(' + (chart.cg.width - chart.cg.margin.left) / 2 + ' ,0)')
         .attr('class', 'x-axis-label')
         .attr('y', 40).attr('font-size', '1.3em')
         .style({'text-anchor': 'end'})
-        .text graph.cg.xLabel
+        .text chart.cg.xLabel
 
 
-      graph.dom.chart.append('g')
-        .attr({'transform': 'translate(0,' + graph.vars.floor + ')', class: 'x-axis axis'})
-        .call(graph.dom.yAxis)
+      chart.dom.chart.append('g')
+        .attr({'transform': 'translate(0,' + chart.vars.floor + ')', class: 'x-axis axis'})
+        .call(chart.dom.yAxis)
         .append('text')
         .attr('transform', 'translate(-30,' + String((-1) * \
-          (graph.cg.height - graph.cg.margin.bottom) / 2) + ')')
+          (chart.cg.height - chart.cg.margin.bottom) / 2) + ')')
         .attr('y', 40)
         .attr('font-size', '1.3em')
         .style({'text-anchor': 'end'})
         .text('Files Count')
 
-    graph.calcX = (d)-> graph.scales.x(d[graph.cg.xProp])
-    graph.calcY = (d)-> graph.scales.y(d.filesCount) + graph.vars.floor
-    graph.calcHeight = (d)-> graph.scales.y(d.filesCount) * (-1)
+    chart.calcX = (d)-> chart.scales.x(d[chart.cg.xProp])
+    chart.calcY = (d)-> chart.scales.y(d.filesCount) + chart.vars.floor
+    chart.calcHeight = (d)-> chart.scales.y(d.filesCount) * (-1)
 
-    graph.createBars = ->
-      dataUsed = graph.data.filter((item, index)->
-        if item[graph.cg.xProp] >= graph.vars.sliderValues[0] \
-          and item[graph.cg.xProp] <= graph.vars.sliderValues[1] then return item
+    chart.createBars = ->
+      dataUsed = chart.data.filter((item, index)->
+        if item[chart.cg.xProp] >= chart.vars.sliderValues[0] \
+          and item[chart.cg.xProp] <= chart.vars.sliderValues[1] then return item
         else return null
       )
       
       dataUsed = _.compact dataUsed
 
-      graph.dom.chart.selectAll('rect')
+      chart.dom.chart.selectAll('rect')
         .data(dataUsed)
         .enter()
         .append('rect')
-        .attr 'x', (d)-> graph.calcX d
-        .attr 'y', (d)-> graph.calcY d
+        .attr 'x', (d)-> chart.calcX d
+        .attr 'y', (d)-> chart.calcY d
         .attr 'width', 2
-        .attr 'height', (d)-> graph.calcHeight d
-        .attr('fill', (d)-> graph.vars.color(d.filesCount))
-        .style 'filter', 'url(#' + graph.vars.elId + '-drop-shadow-filter)'
+        .attr 'height', (d)-> chart.calcHeight d
+        .attr('fill', (d)-> chart.vars.color(d.filesCount))
+        .style 'filter', 'url(#' + chart.vars.elId + '-drop-shadow-filter)'
 
-      graph.vars.points = []
-      graph.dom.chart.selectAll('rect').each (d)->
-        graph.vars.points.push graph.calcX(d)
+      chart.vars.points = []
+      chart.dom.chart.selectAll('rect').each (d)->
+        chart.vars.points.push chart.calcX(d)
 
-    graph.render = (origData, opts, cb)->
-      graph.vars.elId = opts.elId
+    chart.render = (origData, opts, cb)->
+      chart.vars.elId = opts.elId
 
-      common.waitTillElPresent graph.vars.elId, ->
-        graph.setData _.cloneDeep origData
-        graph.setCg(opts)
-        graph.setVars()
-        graph.createSlider()
-        graph.setSliderValues()
-        graph.draw()
+      common.waitTillElPresent chart.vars.elId, ->
+        chart.setData _.cloneDeep origData
+        chart.setCg(opts)
+        chart.setVars()
+        chart.createSlider()
+        chart.setSliderValues()
+        chart.draw()
         cb() if cb
 
-    graph.createFilter = ()->
-      common.createSvgFilterBlack(graph.vars.elId + '-drop-shadow-filter', graph.dom.chart, 1, .6)
+    chart.createFilter = ()->
+      common.createSvgFilterBlack(chart.vars.elId + '-drop-shadow-filter', chart.dom.chart, 1, .6)
 
-    graph.createMouseOverEvent = ()->
-      foreground = graph.dom.svg.append('g')
-        .attr 'id', 'foreground-' + graph.vars.elId
+    chart.createMouseOverEvent = ()->
+      foreground = chart.dom.svg.append('g')
+        .attr 'id', 'foreground-' + chart.vars.elId
         .attr 'class', 'foreground'
 
       foreground.append('title').text('')
@@ -202,43 +202,43 @@ define 'charts/defaults/distribution-bars', ['charts/common'], (common)->
         .attr('fill', 'green')
         .attr('stroke', 'black')
         .attr('class', 'title-rect')
-        .attr 'x', graph.cg.margin.left
+        .attr 'x', chart.cg.margin.left
         .attr 'y', 0
-        .attr 'width', (d, i)-> graph.cg.width - graph.cg.margin.left
-        .attr 'height', graph.vars.floor + graph.cg.margin.bottom
+        .attr 'width', (d, i)-> chart.cg.width - chart.cg.margin.left
+        .attr 'height', chart.vars.floor + chart.cg.margin.bottom
         .style 'opacity', '0'
         .on 'mousemove', ()->
           # TODO: Improve performance of this algorithm
           mouse = d3.mouse(this)
-          foregroundTitle = d3.select('#foreground-' + graph.vars.elId).select('title')
-          x = d3.mouse(this)[0] - graph.cg.margin.left
-          newPoints = angular.copy graph.vars.points
+          foregroundTitle = d3.select('#foreground-' + chart.vars.elId).select('title')
+          x = d3.mouse(this)[0] - chart.cg.margin.left
+          newPoints = angular.copy chart.vars.points
           newPoints = _.map newPoints, (point)-> Math.abs x - point
           minPoint = _.min newPoints
           index = newPoints.indexOf minPoint
-          barsEl = graph.resetBarsColor()
+          barsEl = chart.resetBarsColor()
           bar = barsEl[0][index]
           barEl = d3.select(bar)
           barEl.attr 'fill', '#C87200'
           barData = barEl.data()[0]
           titleText = barData.filesCount + ' file(s) with '
-          titleText += barData[graph.cg.xProp] + ' ' + graph.cg.xTitle
+          titleText += barData[chart.cg.xProp] + ' ' + chart.cg.xTitle
           foregroundTitle.text titleText
-        .on 'mouseleave', -> graph.resetBarsColor()
+        .on 'mouseleave', -> chart.resetBarsColor()
     
-    graph.resetBarsColor = ->
-      barsEl = graph.dom.chart.selectAll('rect')
-      barsEl.attr 'fill', (d)-> graph.vars.color(d.filesCount)
+    chart.resetBarsColor = ->
+      barsEl = chart.dom.chart.selectAll('rect')
+      barsEl.attr 'fill', (d)-> chart.vars.color(d.filesCount)
       barsEl
 
-    graph.draw = ()->
-      graph.createChart()
-      graph.setScales()
-      graph.createAxis()
-      graph.createBars()
-      graph.createFilter()
-      graph.createMouseOverEvent()
+    chart.draw = ()->
+      chart.createChart()
+      chart.setScales()
+      chart.createAxis()
+      chart.createBars()
+      chart.createFilter()
+      chart.createMouseOverEvent()
       
-    graph
+    chart
 
-  createGraph
+  createChart

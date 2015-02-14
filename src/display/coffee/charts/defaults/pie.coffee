@@ -1,7 +1,7 @@
 define 'charts/defaults/pie', ['charts/common'], (common)->
-  graph = {}
+  chart = {}
 
-  graph.render = (data, elId, title, sliceTitleSuffix)->
+  chart.render = (data, elId, title, sliceTitleSuffix)->
     common.waitTillElPresent elId, ->
       width = 330
       height = 330
@@ -14,6 +14,8 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
       outerRadius = (width - margin.top) / 2
       color = d3.scale.category20c()
       arc = {}
+
+      d3.select('#' + elId).text ''
 
       svg = d3.select '#' + elId
         .attr 'class', 'chart-pie'
@@ -84,4 +86,4 @@ define 'charts/defaults/pie', ['charts/common'], (common)->
 
       slices.append('title').text((d)-> d.data.label)
 
-  graph
+  chart

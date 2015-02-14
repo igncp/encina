@@ -122,7 +122,7 @@ class Data():
       for idx, item in enumerate(array):
         array[idx] = item.name
 
-    if '.git' in sf.characteristics['dir']:
+    if 'dir' in sf.characteristics and '.git' in sf.characteristics['dir']:
       from git import Repo
       import subprocess
       

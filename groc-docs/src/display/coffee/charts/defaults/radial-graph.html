@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/defaults/radial-graph</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/defaults/radial-graph"><meta name="groc-project-path" content="src/display/coffee/charts/defaults/radial-graph.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/defaults/radial-graph.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/defaults/radial-graph'</span>, [<span class="hljs-string">'charts/common'</span>], <span class="hljs-function"><span class="hljs-params">(common)</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">createChart</span> = -&gt;</span>
+    chart = {
+      <span class="hljs-attribute">vars</span>: {}
+      <span class="hljs-attribute">dom</span>: {}
+      <span class="hljs-attribute">scales</span>: {}
+    }
+
+    chart.<span class="hljs-function"><span class="hljs-title">setCg</span> = <span class="hljs-params">(title)</span>-&gt;</span>
+      chart.cg = {
+        <span class="hljs-attribute">title</span>: title
+        <span class="hljs-attribute">height</span>: <span class="hljs-number">600</span>
+        <span class="hljs-attribute">margin</span>: {<span class="hljs-attribute">left</span>: <span class="hljs-number">10</span>, <span class="hljs-attribute">bottom</span>: <span class="hljs-number">10</span>, <span class="hljs-attribute">top</span>: <span class="hljs-number">10</span>}
+        <span class="hljs-attribute">colorsArr</span>: [<span class="hljs-string">'#323247'</span>,<span class="hljs-string">'#7C7CC9'</span>,<span class="hljs-string">'#72B66C'</span>,<span class="hljs-string">'#429742'</span>]
+        <span class="hljs-attribute">heavyComputationLimit</span>: <span class="hljs-number">500</span>
+        <span class="hljs-attribute">transitionDuration</span>: <span class="hljs-number">500</span>
+        <span class="hljs-attribute">factors</span>:
+          <span class="hljs-attribute">graphCols</span>: <span class="hljs-number">9</span> <span class="hljs-comment"># of 12 (bootstrap)</span>
+        <span class="hljs-attribute">node</span>:
+          <span class="hljs-attribute">radius</span>: <span class="hljs-number">5</span>
+          <span class="hljs-attribute">radiusMouse</span>: <span class="hljs-number">15</span>
+        <span class="hljs-attribute">force</span>:
+          <span class="hljs-attribute">charge</span>: -<span class="hljs-number">70</span>
+          <span class="hljs-attribute">linkDistance</span>: <span class="hljs-number">50</span>
+      }
+
+      chart.cg.width = chart.vars.elWidth * (chart.cg.factors.graphCols / <span class="hljs-number">12</span>)
+    
+    chart.<span class="hljs-function"><span class="hljs-title">setVarsPreCg</span> = -&gt;</span>
+      chart.vars.elWidth = $(<span class="hljs-string">'#'</span> + chart.vars.elId).width()
+      chart.vars.panelId = chart.vars.elId + <span class="hljs-string">'-panel'</span>
+      chart.vars.el = d3.select <span class="hljs-string">"#<span class="hljs-subst">#{chart.vars.elId}</span>"</span>
+
+    chart.<span class="hljs-function"><span class="hljs-title">setVarsPostCg</span> = <span class="hljs-params">(title)</span>-&gt;</span>
+      chart.vars.chartHeight = chart.cg.height - chart.cg.margin.top - chart.cg.margin.bottom
+      chart.vars.chartWidth = chart.cg.width - chart.cg.margin.left - chart.cg.margin.top
+      chart.vars.force = d3.layout.force()
+        .charge chart.cg.force.charge
+        .linkDistance chart.cg.force.linkDistance
+        .size [chart.cg.width, chart.cg.height]
+    
+    chart.<span class="hljs-function"><span class="hljs-title">setData</span> = <span class="hljs-params">(data)</span>-&gt;</span> chart.data = data
+
+    chart.<span class="hljs-function"><span class="hljs-title">drawBase</span> = -&gt;</span>
+      chart.dom.svg = chart.vars.el
+        .attr <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">chart</span>-<span class="hljs-title">radial</span>-<span class="hljs-title">graph</span>'</span>
+        .text <span class="hljs-string">''</span>
+        .append <span class="hljs-string">'svg'</span>
+        .attr
+          <span class="hljs-attribute">width</span>: chart.cg.width
+          <span class="hljs-attribute">height</span>: chart.cg.height
+          <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">col</span>-<span class="hljs-title">lg</span>-' + <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">factors</span>.<span class="hljs-title">graphCols</span></span>
+      
+      chart.dom.chart = chart.dom.svg.append(<span class="hljs-string">'g'</span>)
+        .attr({<span class="hljs-attribute">transform</span>: <span class="hljs-string">'translate('</span> + chart.cg.margin.left + <span class="hljs-string">','</span> + \
+          chart.cg.margin.bottom + <span class="hljs-string">')'</span>})
+
+    chart.<span class="hljs-function"><span class="hljs-title">transformTreeDataToNodesAndLinks</span> = <span class="hljs-params">(origData)</span>-&gt;</span>
+      nodes = []
+      links = []
+      <span class="hljs-function"><span class="hljs-title">extractNodesAndLinks</span> = <span class="hljs-params">(node, sourceIndex, sourceNode)</span>-&gt;</span>
+        nodes.push _.omit(node, <span class="hljs-string">'children'</span>)
+        lastNode = _.last nodes
+        lastNode.parent = sourceNode <span class="hljs-keyword">if</span> sourceNode
+        lastNode.children = node.children
+        newNodeIndex = (nodes.length - <span class="hljs-number">1</span>)
+        <span class="hljs-keyword">if</span> sourceIndex <span class="hljs-keyword">isnt</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">then</span> links.push {<span class="hljs-attribute">source</span>: sourceIndex, <span class="hljs-attribute">target</span>: newNodeIndex}
+        _.each node.children, <span class="hljs-function"><span class="hljs-params">(child)</span>-&gt;</span>
+          extractNodesAndLinks child, newNodeIndex, lastNode
+
+      extractNodesAndLinks origData, <span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>
+      data =
+        <span class="hljs-attribute">nodes</span>: nodes
+        <span class="hljs-attribute">links</span>: links
+      
+      data
+
+    chart.limitForce =
+      <span class="hljs-attribute">x</span>: <span class="hljs-function"><span class="hljs-params">(x)</span>-&gt;</span>
+        <span class="hljs-keyword">if</span> x &gt; chart.vars.chartWidth <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> chart.vars.chartWidth
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> x &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> x
+      <span class="hljs-attribute">y</span>: <span class="hljs-function"><span class="hljs-params">(y)</span>-&gt;</span>
+        <span class="hljs-keyword">if</span> y &gt; chart.vars.chartHeight <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> chart.vars.chartHeight
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> y &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> y
+
+    chart.<span class="hljs-function"><span class="hljs-title">drawPanel</span> = -&gt;</span>
+      chart.dom.panel = chart.vars.el.append <span class="hljs-string">'div'</span>
+        .attr
+          <span class="hljs-attribute">id</span>: chart.vars.panelId
+          <span class="hljs-class"><span class="hljs-keyword">class</span>: "<span class="hljs-title">chart</span>-<span class="hljs-title">radial</span>-<span class="hljs-title">graph</span>-<span class="hljs-title">panel</span> <span class="hljs-title">col</span>-<span class="hljs-title">lg</span>-#{12 - <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">factors</span>.<span class="hljs-title">graphCols</span>}"</span>
+          <span class="hljs-attribute">style</span>: <span class="hljs-string">"height: <span class="hljs-subst">#{chart.cg.height}</span>px"</span>
+      
+      chart.dom.panelList = chart.dom.panel.append <span class="hljs-string">'ul'</span>
+        .attr
+          <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">chart</span>-<span class="hljs-title">radial</span>-<span class="hljs-title">graph</span>-<span class="hljs-title">panel</span>-<span class="hljs-title">list</span>'</span>
+
+    chart.<span class="hljs-function"><span class="hljs-title">drawGraph</span> = -&gt;</span>
+      chart.vars.force.nodes chart.data.nodes
+        .links chart.data.links
+        .start()
+
+      chart.dom.links = chart.dom.chart.selectAll <span class="hljs-string">'.link'</span>
+        .data chart.data.links
+        .enter().append <span class="hljs-string">'line'</span>
+        .attr <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">link</span>'</span>
+
+      chart.dom.nodes = chart.dom.chart.selectAll <span class="hljs-string">'.node'</span>
+        .data chart.data.nodes
+        .enter().append <span class="hljs-string">'circle'</span>
+        .attr
+          <span class="hljs-class"><span class="hljs-keyword">class</span>: ((<span class="hljs-title">d</span>)-&gt;</span>
+            finalClass = <span class="hljs-string">'node'</span>
+            <span class="hljs-keyword">if</span> d.index <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> finalClass += <span class="hljs-string">' node-root'</span>
+            <span class="hljs-keyword">if</span> d.type <span class="hljs-keyword">is</span> <span class="hljs-string">'directory'</span> <span class="hljs-keyword">then</span> finalClass += <span class="hljs-string">' node-dir'</span>
+            <span class="hljs-keyword">if</span> d.type <span class="hljs-keyword">is</span> <span class="hljs-string">'file'</span> <span class="hljs-keyword">then</span> finalClass += <span class="hljs-string">' node-file'</span>
+            finalClass
+          )
+          <span class="hljs-attribute">id</span>: <span class="hljs-function"><span class="hljs-params">(d, i)</span>-&gt;</span> nodeIndex = <span class="hljs-string">"<span class="hljs-subst">#{chart.vars.elId}</span>-node-<span class="hljs-subst">#{i}</span>"</span>
+        .attr <span class="hljs-attribute">r</span>: chart.cg.node.radius
+        .call chart.vars.force.drag
+      
+      chart.dom.nodes.each <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> d.nodeId = <span class="hljs-string">"#<span class="hljs-subst">#{d3.select(@).attr(<span class="hljs-string">'id'</span>)}</span>"</span>
+
+      chart.setForceListeners()
+      chart.setNodeListeners()
+
+    chart.<span class="hljs-function"><span class="hljs-title">setForceListeners</span> = -&gt;</span>
+      chart.vars.force.<span class="hljs-literal">on</span> <span class="hljs-string">'tick'</span>,<span class="hljs-function"> -&gt;</span>
+        chart.dom.links.attr
+          <span class="hljs-attribute">x1</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.x(d.source.x)
+          <span class="hljs-attribute">y1</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.y(d.source.y)
+          <span class="hljs-attribute">x2</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.x(d.target.x)
+          <span class="hljs-attribute">y2</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.y(d.target.y)
+
+        chart.dom.nodes.attr
+          <span class="hljs-attribute">cx</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.x(d.x)
+          <span class="hljs-attribute">cy</span>: <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.limitForce.y(d.y)
+
+    chart.<span class="hljs-function"><span class="hljs-title">setNodeListeners</span> = -&gt;</span>
+      <span class="hljs-function"><span class="hljs-title">changeRadiusToSelfAndParents</span> = <span class="hljs-params">(nodeData, panelAction, radius, delay)</span>-&gt;</span>
+        <span class="hljs-keyword">if</span> nodeData.parent
+          changeRadiusToSelfAndParents nodeData.parent, panelAction, radius, delay
+          nodeType = nodeData.type
+        <span class="hljs-keyword">else</span>
+          nodeType = <span class="hljs-string">'root'</span>
+
+        node = d3.select nodeData.nodeId
+        <span class="hljs-keyword">if</span> panelAction <span class="hljs-keyword">is</span> <span class="hljs-string">'add'</span>
+          listItem = chart.dom.panelList.append <span class="hljs-string">'li'</span>
+            .attr
+              <span class="hljs-class"><span class="hljs-keyword">class</span>: <span class="hljs-title">nodeType</span></span>
+          
+          listItem.append <span class="hljs-string">'p'</span>
+            .text nodeData.name
+          
+          <span class="hljs-keyword">if</span> nodeType <span class="hljs-keyword">is</span> <span class="hljs-string">'file'</span>
+            listItem.append <span class="hljs-string">'p'</span>
+              .text <span class="hljs-string">"(<span class="hljs-subst">#{Number(nodeData.size / <span class="hljs-number">1000</span>).toFixed(<span class="hljs-number">2</span>)}</span> kbs | "</span> + \
+                <span class="hljs-string">"<span class="hljs-subst">#{nodeData.lines}</span> non empty lines of code)"</span>
+          <span class="hljs-keyword">else</span>
+            files = nodeData.children.filter<span class="hljs-function"><span class="hljs-params">((item)-&gt; item.type <span class="hljs-keyword">is</span> <span class="hljs-string">'file'</span>)</span>.<span class="hljs-title">length</span>
+            <span class="hljs-title">dirs</span> = <span class="hljs-title">nodeData</span>.<span class="hljs-title">children</span>.<span class="hljs-title">filter</span><span class="hljs-params">((item)-&gt; item.type <span class="hljs-keyword">is</span> <span class="hljs-string">'directory'</span>)</span>.<span class="hljs-title">length</span>
+            <span class="hljs-title">listItem</span>.<span class="hljs-title">append</span> '<span class="hljs-title">p</span>'
+              .<span class="hljs-title">text</span> "<span class="hljs-params">(dirs: #{dirs} | files: #{files})</span>"
+
+        <span class="hljs-title">node</span>.<span class="hljs-title">transition</span><span class="hljs-params">()</span>.<span class="hljs-title">delay</span><span class="hljs-params">(delay)</span>
+          .<span class="hljs-title">duration</span> <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">transitionDuration</span>
+          .<span class="hljs-title">attr</span> <span class="hljs-title">r</span>: <span class="hljs-title">radius</span>
+      
+      <span class="hljs-title">chart</span>.<span class="hljs-title">dom</span>.<span class="hljs-title">nodes</span>.<span class="hljs-title">on</span> '<span class="hljs-title">mouseenter</span>', <span class="hljs-params">(d)</span>-&gt;</span>
+        chart.dom.panelList.text <span class="hljs-string">''</span>
+        chart.dom.panelList.style <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>
+        changeRadiusToSelfAndParents d, <span class="hljs-string">'add'</span>, chart.cg.node.radiusMouse, <span class="hljs-number">0</span>
+      
+      chart.dom.nodes.<span class="hljs-literal">on</span> <span class="hljs-string">'mouseleave'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>chart.dom.panelList.style opacity: 0</p></div></div><div class="code"><div class="wrapper">        changeRadiusToSelfAndParents d, <span class="hljs-string">'remove'</span>, chart.cg.node.radius, <span class="hljs-number">500</span>
+
+    chart.<span class="hljs-function"><span class="hljs-title">draw</span> = -&gt;</span>
+      chart.drawBase()
+      chart.drawPanel()
+      chart.drawGraph()
+
+    chart.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(origData, id, title)</span>-&gt;</span>
+      chart.vars.elId = id
+
+      common.waitTillElPresent chart.vars.elId,<span class="hljs-function"> -&gt;</span>
+        chart.setData _.cloneDeep origData
+        chart.setVarsPreCg()
+        chart.setCg(title)
+        chart.setVarsPostCg()
+        <span class="hljs-keyword">if</span> chart.data.nodes.length &gt; chart.cg.heavyComputationLimit
+          advice = d3.select <span class="hljs-string">"#<span class="hljs-subst">#{chart.vars.elId}</span>-advice"</span>
+          advice.style <span class="hljs-attribute">display</span>: <span class="hljs-string">'block'</span>
+            .select <span class="hljs-string">'a'</span>
+            .<span class="hljs-literal">on</span> <span class="hljs-string">'click'</span>,<span class="hljs-function"> -&gt;</span>
+              advice.style <span class="hljs-attribute">display</span>: <span class="hljs-string">'none'</span>
+              chart.draw()
+        <span class="hljs-keyword">else</span> chart.draw()
+
+    chart
+
+  createChart</div></div></div></div></body></html>

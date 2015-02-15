@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/defaults/pie</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/defaults/pie"><meta name="groc-project-path" content="src/display/coffee/charts/defaults/pie.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/defaults/pie.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/defaults/pie'</span>, [<span class="hljs-string">'charts/common'</span>], <span class="hljs-function"><span class="hljs-params">(common)</span>-&gt;</span>
-  graph = {}
+  chart = {}
 
-  graph.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(data, elId, title, sliceTitleSuffix)</span>-&gt;</span>
+  chart.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(data, elId, title, sliceTitleSuffix)</span>-&gt;</span>
     common.waitTillElPresent elId,<span class="hljs-function"> -&gt;</span>
       width = <span class="hljs-number">330</span>
       height = <span class="hljs-number">330</span>
@@ -14,6 +14,8 @@
       outerRadius = (width - margin.top) / <span class="hljs-number">2</span>
       color = d3.scale.category20c()
       arc = {}
+
+      d3.select(<span class="hljs-string">'#'</span> + elId).text <span class="hljs-string">''</span>
 
       svg = d3.select <span class="hljs-string">'#'</span> + elId
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'chart-pie'</span>
@@ -84,4 +86,4 @@
 
       slices.append<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'title'</span>)</span>.<span class="hljs-title">text</span><span class="hljs-params">((d)-&gt; d.data.label)</span>
 
-  <span class="hljs-title">graph</span></span></div></div></div></div></body></html>
+  <span class="hljs-title">chart</span></span></div></div></div></div></body></html>

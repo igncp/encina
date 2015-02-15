@@ -23,11 +23,24 @@
 
           (<span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/lines-distribution'</span>))($scope.data.nel.parsedHist)
           (<span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/depths-distribution'</span>))($scope.data.depths.parsedHist)
+          (<span class="hljs-built_in">require</span>(<span class="hljs-string">'charts/structure-radial-graph'</span>))($scope.data.tree, <span class="hljs-string">'structure-radial-graph'</span>)
 
         renderCharts()
 
         $scope.git = $scope.data.special.git
+        <span class="hljs-keyword">if</span> $scope.git
+          <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> $scope.git.remote <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+            <span class="hljs-keyword">if</span> EncinaUtils.isGitHubRepo $scope.git.remote
+              remoteLink = EncinaUtils.transformGitRepoToGitHubUrl $scope.git.remote
+            <span class="hljs-keyword">else</span>
+              remoteLink = EncinaUtils.transformToGoogleSearchUrl $scope.git.remote
+            $scope.git.remote =
+              <span class="hljs-attribute">name</span>: $scope.git.remote
+              <span class="hljs-attribute">link</span>: remoteLink
+
         $scope.launchModal = EncinaUtils.launchModal
+
+        <span class="hljs-built_in">console</span>.log <span class="hljs-string">'$scope.data'</span>, $scope.data
 
       <span class="hljs-function"><span class="hljs-title">waitTillDataLoaded</span> = -&gt;</span>
         <span class="hljs-keyword">if</span> $scope.$parent.data <span class="hljs-keyword">then</span> runController()

@@ -1,14 +1,14 @@
 <!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/defaults/distribution-bars</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/defaults/distribution-bars"><meta name="groc-project-path" content="src/display/coffee/charts/defaults/distribution-bars.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../../assets/style.css"><script type="text/javascript" src="../../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/defaults/distribution-bars.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/defaults/distribution-bars'</span>, [<span class="hljs-string">'charts/common'</span>], <span class="hljs-function"><span class="hljs-params">(common)</span>-&gt;</span>
-  <span class="hljs-function"><span class="hljs-title">createGraph</span> = -&gt;</span>
-    graph = {
+  <span class="hljs-function"><span class="hljs-title">createChart</span> = -&gt;</span>
+    chart = {
       <span class="hljs-attribute">vars</span>: {}
       <span class="hljs-attribute">dom</span>: {}
       <span class="hljs-attribute">scales</span>: {}
     }
 
-    graph.<span class="hljs-function"><span class="hljs-title">setCg</span> = <span class="hljs-params">(opts)</span>-&gt;</span>
-      graph.cg = {
-        <span class="hljs-attribute">width</span>: $(<span class="hljs-string">'#'</span> + graph.vars.elId).width()
+    chart.<span class="hljs-function"><span class="hljs-title">setCg</span> = <span class="hljs-params">(opts)</span>-&gt;</span>
+      chart.cg = {
+        <span class="hljs-attribute">width</span>: $(<span class="hljs-string">'#'</span> + chart.vars.elId).width()
         <span class="hljs-attribute">height</span>: <span class="hljs-number">400</span>
         <span class="hljs-attribute">margin</span>: {<span class="hljs-attribute">left</span>: <span class="hljs-number">160</span>, <span class="hljs-attribute">bottom</span>: <span class="hljs-number">100</span>, <span class="hljs-attribute">top</span>: <span class="hljs-number">10</span>}
         <span class="hljs-attribute">colorsArr</span>: [<span class="hljs-string">'#323247'</span>,<span class="hljs-string">'#7C7CC9'</span>,<span class="hljs-string">'#72B66C'</span>,<span class="hljs-string">'#429742'</span>]
@@ -17,90 +17,90 @@
         <span class="hljs-attribute">xTitle</span>: opts.xTitle
       }
     
-    graph.<span class="hljs-function"><span class="hljs-title">setVars</span> = -&gt;</span>
-      graph.vars.filesWithZeroLines = <span class="hljs-literal">false</span>
-      <span class="hljs-keyword">if</span> graph.data[<span class="hljs-number">0</span>][graph.cg.xProp] <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
-        graph.vars.filesWithZeroLines = graph.data[<span class="hljs-number">0</span>].filesCount
-        graph.data.splice <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
+    chart.<span class="hljs-function"><span class="hljs-title">setVars</span> = -&gt;</span>
+      chart.vars.filesWithZeroLines = <span class="hljs-literal">false</span>
+      <span class="hljs-keyword">if</span> chart.data[<span class="hljs-number">0</span>][chart.cg.xProp] <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
+        chart.vars.filesWithZeroLines = chart.data[<span class="hljs-number">0</span>].filesCount
+        chart.data.splice <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
 
-      graph.vars.maxXProp = d3.max<span class="hljs-function"><span class="hljs-params">(graph.data, (d)-&gt; d[graph.cg.xProp])</span>
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">maxFilesCount</span> = <span class="hljs-title">d3</span>.<span class="hljs-title">max</span><span class="hljs-params">(graph.data, (d)-&gt; d.filesCount)</span>
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">verticalMargin</span> = <span class="hljs-title">graph</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">top</span> + <span class="hljs-title">graph</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">bottom</span>
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">floor</span> = <span class="hljs-title">graph</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">height</span> - <span class="hljs-title">graph</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">bottom</span> * 2
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">barHeight</span> = <span class="hljs-params">(graph.cg.height - \
-        graph.vars.verticalMargin)</span> / <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">maxFilesCount</span>
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">color</span> = <span class="hljs-title">common</span>.<span class="hljs-title">createColorsScale</span>  <span class="hljs-title">graph</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">colorsArr</span>, <span class="hljs-title">graph</span>.<span class="hljs-title">data</span>, '<span class="hljs-title">filesCount</span>'
+      chart.vars.maxXProp = d3.max<span class="hljs-function"><span class="hljs-params">(chart.data, (d)-&gt; d[chart.cg.xProp])</span>
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">maxFilesCount</span> = <span class="hljs-title">d3</span>.<span class="hljs-title">max</span><span class="hljs-params">(chart.data, (d)-&gt; d.filesCount)</span>
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">verticalMargin</span> = <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">top</span> + <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">bottom</span>
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">floor</span> = <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">height</span> - <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">margin</span>.<span class="hljs-title">bottom</span> * 2
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">barHeight</span> = <span class="hljs-params">(chart.cg.height - \
+        chart.vars.verticalMargin)</span> / <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">maxFilesCount</span>
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">color</span> = <span class="hljs-title">common</span>.<span class="hljs-title">createColorsScale</span>  <span class="hljs-title">chart</span>.<span class="hljs-title">cg</span>.<span class="hljs-title">colorsArr</span>, <span class="hljs-title">chart</span>.<span class="hljs-title">data</span>, '<span class="hljs-title">filesCount</span>'
 
-    <span class="hljs-title">graph</span>.<span class="hljs-title">setData</span> = <span class="hljs-params">(data)</span>-&gt;</span> graph.data = data
+    <span class="hljs-title">chart</span>.<span class="hljs-title">setData</span> = <span class="hljs-params">(data)</span>-&gt;</span> chart.data = data
 
-    graph.<span class="hljs-function"><span class="hljs-title">createSlider</span> = -&gt;</span>
-      d3.select(<span class="hljs-string">'#'</span> + graph.vars.elId)
+    chart.<span class="hljs-function"><span class="hljs-title">createSlider</span> = -&gt;</span>
+      d3.select(<span class="hljs-string">'#'</span> + chart.vars.elId)
         .append <span class="hljs-string">'div'</span>
         .append <span class="hljs-string">'p'</span>
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'col-lg-12 slider-title'</span>
-        .attr <span class="hljs-string">'id'</span>, graph.vars.elId + <span class="hljs-string">'-slider-title'</span>
+        .attr <span class="hljs-string">'id'</span>, chart.vars.elId + <span class="hljs-string">'-slider-title'</span>
         .text <span class="hljs-string">'Scale Modification (Logarithmic)'</span>
-      d3.select(<span class="hljs-string">'#'</span> + graph.vars.elId)
+      d3.select(<span class="hljs-string">'#'</span> + chart.vars.elId)
         .append <span class="hljs-string">'div'</span>
         .append <span class="hljs-string">'p'</span>
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'col-lg-1 slider-val-0'</span>
-        .attr <span class="hljs-string">'id'</span>, graph.vars.elId + <span class="hljs-string">'-slider-val-0'</span>
-      d3.select(<span class="hljs-string">'#'</span>  + graph.vars.elId)
+        .attr <span class="hljs-string">'id'</span>, chart.vars.elId + <span class="hljs-string">'-slider-val-0'</span>
+      d3.select(<span class="hljs-string">'#'</span>  + chart.vars.elId)
         .append <span class="hljs-string">'div'</span>
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'col-lg-10 slider'</span>
-        .attr <span class="hljs-string">'id'</span>, graph.vars.elId + <span class="hljs-string">'-slider'</span>
-      d3.select(<span class="hljs-string">'#'</span> + graph.vars.elId)
+        .attr <span class="hljs-string">'id'</span>, chart.vars.elId + <span class="hljs-string">'-slider'</span>
+      d3.select(<span class="hljs-string">'#'</span> + chart.vars.elId)
         .append <span class="hljs-string">'div'</span>
         .append <span class="hljs-string">'p'</span>
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'col-lg-1 slider-val-1'</span>
-        .attr <span class="hljs-string">'id'</span>, graph.vars.elId + <span class="hljs-string">'-slider-val-1'</span>
-      graph.dom.slider = $(<span class="hljs-string">'#'</span> + graph.vars.elId + <span class="hljs-string">'-slider'</span>)
-      graph.dom.slider.slider({
+        .attr <span class="hljs-string">'id'</span>, chart.vars.elId + <span class="hljs-string">'-slider-val-1'</span>
+      chart.dom.slider = $(<span class="hljs-string">'#'</span> + chart.vars.elId + <span class="hljs-string">'-slider'</span>)
+      chart.dom.slider.slider({
         <span class="hljs-attribute">range</span>: <span class="hljs-literal">true</span>
         <span class="hljs-attribute">min</span>: <span class="hljs-number">1</span>
-        <span class="hljs-attribute">max</span>: graph.vars.maxXProp
-        <span class="hljs-attribute">values</span>: [<span class="hljs-number">1</span>, graph.vars.maxXProp]
-        <span class="hljs-attribute">change</span>: graph.draw
-        <span class="hljs-attribute">slide</span>: graph.setSliderValues
-        <span class="hljs-attribute">stop</span>: graph.setSliderValues
+        <span class="hljs-attribute">max</span>: chart.vars.maxXProp
+        <span class="hljs-attribute">values</span>: [<span class="hljs-number">1</span>, chart.vars.maxXProp]
+        <span class="hljs-attribute">change</span>: chart.draw
+        <span class="hljs-attribute">slide</span>: chart.setSliderValues
+        <span class="hljs-attribute">stop</span>: chart.setSliderValues
       })
 
-    graph.<span class="hljs-function"><span class="hljs-title">setSliderValues</span> = -&gt;</span>
+    chart.<span class="hljs-function"><span class="hljs-title">setSliderValues</span> = -&gt;</span>
       <span class="hljs-function"><span class="hljs-title">transformToLogValue</span> = <span class="hljs-params">(sliderValue)</span>-&gt;</span>
         minp = <span class="hljs-number">1</span>
-        maxp = graph.vars.maxXProp
+        maxp = chart.vars.maxXProp
         minv = Math.log <span class="hljs-number">1</span>
-        maxv = Math.log graph.vars.maxXProp</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>calculate adjustment factor</p></div></div><div class="code"><div class="wrapper">        factor = (maxv-minv) / (maxp-minp)
+        maxv = Math.log chart.vars.maxXProp</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>calculate adjustment factor</p></div></div><div class="code"><div class="wrapper">        factor = (maxv-minv) / (maxp-minp)
         Math.exp(minv + factor * (sliderValue-minp))
 
-      graph.vars.sliderValues = graph.dom.slider.slider(<span class="hljs-string">'values'</span>)
-      _.each graph.vars.sliderValues, <span class="hljs-function"><span class="hljs-params">(value, index)</span>-&gt;</span>
+      chart.vars.sliderValues = chart.dom.slider.slider(<span class="hljs-string">'values'</span>)
+      _.each chart.vars.sliderValues, <span class="hljs-function"><span class="hljs-params">(value, index)</span>-&gt;</span>
         transformedValue = Math.floor transformToLogValue(value)
-        $(<span class="hljs-string">'#'</span> + graph.vars.elId + <span class="hljs-string">'-slider-val-'</span> + index).html transformedValue
-        graph.vars.sliderValues[index] = transformedValue
+        $(<span class="hljs-string">'#'</span> + chart.vars.elId + <span class="hljs-string">'-slider-val-'</span> + index).html transformedValue
+        chart.vars.sliderValues[index] = transformedValue
 
-    graph.<span class="hljs-function"><span class="hljs-title">setScales</span> = -&gt;</span>
-      graph.scales.x = d3.scale.log()
-        .domain [graph.vars.sliderValues[<span class="hljs-number">0</span>] - <span class="hljs-number">0.5</span>, graph.vars.sliderValues[<span class="hljs-number">1</span>] + <span class="hljs-number">1</span>]
-        .range [<span class="hljs-number">0</span>, graph.cg.width - graph.cg.margin.left - <span class="hljs-number">20</span>]
+    chart.<span class="hljs-function"><span class="hljs-title">setScales</span> = -&gt;</span>
+      chart.scales.x = d3.scale.log()
+        .domain [chart.vars.sliderValues[<span class="hljs-number">0</span>] - <span class="hljs-number">0.5</span>, chart.vars.sliderValues[<span class="hljs-number">1</span>] + <span class="hljs-number">1</span>]
+        .range [<span class="hljs-number">0</span>, chart.cg.width - chart.cg.margin.left - <span class="hljs-number">20</span>]
 
-      graph.scales.y = d3.scale.log()
-        .domain [<span class="hljs-number">0.5</span>, graph.vars.maxFilesCount]
-        .rangeRound [<span class="hljs-number">0</span>, (-<span class="hljs-number">1</span>) * (graph.cg.height - graph.vars.verticalMargin - <span class="hljs-number">20</span>)]
+      chart.scales.y = d3.scale.log()
+        .domain [<span class="hljs-number">0.5</span>, chart.vars.maxFilesCount]
+        .rangeRound [<span class="hljs-number">0</span>, (-<span class="hljs-number">1</span>) * (chart.cg.height - chart.vars.verticalMargin - <span class="hljs-number">20</span>)]
 
-    graph.<span class="hljs-function"><span class="hljs-title">createChart</span> = -&gt;</span>
-      previousSvg = d3.select(<span class="hljs-string">'#'</span> + graph.vars.elId + <span class="hljs-string">' svg'</span>)
+    chart.<span class="hljs-function"><span class="hljs-title">createChart</span> = -&gt;</span>
+      previousSvg = d3.select(<span class="hljs-string">'#'</span> + chart.vars.elId + <span class="hljs-string">' svg'</span>)
       previousSvg.remove() <span class="hljs-keyword">if</span> previousSvg
-      graph.dom.svg = d3.select(<span class="hljs-string">'#'</span> + graph.vars.elId)
+      chart.dom.svg = d3.select(<span class="hljs-string">'#'</span> + chart.vars.elId)
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'chart-distribution-bars'</span>
         .append(<span class="hljs-string">'svg'</span>)
-        .attr({<span class="hljs-attribute">width</span>: graph.cg.width, <span class="hljs-attribute">height</span>: graph.cg.height})
-      graph.dom.chart = graph.dom.svg.append(<span class="hljs-string">'g'</span>)
-        .attr({<span class="hljs-attribute">transform</span>: <span class="hljs-string">'translate('</span> + graph.cg.margin.left + <span class="hljs-string">','</span> + \
-          graph.cg.margin.bottom + <span class="hljs-string">')'</span>})
+        .attr({<span class="hljs-attribute">width</span>: chart.cg.width, <span class="hljs-attribute">height</span>: chart.cg.height})
+      chart.dom.chart = chart.dom.svg.append(<span class="hljs-string">'g'</span>)
+        .attr({<span class="hljs-attribute">transform</span>: <span class="hljs-string">'translate('</span> + chart.cg.margin.left + <span class="hljs-string">','</span> + \
+          chart.cg.margin.bottom + <span class="hljs-string">')'</span>})
     
-    graph.<span class="hljs-function"><span class="hljs-title">createAxis</span> = -&gt;</span>
-      graph.dom.xAxis = d3.svg.axis().scale(graph.scales.x)
+    chart.<span class="hljs-function"><span class="hljs-title">createAxis</span> = -&gt;</span>
+      chart.dom.xAxis = d3.svg.axis().scale(chart.scales.x)
         .orient(<span class="hljs-string">'bottom'</span>)
         .tickFormat<span class="hljs-function"><span class="hljs-params">((d)-&gt;</span></span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Digits different than zero (except first one)</p></div></div><div class="code"><div class="wrapper">          dString = d.toFixed(<span class="hljs-number">0</span>).toString()
           digits = d % Math.pow(<span class="hljs-number">10</span>, (dString.length) - <span class="hljs-number">1</span>)
@@ -109,9 +109,9 @@
           <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
         )
 
-      graph.dom.yAxis = d3.svg.axis().scale(graph.scales.y)
+      chart.dom.yAxis = d3.svg.axis().scale(chart.scales.y)
         .orient(<span class="hljs-string">'left'</span>)
-        .ticks <span class="hljs-keyword">if</span> graph.vars.maxFilesCount &lt; <span class="hljs-number">11</span> <span class="hljs-keyword">then</span> graph.vars.maxFilesCount <span class="hljs-keyword">else</span> <span class="hljs-number">10</span>
+        .ticks <span class="hljs-keyword">if</span> chart.vars.maxFilesCount &lt; <span class="hljs-number">11</span> <span class="hljs-keyword">then</span> chart.vars.maxFilesCount <span class="hljs-keyword">else</span> <span class="hljs-number">10</span>
         .tickFormat<span class="hljs-function"><span class="hljs-params">((d)-&gt;</span></span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Digits different than zero (except first one)</p></div></div><div class="code"><div class="wrapper">          dString = d.toFixed(<span class="hljs-number">0</span>).toString()
           digits = d % Math.pow(<span class="hljs-number">10</span>, (dString.length) - <span class="hljs-number">1</span>)
           firstDigitOneTwoOrFive = dString[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">'1'</span> <span class="hljs-keyword">or</span> dString[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">'2'</span> <span class="hljs-keyword">or</span> dString[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">'5'</span>
@@ -119,74 +119,74 @@
           <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
         )
       
-      graph.dom.chart.append(<span class="hljs-string">'g'</span>)
-        .attr({<span class="hljs-string">'transform'</span>: <span class="hljs-string">'translate(0,'</span> + graph.vars.floor + <span class="hljs-string">')'</span>, <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">x</span>-<span class="hljs-title">axis</span> <span class="hljs-title">axis</span>'})</span>
-        .call(graph.dom.xAxis)
+      chart.dom.chart.append(<span class="hljs-string">'g'</span>)
+        .attr({<span class="hljs-string">'transform'</span>: <span class="hljs-string">'translate(0,'</span> + chart.vars.floor + <span class="hljs-string">')'</span>, <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">x</span>-<span class="hljs-title">axis</span> <span class="hljs-title">axis</span>'})</span>
+        .call(chart.dom.xAxis)
         .append(<span class="hljs-string">'text'</span>)
-        .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + (graph.cg.width - graph.cg.margin.left) / <span class="hljs-number">2</span> + <span class="hljs-string">' ,0)'</span>)
+        .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + (chart.cg.width - chart.cg.margin.left) / <span class="hljs-number">2</span> + <span class="hljs-string">' ,0)'</span>)
         .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'x-axis-label'</span>)
         .attr(<span class="hljs-string">'y'</span>, <span class="hljs-number">40</span>).attr(<span class="hljs-string">'font-size'</span>, <span class="hljs-string">'1.3em'</span>)
         .style({<span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">'end'</span>})
-        .text graph.cg.xLabel
+        .text chart.cg.xLabel
 
 
-      graph.dom.chart.append(<span class="hljs-string">'g'</span>)
-        .attr({<span class="hljs-string">'transform'</span>: <span class="hljs-string">'translate(0,'</span> + graph.vars.floor + <span class="hljs-string">')'</span>, <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">x</span>-<span class="hljs-title">axis</span> <span class="hljs-title">axis</span>'})</span>
-        .call(graph.dom.yAxis)
+      chart.dom.chart.append(<span class="hljs-string">'g'</span>)
+        .attr({<span class="hljs-string">'transform'</span>: <span class="hljs-string">'translate(0,'</span> + chart.vars.floor + <span class="hljs-string">')'</span>, <span class="hljs-class"><span class="hljs-keyword">class</span>: '<span class="hljs-title">x</span>-<span class="hljs-title">axis</span> <span class="hljs-title">axis</span>'})</span>
+        .call(chart.dom.yAxis)
         .append(<span class="hljs-string">'text'</span>)
         .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate(-30,'</span> + String((-<span class="hljs-number">1</span>) * \
-          (graph.cg.height - graph.cg.margin.bottom) / <span class="hljs-number">2</span>) + <span class="hljs-string">')'</span>)
+          (chart.cg.height - chart.cg.margin.bottom) / <span class="hljs-number">2</span>) + <span class="hljs-string">')'</span>)
         .attr(<span class="hljs-string">'y'</span>, <span class="hljs-number">40</span>)
         .attr(<span class="hljs-string">'font-size'</span>, <span class="hljs-string">'1.3em'</span>)
         .style({<span class="hljs-string">'text-anchor'</span>: <span class="hljs-string">'end'</span>})
         .text(<span class="hljs-string">'Files Count'</span>)
 
-    graph.<span class="hljs-function"><span class="hljs-title">calcX</span> = <span class="hljs-params">(d)</span>-&gt;</span> graph.scales.x(d[graph.cg.xProp])
-    graph.<span class="hljs-function"><span class="hljs-title">calcY</span> = <span class="hljs-params">(d)</span>-&gt;</span> graph.scales.y(d.filesCount) + graph.vars.floor
-    graph.<span class="hljs-function"><span class="hljs-title">calcHeight</span> = <span class="hljs-params">(d)</span>-&gt;</span> graph.scales.y(d.filesCount) * (-<span class="hljs-number">1</span>)
+    chart.<span class="hljs-function"><span class="hljs-title">calcX</span> = <span class="hljs-params">(d)</span>-&gt;</span> chart.scales.x(d[chart.cg.xProp])
+    chart.<span class="hljs-function"><span class="hljs-title">calcY</span> = <span class="hljs-params">(d)</span>-&gt;</span> chart.scales.y(d.filesCount) + chart.vars.floor
+    chart.<span class="hljs-function"><span class="hljs-title">calcHeight</span> = <span class="hljs-params">(d)</span>-&gt;</span> chart.scales.y(d.filesCount) * (-<span class="hljs-number">1</span>)
 
-    graph.<span class="hljs-function"><span class="hljs-title">createBars</span> = -&gt;</span>
-      dataUsed = graph.data.filter<span class="hljs-function"><span class="hljs-params">((item, index)-&gt;
-        <span class="hljs-keyword">if</span> item[graph.cg.xProp] &gt;= graph.vars.sliderValues[<span class="hljs-number">0</span>] \
-          <span class="hljs-keyword">and</span> item[graph.cg.xProp] &lt;= graph.vars.sliderValues[<span class="hljs-number">1</span>] <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> item
+    chart.<span class="hljs-function"><span class="hljs-title">createBars</span> = -&gt;</span>
+      dataUsed = chart.data.filter<span class="hljs-function"><span class="hljs-params">((item, index)-&gt;
+        <span class="hljs-keyword">if</span> item[chart.cg.xProp] &gt;= chart.vars.sliderValues[<span class="hljs-number">0</span>] \
+          <span class="hljs-keyword">and</span> item[chart.cg.xProp] &lt;= chart.vars.sliderValues[<span class="hljs-number">1</span>] <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> item
         <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
       )</span>
       
       <span class="hljs-title">dataUsed</span> = <span class="hljs-title">_</span>.<span class="hljs-title">compact</span> <span class="hljs-title">dataUsed</span>
 
-      <span class="hljs-title">graph</span>.<span class="hljs-title">dom</span>.<span class="hljs-title">chart</span>.<span class="hljs-title">selectAll</span><span class="hljs-params">(<span class="hljs-string">'rect'</span>)</span>
+      <span class="hljs-title">chart</span>.<span class="hljs-title">dom</span>.<span class="hljs-title">chart</span>.<span class="hljs-title">selectAll</span><span class="hljs-params">(<span class="hljs-string">'rect'</span>)</span>
         .<span class="hljs-title">data</span><span class="hljs-params">(dataUsed)</span>
         .<span class="hljs-title">enter</span><span class="hljs-params">()</span>
         .<span class="hljs-title">append</span><span class="hljs-params">(<span class="hljs-string">'rect'</span>)</span>
-        .<span class="hljs-title">attr</span> '<span class="hljs-title">x</span>', <span class="hljs-params">(d)</span>-&gt;</span> graph.calcX d
-        .attr <span class="hljs-string">'y'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> graph.calcY d
+        .<span class="hljs-title">attr</span> '<span class="hljs-title">x</span>', <span class="hljs-params">(d)</span>-&gt;</span> chart.calcX d
+        .attr <span class="hljs-string">'y'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.calcY d
         .attr <span class="hljs-string">'width'</span>, <span class="hljs-number">2</span>
-        .attr <span class="hljs-string">'height'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> graph.calcHeight d
-        .attr<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'fill'</span>, (d)-&gt; graph.vars.color(d.filesCount))</span>
-        .<span class="hljs-title">style</span> '<span class="hljs-title">filter</span>', '<span class="hljs-title">url</span><span class="hljs-params">(#<span class="hljs-string">' + graph.vars.elId + '</span>-drop-shadow-filter)</span>'
+        .attr <span class="hljs-string">'height'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.calcHeight d
+        .attr<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'fill'</span>, (d)-&gt; chart.vars.color(d.filesCount))</span>
+        .<span class="hljs-title">style</span> '<span class="hljs-title">filter</span>', '<span class="hljs-title">url</span><span class="hljs-params">(#<span class="hljs-string">' + chart.vars.elId + '</span>-drop-shadow-filter)</span>'
 
-      <span class="hljs-title">graph</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">points</span> = []
-      <span class="hljs-title">graph</span>.<span class="hljs-title">dom</span>.<span class="hljs-title">chart</span>.<span class="hljs-title">selectAll</span><span class="hljs-params">(<span class="hljs-string">'rect'</span>)</span>.<span class="hljs-title">each</span> <span class="hljs-params">(d)</span>-&gt;</span>
-        graph.vars.points.push graph.calcX(d)
+      <span class="hljs-title">chart</span>.<span class="hljs-title">vars</span>.<span class="hljs-title">points</span> = []
+      <span class="hljs-title">chart</span>.<span class="hljs-title">dom</span>.<span class="hljs-title">chart</span>.<span class="hljs-title">selectAll</span><span class="hljs-params">(<span class="hljs-string">'rect'</span>)</span>.<span class="hljs-title">each</span> <span class="hljs-params">(d)</span>-&gt;</span>
+        chart.vars.points.push chart.calcX(d)
 
-    graph.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(origData, opts, cb)</span>-&gt;</span>
-      graph.vars.elId = opts.elId
+    chart.<span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(origData, opts, cb)</span>-&gt;</span>
+      chart.vars.elId = opts.elId
 
-      common.waitTillElPresent graph.vars.elId,<span class="hljs-function"> -&gt;</span>
-        graph.setData _.cloneDeep origData
-        graph.setCg(opts)
-        graph.setVars()
-        graph.createSlider()
-        graph.setSliderValues()
-        graph.draw()
+      common.waitTillElPresent chart.vars.elId,<span class="hljs-function"> -&gt;</span>
+        chart.setData _.cloneDeep origData
+        chart.setCg(opts)
+        chart.setVars()
+        chart.createSlider()
+        chart.setSliderValues()
+        chart.draw()
         cb() <span class="hljs-keyword">if</span> cb
 
-    graph.<span class="hljs-function"><span class="hljs-title">createFilter</span> = <span class="hljs-params">()</span>-&gt;</span>
-      common.createSvgFilterBlack(graph.vars.elId + <span class="hljs-string">'-drop-shadow-filter'</span>, graph.dom.chart, <span class="hljs-number">1</span>, <span class="hljs-number">.6</span>)
+    chart.<span class="hljs-function"><span class="hljs-title">createFilter</span> = <span class="hljs-params">()</span>-&gt;</span>
+      common.createSvgFilterBlack(chart.vars.elId + <span class="hljs-string">'-drop-shadow-filter'</span>, chart.dom.chart, <span class="hljs-number">1</span>, <span class="hljs-number">.6</span>)
 
-    graph.<span class="hljs-function"><span class="hljs-title">createMouseOverEvent</span> = <span class="hljs-params">()</span>-&gt;</span>
-      foreground = graph.dom.svg.append(<span class="hljs-string">'g'</span>)
-        .attr <span class="hljs-string">'id'</span>, <span class="hljs-string">'foreground-'</span> + graph.vars.elId
+    chart.<span class="hljs-function"><span class="hljs-title">createMouseOverEvent</span> = <span class="hljs-params">()</span>-&gt;</span>
+      foreground = chart.dom.svg.append(<span class="hljs-string">'g'</span>)
+        .attr <span class="hljs-string">'id'</span>, <span class="hljs-string">'foreground-'</span> + chart.vars.elId
         .attr <span class="hljs-string">'class'</span>, <span class="hljs-string">'foreground'</span>
 
       foreground.append(<span class="hljs-string">'title'</span>).text(<span class="hljs-string">''</span>)
@@ -195,41 +195,41 @@
         .attr(<span class="hljs-string">'fill'</span>, <span class="hljs-string">'green'</span>)
         .attr(<span class="hljs-string">'stroke'</span>, <span class="hljs-string">'black'</span>)
         .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'title-rect'</span>)
-        .attr <span class="hljs-string">'x'</span>, graph.cg.margin.left
+        .attr <span class="hljs-string">'x'</span>, chart.cg.margin.left
         .attr <span class="hljs-string">'y'</span>, <span class="hljs-number">0</span>
-        .attr <span class="hljs-string">'width'</span>, <span class="hljs-function"><span class="hljs-params">(d, i)</span>-&gt;</span> graph.cg.width - graph.cg.margin.left
-        .attr <span class="hljs-string">'height'</span>, graph.vars.floor + graph.cg.margin.bottom
+        .attr <span class="hljs-string">'width'</span>, <span class="hljs-function"><span class="hljs-params">(d, i)</span>-&gt;</span> chart.cg.width - chart.cg.margin.left
+        .attr <span class="hljs-string">'height'</span>, chart.vars.floor + chart.cg.margin.bottom
         .style <span class="hljs-string">'opacity'</span>, <span class="hljs-string">'0'</span>
         .<span class="hljs-literal">on</span> <span class="hljs-string">'mousemove'</span>, <span class="hljs-function"><span class="hljs-params">()</span>-&gt;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>TODO: Improve performance of this algorithm</p></div></div><div class="code"><div class="wrapper">          mouse = d3.mouse(<span class="hljs-keyword">this</span>)
-          foregroundTitle = d3.select(<span class="hljs-string">'#foreground-'</span> + graph.vars.elId).select(<span class="hljs-string">'title'</span>)
-          x = d3.mouse(<span class="hljs-keyword">this</span>)[<span class="hljs-number">0</span>] - graph.cg.margin.left
-          newPoints = angular.copy graph.vars.points
+          foregroundTitle = d3.select(<span class="hljs-string">'#foreground-'</span> + chart.vars.elId).select(<span class="hljs-string">'title'</span>)
+          x = d3.mouse(<span class="hljs-keyword">this</span>)[<span class="hljs-number">0</span>] - chart.cg.margin.left
+          newPoints = angular.copy chart.vars.points
           newPoints = _.map newPoints, <span class="hljs-function"><span class="hljs-params">(point)</span>-&gt;</span> Math.abs x - point
           minPoint = _.min newPoints
           index = newPoints.indexOf minPoint
-          barsEl = graph.resetBarsColor()
+          barsEl = chart.resetBarsColor()
           bar = barsEl[<span class="hljs-number">0</span>][index]
           barEl = d3.select(bar)
           barEl.attr <span class="hljs-string">'fill'</span>, <span class="hljs-string">'#C87200'</span>
           barData = barEl.data()[<span class="hljs-number">0</span>]
           titleText = barData.filesCount + <span class="hljs-string">' file(s) with '</span>
-          titleText += barData[graph.cg.xProp] + <span class="hljs-string">' '</span> + graph.cg.xTitle
+          titleText += barData[chart.cg.xProp] + <span class="hljs-string">' '</span> + chart.cg.xTitle
           foregroundTitle.text titleText
-        .<span class="hljs-literal">on</span> <span class="hljs-string">'mouseleave'</span>,<span class="hljs-function"> -&gt;</span> graph.resetBarsColor()
+        .<span class="hljs-literal">on</span> <span class="hljs-string">'mouseleave'</span>,<span class="hljs-function"> -&gt;</span> chart.resetBarsColor()
     
-    graph.<span class="hljs-function"><span class="hljs-title">resetBarsColor</span> = -&gt;</span>
-      barsEl = graph.dom.chart.selectAll(<span class="hljs-string">'rect'</span>)
-      barsEl.attr <span class="hljs-string">'fill'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> graph.vars.color(d.filesCount)
+    chart.<span class="hljs-function"><span class="hljs-title">resetBarsColor</span> = -&gt;</span>
+      barsEl = chart.dom.chart.selectAll(<span class="hljs-string">'rect'</span>)
+      barsEl.attr <span class="hljs-string">'fill'</span>, <span class="hljs-function"><span class="hljs-params">(d)</span>-&gt;</span> chart.vars.color(d.filesCount)
       barsEl
 
-    graph.<span class="hljs-function"><span class="hljs-title">draw</span> = <span class="hljs-params">()</span>-&gt;</span>
-      graph.createChart()
-      graph.setScales()
-      graph.createAxis()
-      graph.createBars()
-      graph.createFilter()
-      graph.createMouseOverEvent()
+    chart.<span class="hljs-function"><span class="hljs-title">draw</span> = <span class="hljs-params">()</span>-&gt;</span>
+      chart.createChart()
+      chart.setScales()
+      chart.createAxis()
+      chart.createBars()
+      chart.createFilter()
+      chart.createMouseOverEvent()
       
-    graph
+    chart
 
-  createGraph</div></div></div></div></body></html>
+  createChart</div></div></div></div></body></html>

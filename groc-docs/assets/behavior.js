@@ -231,6 +231,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                           },
                           "depth": 6,
                           "outline": []
+                        }, {
+                          "type": "file",
+                          "data": {
+                            "language": {
+                              "nameMatchers": [".coffee", "Cakefile"],
+                              "pygmentsLexer": "coffee-script",
+                              "highlightJS": "coffeescript",
+                              "multiLineComment": ["###*", " *", " ###", "###", "#", "###", "###*", "#", "###"],
+                              "strictMultiLineEnd": false,
+                              "singleLineComment": ["#"],
+                              "ignorePrefix": "}",
+                              "foldPrefix": "^",
+                              "name": "CoffeeScript"
+                            },
+                            "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/charts/defaults/radial-graph.coffee",
+                            "projectPath": "src/display/coffee/charts/defaults/radial-graph.coffee",
+                            "targetPath": "src/display/coffee/charts/defaults/radial-graph",
+                            "pageTitle": "src/display/coffee/charts/defaults/radial-graph",
+                            "title": "radial-graph"
+                          },
+                          "depth": 6,
+                          "outline": []
                         }
                       ]
                     }, {
@@ -296,6 +318,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                         "targetPath": "src/display/coffee/charts/lines-distribution",
                         "pageTitle": "src/display/coffee/charts/lines-distribution",
                         "title": "lines-distribution"
+                      },
+                      "depth": 5,
+                      "outline": []
+                    }, {
+                      "type": "file",
+                      "data": {
+                        "language": {
+                          "nameMatchers": [".coffee", "Cakefile"],
+                          "pygmentsLexer": "coffee-script",
+                          "highlightJS": "coffeescript",
+                          "multiLineComment": ["###*", " *", " ###", "###", "#", "###", "###*", "#", "###"],
+                          "strictMultiLineEnd": false,
+                          "singleLineComment": ["#"],
+                          "ignorePrefix": "}",
+                          "foldPrefix": "^",
+                          "name": "CoffeeScript"
+                        },
+                        "sourcePath": "/home/igncp/development/github/own/encina/src/display/coffee/charts/structure-radial-graph.coffee",
+                        "projectPath": "src/display/coffee/charts/structure-radial-graph.coffee",
+                        "targetPath": "src/display/coffee/charts/structure-radial-graph",
+                        "pageTitle": "src/display/coffee/charts/structure-radial-graph",
+                        "title": "structure-radial-graph"
                       },
                       "depth": 5,
                       "outline": []

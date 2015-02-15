@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="en"><head><title>src/display/coffee/charts/structure-radial-graph</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../../"><meta name="groc-document-path" content="src/display/coffee/charts/structure-radial-graph"><meta name="groc-project-path" content="src/display/coffee/charts/structure-radial-graph.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../../../assets/style.css"><script type="text/javascript" src="../../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/display/coffee/charts/structure-radial-graph.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper">define <span class="hljs-string">'charts/structure-radial-graph'</span>, [<span class="hljs-string">'charts/defaults/radial-graph'</span>], <span class="hljs-function"><span class="hljs-params">(chart)</span>-&gt;</span>
+  <span class="hljs-function"><span class="hljs-title">render</span> = <span class="hljs-params">(data, id)</span>-&gt;</span>
+    graph = chart()
+    transformedData = graph.transformTreeDataToNodesAndLinks data
+    graph.render transformedData, id, <span class="hljs-string">'TITLE'</span>
+
+  render</div></div></div></div></body></html>

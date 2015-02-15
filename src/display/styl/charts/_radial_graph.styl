@@ -1,11 +1,38 @@
+dir-color = #8FA5C2
+root-color = #FF8A8A
+file-color = #8A9E7C
+
 .chart-radial-graph
   .node
     &.node-dir
-      fill #8FA5C2
+      fill dir-color
       &.node-root
-        fill #FF8A98
+        fill root-color
     &.node-file
-      fill #8A9E7C
+      fill file-color
   .link
     stroke #777
     stroke-width 1
+    
+  .chart-radial-graph-panel
+    border 1px solid #ccc
+    border-radius 10px
+    overflow auto
+    
+    .chart-radial-graph-panel-list
+      transition opacity linear 1s
+      list-style-type none
+      padding 0
+      li
+        font-weight bold
+        margin 30px 0
+        p
+          text-align center
+          margin 0
+        
+        &.directory
+          color dir-color
+        &.root
+          color root-color
+        &.file
+          color file-color

@@ -70,7 +70,7 @@ module.exports = (grunt) ->
         commit: true,
         commitMessage: 'Release v%VERSION%',
         commitFiles: ['.'],
-        createTag: true,
+        createTag: false,
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
         push: true,

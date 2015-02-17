@@ -9,7 +9,7 @@ program
 
 program
   .command 'examine <path>'
-  .description 'Analyze the project, creating an html output'
+  .description 'Analyze the project and generate the result as local a web display'
   .action examine
 
 program

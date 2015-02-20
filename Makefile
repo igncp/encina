@@ -1,4 +1,4 @@
-all: install-node-modules install-python-libraries
+all: install-node-modules install-python-libraries-dev
 	@echo 'Done!'
 
 clear-devel:

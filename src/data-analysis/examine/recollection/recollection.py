@@ -1,8 +1,9 @@
 import os
 import sys
+import recollection_git
 
 
-class Data():
+class Data(recollection_git.Data):
   def set_structure(sf):
     total_files = 0
     total_dirs = 0
@@ -116,32 +117,3 @@ class Data():
     if sf.root['dir'][-1] != os.sep: sf.root['dir'] += os.sep
     sf.root['dir'] = os.path.normpath(os.getcwd() + os.sep + sf.root['dir'])
     sf.root['name'] = sf.root['dir'].split(os.sep)[-1]
-
-  def recollect_git_info_if_necessary(sf):
-    def extract_names(array):
-      for idx, item in enumerate(array):
-        array[idx] = item.name
-
-    if 'dir' in sf.characteristics and '.git' in sf.characteristics['dir']:
-      from git import Repo
-      import subprocess
-      
-      sf.special['git'] = {}
-      
-      all_branches_cmd = 'cd ' + sf.root['dir'] + '; git branch -a'
-      output = subprocess.check_output(all_branches_cmd, shell=True)
-      all_branches = output.split('\n')
-      all_branches = [branch.strip() for branch in all_branches if branch != '']
-      all_branches = [branch.replace('* ', '') for branch in all_branches]
-      
-      repo = Repo(sf.root['dir'])
-      sf.special['git']['local_branches'] = repo.branches
-      sf.special['git']['all_branches'] = all_branches
-      sf.special['git']['description'] = repo.description
-      sf.special['git']['refs'] = list(repo.refs)
-      sf.special['git']['remote'] = repo.remote().url
-      sf.special['git']['tags'] = repo.tags
-      sf.special['git']['commits_count'] = repo.head.commit.count()
-      
-      for key in ['local_branches', 'refs', 'tags']:
-        extract_names(sf.special['git'][key])

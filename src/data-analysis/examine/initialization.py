@@ -1,4 +1,4 @@
-import recollection
+import recollection.recollection as recollection
 import storage
 import processing
 import utilities

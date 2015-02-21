@@ -3,8 +3,9 @@
     <div class="col-lg-6">
       <p>Commits count on current branch: <strong>{{nbrWCommas(git.commits_count)}}</strong>
       </p>
-      <bootstrap-modal-default-list modal-number="1" var-name="git-local-branches" label-title="Local branches" modal-title="Git Local Branches" var-array="git.local_branches"></bootstrap-modal-default-list>
-      <bootstrap-modal-default-list modal-number="1" var-name="git--all-branches" label-title="All branches" modal-title="Git All Branches" var-array="git.all_branches"></bootstrap-modal-default-list>
+      <bootstrap-modal-default-list modal-number="1" var-name="git-local-branches" label-title="Local branches" modal-title="Git Repository Local Branches" var-array="git.local_branches"></bootstrap-modal-default-list>
+      <bootstrap-modal-default-list modal-number="1" var-name="git-all-branches" label-title="All branches" modal-title="Git Repository All Branches" var-array="git.all_branches"></bootstrap-modal-default-list>
+      <bootstrap-modal-default-list modal-number="1" var-name="git-contributors" label-title="Contributors" modal-title="Git Repository Contributors (with Commits Count)" var-array="git.contributors"></bootstrap-modal-default-list>
     </div>
     <div class="col-lg-6">
       <p>Remote: <a href="{{git.remote.link}}" target="_blank">{{git.remote.name}}</a>

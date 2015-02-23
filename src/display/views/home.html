@@ -1,7 +1,7 @@
 <table class="table" id="home-table">
   <tbody>
-    <tr ng-repeat="project in projects">
-      <td class="col-lg-6 project-name" style="background-color: {{colorsScale($index, projects)}}"><strong>{{project.name}}</strong></td>
+    <tr ng-repeat="project in projects" class="home-project-row">
+      <td class="col-lg-6 project-name" home-project-row-name style="background-color: {{colorsScale($index, projects)}}"><strong>{{project.name}}</strong></td>
       <td class="project-reports" style="background-color: {{colorsScale($index, projects)}}">
         <ul>
           <li ng-repeat="report in project.reports" ng-class="notLastItem($index, project.reports)">

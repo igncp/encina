@@ -3,6 +3,7 @@ define 'directives/directives', [
   'directives/bootstrap-accordion'
   'directives/bootstrap-modal'
   'directives/bootstrap-modal-default-list'
+  'directives/home-project-row-name'
 ], ()->
   directives = arguments
   createDirectives = (encina)->

@@ -139,9 +139,10 @@ define 'charts/defaults/radial-graph', ['charts/common'], (common)->
           cy: (d)-> chart.limitForce.y(d.y)
 
     chart.setNodeListeners = ->
-      changeRadiusToSelfAndParents = (nodeData, panelAction, radius, delay)->
+      previousD = ''
+      changeRadiusToSelfAndParents = (nodeData, panelAction, radius)->
         if nodeData.parent
-          changeRadiusToSelfAndParents nodeData.parent, panelAction, radius, delay
+          changeRadiusToSelfAndParents nodeData.parent, panelAction, radius
           nodeType = nodeData.type
         else
           nodeType = 'root'
@@ -165,18 +166,18 @@ define 'charts/defaults/radial-graph', ['charts/common'], (common)->
             listItem.append 'p'
               .text "(dirs: #{dirs} | files: #{files})"
 
-        node.transition().delay(delay)
+        node.transition()
           .duration chart.cg.transitionDuration
           .attr r: radius
       
       chart.dom.nodes.on 'mouseenter', (d)->
+        if previousD
+          changeRadiusToSelfAndParents previousD, 'remove', chart.cg.node.radius
         chart.dom.panelList.text ''
         chart.dom.panelList.style opacity: 1
-        changeRadiusToSelfAndParents d, 'add', chart.cg.node.radiusMouse, 0
+        changeRadiusToSelfAndParents d, 'add', chart.cg.node.radiusMouse
+        previousD = d
       
-      chart.dom.nodes.on 'mouseleave', (d)->
-        # chart.dom.panelList.style opacity: 0
-        changeRadiusToSelfAndParents d, 'remove', chart.cg.node.radius, 500
 
     chart.draw = ->
       chart.drawBase()

@@ -38,5 +38,4 @@ define 'controllers/home', ->
           scaleFn = (p)-> colorScale(c(p))
           scaleFn(index)
 
-
   createController

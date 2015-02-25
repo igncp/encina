@@ -6,6 +6,7 @@
 
 - name: package.json
   desc: Uses Node.js
+  method: recollect_packagejson
 
 - name: .travis.yml
   desc: Uses Travis CI

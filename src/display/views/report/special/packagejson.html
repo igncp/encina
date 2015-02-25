@@ -1,0 +1,10 @@
+<bootstrap-accordion ng-if="packagejson" title-text="Node.js" name="packagejson" expanded="true">
+    <div class="col-lg-12">
+        <bootstrap-modal-default-list modal-number="1" var-name="node-files" label-title="Files named package.json found:" modal-title="Files named package.json" var-array="packagejson.paths"></bootstrap-modal-default-list>
+    </div>
+    <div ng-repeat="file in packagejson.files" class="col-lg-12 packagejson-file">
+        <p class="col-lg-12 packagejson-file-header">File from: <i>{{file.path}}</i><span ng-if="file.path === '/package.json'"> - <strong>project's root directory</strong></span></p>
+        <bootstrap-modal-default-list class="col-lg-6" ng-if="file.data.dependencies" modal-number="{{$index + 1}}" var-name="production-dependencies" label-title="Production dependencies:" modal-title="Production Dependencies" var-array="file.data.dependencies"></bootstrap-modal-default-list>
+        <bootstrap-modal-default-list class="col-lg-6" ng-if="file.data.devDependencies" modal-number="{{$index + 1}}" var-name="dev-dependencies" label-title="Development dependencies:" modal-title="Development Dependencies" var-array="file.data.devDependencies"></bootstrap-modal-default-list>
+    </div>
+</bootstrap-accordion>

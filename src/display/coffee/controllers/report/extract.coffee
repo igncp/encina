@@ -38,9 +38,18 @@ define 'controllers/report/extract', ->
               name: $scope.git.remote
               link: remoteLink
 
-        $scope.launchModal = EncinaUtils.launchModal
+        $scope.packagejson = $scope.data.special.packagejson
+        if $scope.packagejson
+          convertObjToArrayAndSort = (parent, objProp)->
+            if parent[objProp]
+              parent[objProp] = Object.keys parent[objProp]
+              parent[objProp].sort()
+          $scope.packagejson.paths = _.pluck $scope.packagejson.files, 'path'
+          _.each $scope.packagejson.files, (file)->
+            convertObjToArrayAndSort file.data, 'dependencies'
+            convertObjToArrayAndSort file.data, 'devDependencies'
 
-        console.log '$scope.data', $scope.data
+        $scope.launchModal = EncinaUtils.launchModal
 
       waitTillDataLoaded = ->
         if $scope.$parent.data then runController()

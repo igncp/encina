@@ -1,9 +1,10 @@
 import os
 import sys
 import recollection_git
+import recollection_packagejson
 
 
-class Data(recollection_git.Data):
+class Data(recollection_git.Data, recollection_packagejson.Data):
   def set_structure(sf):
     total_files = 0
     total_dirs = 0
@@ -36,7 +37,7 @@ class Data(recollection_git.Data):
       name = os.path.basename(path)
       d = {'name': name}
       if os.path.isdir(path):
-        sf.check_characteristics('dir', name)
+        sf.check_characteristics('dir', name, path)
         if name not in sf.static['excluded']['all']['dir']:
           d['type'] = 'directory'
           inside_files = []
@@ -64,10 +65,10 @@ class Data(recollection_git.Data):
           sf.structure['excluded']['all']['dir'].append(name)
           return False
       else:
-        sf.check_characteristics('dir', name)
+        sf.check_characteristics('dir', name, path)
         d['extension'] = sf.get_file_extension(name)
-        sf.check_characteristics('file', name)
-        sf.check_characteristics('extension', d['extension'])
+        sf.check_characteristics('file', name, path)
+        sf.check_characteristics('extension', d['extension'], path)
         
         permitted_extension = d['extension'] not in sf.static['excluded']['all']['extension']
         permitted_file = name not in sf.static['excluded']['all']['file']
@@ -100,13 +101,16 @@ class Data(recollection_git.Data):
 
     return extension
 
-  def check_characteristics(sf, children_type, name):
+  def check_characteristics(sf, children_type, name, path):
     if children_type in sf.static['characteristics']['raw']:
       for possible_charac in sf.static['characteristics']['raw'][children_type]:
         if name == possible_charac['name']:
           if children_type not in sf.characteristics: sf.characteristics[children_type] = dict()
           if name not in sf.characteristics[children_type]:
             sf.characteristics[children_type][name] = possible_charac['desc']
+          if 'method' in possible_charac:
+            charac_method = getattr(sf, possible_charac['method'])
+            charac_method(path)
 
   def get_size(sf, path):
     size = os.path.getsize(path)

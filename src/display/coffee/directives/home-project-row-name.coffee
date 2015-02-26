@@ -20,7 +20,7 @@ define 'directives/home-project-row-name', [], ->
             _.each rows, (row)->
               tds = row.querySelectorAll 'td'
               row.addEventListener 'mouseenter', ->
-                changeVerticalPaddingsToTds tds, 30
+                changeVerticalPaddingsToTds tds, 14
               row.addEventListener 'mouseleave', ->
                 changeVerticalPaddingsToTds tds, 8
       }

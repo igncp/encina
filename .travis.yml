@@ -9,3 +9,10 @@ install:
   - pip install -r src/vendor/python-requirements-dev.txt
 
 script: 'make tests-travis'
+
+addons:
+  apt:
+    sources:
+    - chris-lea/node.js
+    packages:
+    - nodejs

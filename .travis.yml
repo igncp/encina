@@ -7,14 +7,5 @@ sudo: false
 install:
   # Python test requirements
   - pip install -r src/vendor/python-requirements-dev.txt
-  - npm install -g grunt-cli
-  - npm install
 
 script: 'make tests-travis'
-
-addons:
-  apt:
-    sources:
-    - chris-lea/node.js
-    packages:
-    - nodejs

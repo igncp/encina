@@ -27,7 +27,8 @@ server:
 		../../../node_modules/supervisor/lib/cli-wrapper.js -e coffee,txt \
 		-w ../../../src/cli/run-server.coffee,../../../src/display/devel/changeme.txt -- ../../../bin/encina.js server
 
-tests-travis: tests-unit-frontend
+tests-travis: tests-e2e-backend tests-unit-frontend tests-unit-backend
+
 set-test-bin-executable:
 	@chmod +x test/bin/*
 	@echo "The bin files in the test directory are now executables"

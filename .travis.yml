@@ -8,10 +8,17 @@ install:
   # Python test requirements
   - pip install -r src/vendor/python-requirements-dev.txt
   # JavaScript test requirements
-  - add-apt-repository -y ppa:chris-lea/node.js
+  - add-apt-repository -y 
   - apt-get -y update
   - apt-get -y install nodejs
   - npm install -g grunt-cli
   - npm install
 
 script: 'make tests-travis'
+
+addons:
+  apt:
+    sources:
+    - chris-lea/node.js
+    packages:
+    - nodejs
